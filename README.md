@@ -28,30 +28,19 @@ For debug, you can use next commands in Isaac command line (~):
 
 ## File structure
 
-**`content`** - Contains xml-files for Isaac mod API
+- **`content`** - Contains xml-files for Isaac mod API
+- **`resources`** - Contains media-sources and files for replacing
 
-**`resources`** - Contains media-sources and files for replacing
+- **`scripts`** - Contains .lua files for Twitch mod
+  - **`ativeItems.lua`** - List of all active items from mod
+  - **`callbacks.lua`** - Main callbacks for mod, like saving game
+  - **`cmd.lua`** - Commands for Isaac command line
+  - **`enums.lua`** - Lists of different objects, like colors or enemies
+  - **`events.lua`** - Events list
+  - **`passiveItems.lua`** - List of all passive items from mod
+  - **`helper.lua`** - Additional functions for comfort developing
+  - **`server.lua`** - Twitch mod server for receiveng/sending data
+  - **`sprites.lua`** - Contains UI and etc sprites from mod
+- **`main.lua`** - Main mod script, contains root mod object
 
-**`scripts`** - Contains .lua files for Twitch mod
-
-​	**`ativeItems.lua`** - List of all active items from mod
-
-​	**`callbacks.lua`** - Main callbacks for mod, like saving game
-
-​	**`cmd.lua`** - Commands for Isaac command line
-
-​	**`enums.lua`** - Lists of different objects, like colors or enemies
-
-​	**`events.lua`** - Events list
-
-​	**`passiveItems.lua`** - List of all passive items from mod
-
-​	**`helper.lua`** - Additional functions for comfort developing
-
-​	**`server.lua`** - Twitch mod server for receiveng/sending data
-
-​	**`sprites.lua`** - Contains UI and etc sprites from mod
-
-**`main.lua`** - Main mod script, contains root mod object
-
-**`metadata.xml`** - Mod config
+- **`metadata.xml`** - Mod config
