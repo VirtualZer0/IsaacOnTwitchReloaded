@@ -1,0 +1,34 @@
+<!--
+	Challenge Format:
+* name = challenge name
+* id = challenge id
+* startingitems = comma separated (nospace) item ids that will be added at the start
+* startingtrinkets = comma separated (nospace) trinket ids that will be added at the start (max 2)
+* startingpill = effect id of the starting pill (-1 for no pill | default)
+* startingcard = card id of the starting card (can include runes) (-1 for random tarot card, 0 for no card | default)
+* playertype = player type id for player type to start with (0 for Isaac | default)
+* endstage = the last stage of the challenge (use eLevelStage ids)
+* roomfilter = list of room ids to not be generated in challenge [Not all room ids can be used] (NORMAL - 1, Shop - 2, Error - 3, Treasure - 4, Boss - 5, Miniboss - 6, Secret - 7, SuperSecret - 8, Arcade - 9, Curse - 10, Challenge - 11, Library - 12, Sacrifice - 13, Devil - 14, Angel - 15, Dungeon - 16, Bossrush - 17, Isaacs - 18, Barren - 19, Chest - 20, Dice - 21, BMarket - 22).
+* cursefilter = bitmask for curses to be removed (Darkness = 1, Labyrinth = 2, Lost = 4, Unknown = 8, Cursed = 16)
+* getcurse = bitmask for curses to be forced (Same id's as curse filter)
+* achievements = list of achievement ids that are required to be able to play the challenge
+* altpath = alternative floor for light/dark path (isaac/satan)
+* canshoot = determines if player can shoot (true | default)
+* redhp = add red hp
+* maxhp = add hp container
+* soulhp = add soul hp
+* blackhp = add black hp
+* coins = add coins
+* maxdamage = maximal damage or more (clamps at min 100)
+* adddamage = + damage up
+* minfirerate = minimal fire rate or more
+* minshotspeed = minimal shot speed or less
+* bigrange = big range
+* difficulty = game difficulty (0 - normal | default, 1 - hard)
+* megasatan = last boss is megasatan
+-->
+<challenges version="1">
+	<challenge name="Twitch Power"  megasatan="true" endstage="12" roomfilter="4" canshoot="false" playertype="10" startingitems="238,239" difficulty="1"/>
+	<challenge name="Eternal Darkness"  endstage="7" difficulty="1"/>
+	<challenge name="Triple Rainbow"  megasatan="true" endstage="12" roomfilter="4" startingitems="330,6,513,191,418,238,239" difficulty="1"/>
+</challenges>

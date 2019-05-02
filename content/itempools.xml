@@ -1,0 +1,56 @@
+<ItemPools>
+	<Pool Name="greedTreasure">
+		<Item name="Kappa" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Golden Kappa" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Future Man" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Curse Lit" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Drink Purple" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Kreygasm" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="BCouch" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Brain Slug" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Twitch Raid" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="TTours" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Vote Nay" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Vote Yea" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Humble Life" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Nightbot" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Stinky Cheese" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="SSSsss" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+	</Pool>
+	<Pool Name="greedSecret">
+		<Item name="Kappa" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Golden Kappa" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Future Man" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Curse Lit" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Drink Purple" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Kreygasm" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="BCouch" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Brain Slug" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Twitch Raid" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="TTours" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Vote Nay" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Vote Yea" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Humble Life" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Nightbot" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Stinky Cheese" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="SSSsss" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+	</Pool>
+	<Pool Name="greedShop">
+		<Item name="Kappa" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Golden Kappa" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Future Man" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Curse Lit" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Drink Purple" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Kreygasm" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="BCouch" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Brain Slug" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Twitch Raid" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="TTours" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Vote Nay" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Vote Yea" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Humble Life" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Nightbot" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Stinky Cheese" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="SSSsss" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+	</Pool>
+</ItemPools>

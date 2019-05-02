@@ -1,0 +1,55 @@
+<sounds root="sfx/">
+	<sound name="BitsAppear">
+		<sample weight="1" path="bits/appear.wav" />
+	</sound>
+	<sound name="BitsCollect">
+		<sample weight="1" path="bits/collect.wav" />
+	</sound>
+	
+	<sound name="SuperhotBreak">
+		<sample weight="1" path="events/superhot/break1.wav" />
+		<sample weight="1" path="events/superhot/break2.wav" />
+	</sound>
+	
+	<sound name="Sneeze">
+		<sample weight="1" path="events/allergia/sneeze1.wav" />
+		<sample weight="1" path="events/allergia/sneeze2.wav" />
+		<sample weight="1" path="events/allergia/sneeze3.wav" />
+	</sound>
+	
+	<sound name="Rain">
+		<sample weight="1" path="events/heavyrain/rain.wav" />
+	</sound>
+	
+	<sound name="Rewind">
+		<sample weight="1" path="events/rewind/rewind.wav" />
+	</sound>
+	
+	<sound name="GoodMusic">
+		<sample weight="1" path="events/goodmusic/goodmusic.wav" />
+	</sound>
+	
+	<sound name="DdosDialup">
+		<sample weight="1" path="events/ddos/dialup.wav" />
+	</sound>
+	
+	<sound name="AttackOnTitan">
+		<sample weight="1" path="events/attackontitan/intro.wav" />
+	</sound>
+	
+	<sound name="Interstellar">
+		<sample weight="1" path="events/interstellar/interstellar.wav" />
+	</sound>
+	
+	<sound name="RerunCharging">
+		<sample weight="1" path="events/rerun/charging.wav" />
+	</sound>
+	
+	<sound name="QTEYes">
+		<sample weight="1" path="events/qte/yes.wav" />
+	</sound>
+	
+	<sound name="QTENo">
+		<sample weight="1" path="events/qte/no.wav" />
+	</sound>
+</sounds>

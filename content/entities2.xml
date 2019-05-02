@@ -1,0 +1,88 @@
+<entities anm2root="gfx/" version="5">
+	
+	<entity anm2path="mod.twitch_twitchHeart.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="12" friction="1" id="5" name="Twitch Heart" numGridCollisionPoints="24" shadowSize="22" stageHP="0" variant="1000" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_1bits.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="16" friction="1" id="5" name="Bits A" numGridCollisionPoints="24" shadowSize="24" stageHP="0" variant="1001" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_100bits.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="5" collisionRadius="16" friction="0.9" id="5" name="Bits B" numGridCollisionPoints="24" shadowSize="22" stageHP="0" variant="1002" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_1000bits.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="7" collisionRadius="16" friction="0.75" id="5" name="Bits C" numGridCollisionPoints="24" shadowSize="22" stageHP="0" variant="1003" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_5000bits.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="9" collisionRadius="16" friction="0.58" id="5" name="Bits D" numGridCollisionPoints="24" shadowSize="22" stageHP="0" variant="1004" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_10000bits.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="11" collisionRadius="16" friction="0.42" id="5" name="Bits E" numGridCollisionPoints="24" shadowSize="22" stageHP="0" variant="1005" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_subscriber.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0.25" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Subscriber" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="1000">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_nightbot.anm2" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Nightbot" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="1001">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_stinkyCheese.anm2" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Stinky Cheese" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="1002">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<!-- Effeсts -->
+	<entity anm2path="mod.twitch_effect_sandstorm.anm2" boss="0" champion="0" collisionDamage="5" collisionMass="3" collisionRadius="32" friction="1" id="3" name="Sandstorm swirl" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="1100">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_effect_blackhole.anm2" reroll="false" baseHP="20" boss="0" champion="0" collisionDamage="2" collisionMass="7" collisionRadius="256" friction="0" id="1000" name="Twitch Black Hole" numGridCollisionPoints="0" shadowSize="0" stageHP="0" variant="1100">
+        <gibs amount="6" blood="0" bone="0" eye="0" gut="0" large="0" worm="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_arrowUp.anm2" reroll="false" baseHP="20" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="0" id="1000" name="Twitch Arrow Up" numGridCollisionPoints="0" shadowSize="0" stageHP="0" variant="1101">
+        <gibs amount="6" blood="0" bone="0" eye="0" gut="0" large="0" worm="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_arrowDown.anm2" reroll="false" baseHP="20" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="0" id="1000" name="Twitch Arrow Down" numGridCollisionPoints="0" shadowSize="0" stageHP="0" variant="1102">
+        <gibs amount="6" blood="0" bone="0" eye="0" gut="0" large="0" worm="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_arrowLeft.anm2" reroll="false" baseHP="20" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="0" id="1000" name="Twitch Arrow Left" numGridCollisionPoints="0" shadowSize="0" stageHP="0" variant="1103">
+        <gibs amount="6" blood="0" bone="0" eye="0" gut="0" large="0" worm="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_arrowRight.anm2" reroll="false" baseHP="20" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="0" id="1000" name="Twitch Arrow Right" numGridCollisionPoints="0" shadowSize="0" stageHP="0" variant="1104">
+        <gibs amount="6" blood="0" bone="0" eye="0" gut="0" large="0" worm="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_effect_matrix.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="1" id="1000" name="Matrix Symbol" numGridCollisionPoints="1" shadowSize="0" stageHP="0" variant="1105">
+      <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_effect_rain.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="1" id="1000" name="Rain Particle" numGridCollisionPoints="1" shadowSize="0" stageHP="0" variant="1106">
+      <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_ball_s.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="5" collisionRadius="16" friction="0.42" id="5" name="Marble Ball S" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="1107" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_ball_n.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="10" collisionRadius="16" friction="0.62" id="5" name="Marble Ball N" numGridCollisionPoints="24" shadowSize="18" stageHP="0" variant="1108" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_ball_l.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="15" collisionRadius="16" friction="0.82" id="5" name="Marble Ball L" numGridCollisionPoints="24" shadowSize="24" stageHP="0" variant="1109" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+	
+	<entity anm2path="mod.twitch_ball_xl.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="20" collisionRadius="16" friction="1" id="5" name="Marble Ball XL" numGridCollisionPoints="24" shadowSize="28" stageHP="0" variant="1110" subtype="0">
+        <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
+    </entity>
+
+</entities>
