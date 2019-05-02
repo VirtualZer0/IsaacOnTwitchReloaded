@@ -10,14 +10,14 @@ function cmd.main (obj, mcmd, params)
   end
   
   lines = {}
-  for s in params:gmatch("[^\r\n]+") do
+  for s in params:gmatch("[^\r\n ]+") do
       table.insert(lines, s)
   end
   
   if (cmd[lines[1]] ~= nil) then
-    cmd[lines[1]]()
+    cmd[lines[1]](lines)
   else
-    cmd.send("Command "..lines[1] .. "not found")
+    cmd.send("Command "..lines[1] .. " not found")
   end
 end
 
@@ -86,6 +86,39 @@ function cmd.allactive ()
   end
   
   cmd.send("Spawned "..count.." active items")
+end
+
+-- Enable shader
+function cmd.toggleshader (params) 
+  
+  if (ITMR.Shaders[params[2]] == nil) then
+    cmd.send("Shader "..params[2].." not found")
+    return
+  end
+  
+  ITMR.Shaders[params[2]].enabled = not ITMR.Shaders[params[2]].enabled
+  
+  if (ITMR.Shaders[params[2]].enabled) then
+    cmd.send("Shader "..params[2].." enabled")
+  else
+    cmd.send("Shader "..params[2].." disabled")
+  end
+end
+
+-- Set shader param
+function cmd.setshader (params) 
+  
+  if (ITMR.Shaders[params[2]] == nil) then
+    cmd.send("Shader "..params[2].." not found")
+    return
+  end
+  
+  if (ITMR.Shaders[params[2]].params[params[3]] == nil) then
+    cmd.send("Shader "..params[2].." do not have " .. params[3] .. " param")
+    return
+  end
+  
+  ITMR.Shaders[params[2]].params[params[3]] = tonumber(params[4])
 end
 
 return cmd

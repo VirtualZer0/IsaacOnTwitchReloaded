@@ -1,0 +1,452 @@
+<shaders>
+
+  <!-- Blink shader -->
+  <shader name="ITMR_Blink">
+    <parameters>
+      <param name="Time" type="float"/>
+    </parameters>
+    <vertex>
+    <![CDATA[
+      attribute vec3 Position;
+      attribute vec4 Color;
+      attribute vec2 TexCoord;
+      attribute vec4 RenderData; 
+      attribute float Scale;
+      
+      varying vec4 Color0; 
+      varying vec2 TexCoord0; 
+      varying vec4 RenderDataOut; 
+      varying float ScaleOut;
+      uniform mat4 Transform;
+      
+      attribute float Time;
+      varying float TimeOut;
+      
+      void main(void) {
+        RenderDataOut = RenderData; 
+        ScaleOut = Scale;
+        TimeOut = Time;
+        Color0 = Color; 
+        TexCoord0 = TexCoord;
+        gl_Position = Transform * vec4(Position.xyz, 1.0); 
+      }
+    ]]>
+    </vertex>
+    <fragment>
+    <![CDATA[
+      varying lowp vec4 Color0; 
+      varying mediump vec2 TexCoord0; 
+      varying lowp vec4 RenderDataOut;
+      varying lowp float ScaleOut;
+      uniform sampler2D Texture0;
+      
+      varying lowp float TimeOut;
+      
+      void main(void) {
+        if (TimeOut > 0) {
+          vec4 Color = Color0 * texture2D(Texture0, TexCoord0);
+          Color.r *= 1 - TimeOut;
+          Color.g *= 1 - TimeOut;
+          Color.b *= 1 - TimeOut;
+          gl_FragColor = Color;
+        }
+        else {
+          gl_FragColor = Color0 * texture2D(Texture0, TexCoord0);
+        }
+      }
+    ]]>
+    </fragment>
+  </shader>
+  
+  <!-- Screen mirror shader -->
+  <shader name="ITMR_ScreenMirror">
+    <parameters>
+      <param name="Pos" type="float"/>
+    </parameters>
+    <vertex>
+    <![CDATA[
+      attribute vec3 Position;
+      attribute vec4 Color;
+      attribute vec2 TexCoord;
+      attribute vec4 RenderData; 
+      attribute float Scale;
+      
+      varying vec4 Color0; 
+      varying vec2 TexCoord0; 
+      varying vec4 RenderDataOut; 
+      varying float ScaleOut;
+      uniform mat4 Transform;
+      
+      attribute float Pos;
+      
+      void main(void) {
+        Color0 = Color; 
+        
+        if (Pos == 0) {
+					TexCoord0 = TexCoord;
+				}
+				else if (Pos == 1) {
+					TexCoord0 = vec2(RenderData.w/RenderData.z - TexCoord.x, TexCoord.y);
+				}
+				else if (Pos == 2) {
+					TexCoord0 = vec2(TexCoord.x, RenderData.y/RenderData.x - TexCoord.y);
+				}
+				else {
+					TexCoord0 = vec2(RenderData.w/RenderData.z - TexCoord.x, RenderData.y/RenderData.x - TexCoord.y);
+				}
+        
+        gl_Position = Transform * vec4(Position.xyz, 1.0); 
+      }
+      
+    ]]>
+    </vertex>
+    <fragment>
+    <![CDATA[
+      varying lowp vec4 Color0; 
+      varying mediump vec2 TexCoord0; 
+      varying lowp vec4 RenderDataOut;
+      varying lowp float ScaleOut;
+      uniform sampler2D Texture0;
+      
+      void main(void) {
+        gl_FragColor = Color0 * texture2D(Texture0, TexCoord0);
+      }
+    ]]>
+    </fragment>
+  </shader>
+  
+
+  <!-- VHS shader -->
+  <shader name="ITMR_VHS">
+    <parameters>
+      <param name="Time" type="float"/>
+    </parameters>
+    <vertex>
+    <![CDATA[
+      attribute vec3 Position;
+      attribute vec4 Color;
+      attribute vec2 TexCoord;
+      attribute vec4 RenderData; 
+      attribute float Scale;
+      
+      varying vec4 Color0; 
+      varying vec2 TexCoord0; 
+      varying vec4 RenderDataOut; 
+      varying float ScaleOut;
+      uniform mat4 Transform;
+      
+      attribute float Time;
+      varying float TimeOut;
+      
+      void main(void) {
+        RenderDataOut = RenderData; 
+        ScaleOut = Scale;
+        TimeOut = Time;
+        Color0 = Color; 
+        TexCoord0 = TexCoord;
+        gl_Position = Transform * vec4(Position.xyz, 1.0); 
+      }
+    ]]>
+    </vertex>
+    <fragment>
+    <![CDATA[
+      varying lowp vec4 Color0; 
+      varying mediump vec2 TexCoord0; 
+      varying lowp vec4 RenderDataOut;
+      varying lowp float ScaleOut;
+      uniform sampler2D Texture0;
+      
+      varying lowp float TimeOut;
+      
+      float rand(vec2 co){
+				return fract(sin(dot(co.xy, vec2(12.9898,78.233))) * 43758.5453);
+			}
+      
+      void main(void) {
+        if (TimeOut > 0) {
+          vec4 Color = Color0 * texture2D(Texture0, TexCoord0);
+          
+          float VHSPosWidth = rand(TexCoord0)/18;
+					if (TexCoord0.y > TimeOut && TexCoord0.y < TimeOut + VHSPosWidth) {
+						
+						float c = rand(vec2(TexCoord0.y, TexCoord0.y))+0.7;
+						Color.r *= c;
+						Color.g *= c;
+						Color.b *= c;
+					}
+          gl_FragColor = Color;
+        }
+        else {
+          gl_FragColor = Color0 * texture2D(Texture0, TexCoord0);
+        }
+      }
+    ]]>
+    </fragment>
+  </shader>
+  
+    <!-- ColorSides shader -->
+  <shader name="ITMR_ColorSides">
+    <parameters>
+      <param name="Intensity" type="float"/>
+      <param name="VColor" type="vec3"/>
+    </parameters>
+    <vertex>
+    <![CDATA[
+      attribute vec3 Position;
+      attribute vec4 Color;
+      attribute vec2 TexCoord;
+      attribute vec4 RenderData; 
+      attribute float Scale;
+      
+      varying vec4 Color0; 
+      varying vec2 TexCoord0; 
+      varying vec4 RenderDataOut; 
+      varying float ScaleOut;
+      uniform mat4 Transform;
+      
+      attribute float Intensity;
+      varying float IntensityOut;
+      
+      attribute vec3 VColor;
+      varying vec3 VColorOut;
+      
+      varying vec3 PositionOut;
+      
+      void main(void) {
+        RenderDataOut = RenderData;
+				PositionOut = Position;
+        ScaleOut = Scale;
+        IntensityOut = Intensity;
+        VColorOut = VColor;
+        Color0 = Color; 
+        TexCoord0 = TexCoord;
+        gl_Position = Transform * vec4(Position.xyz, 1.0); 
+      }
+    ]]>
+    </vertex>
+    <fragment>
+    <![CDATA[
+      varying lowp vec4 Color0; 
+      varying mediump vec2 TexCoord0; 
+      varying lowp vec4 RenderDataOut;
+      varying lowp float ScaleOut;
+      uniform sampler2D Texture0;
+      
+      varying lowp float IntensityOut;
+      varying lowp vec3 VColorOut;
+      varying lowp vec3 PositionOut;
+      
+      void main(void) {
+        if (IntensityOut > 0) {
+          vec4 color = Color0 * texture2D(Texture0, TexCoord0);
+          color.rgb = color.rgb + VColorOut.rgb * abs(PositionOut.x/RenderDataOut.z-0.2 + PositionOut.y/RenderDataOut.y-0.2)*IntensityOut;
+          gl_FragColor = color;
+        }
+        else {
+          gl_FragColor = Color0 * texture2D(Texture0, TexCoord0);
+        }
+      }
+    ]]>
+    </fragment>
+  </shader>
+  
+  <!-- Glitch shader -->
+  <shader name="ITMR_Glitch">
+    <parameters>
+      <param name="Time" type="float"/>
+    </parameters>
+    <vertex>
+    <![CDATA[
+      attribute vec3 Position;
+      attribute vec4 Color;
+      attribute vec2 TexCoord;
+      attribute vec4 RenderData; 
+      attribute float Scale;
+      
+      varying vec4 Color0; 
+      varying vec2 TexCoord0; 
+      varying vec4 RenderDataOut; 
+      varying float ScaleOut;
+      uniform mat4 Transform;
+      
+      attribute float Time;
+      varying float TimeOut;
+      
+      void main(void) {
+        RenderDataOut = RenderData; 
+        ScaleOut = Scale;
+        TimeOut = Time;
+        Color0 = Color; 
+        TexCoord0 = TexCoord;
+        gl_Position = Transform * vec4(Position.xyz, 1.0); 
+      }
+    ]]>
+    </vertex>
+    <fragment>
+    <![CDATA[
+      varying lowp vec4 Color0; 
+      varying mediump vec2 TexCoord0; 
+      varying lowp vec4 RenderDataOut;
+      varying lowp float ScaleOut;
+      uniform sampler2D Texture0;
+      
+      varying lowp float TimeOut;
+      
+      float rand(vec2 co) {
+				return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+			}
+      
+      void main(void) {
+        if (TimeOut >= 0) {
+          vec4 Color = Color0 * texture2D(Texture0, TexCoord0);
+          float temp = rand(vec2(TexCoord0.x + TimeOut, TexCoord0.y + TimeOut));
+					
+					if (rand(vec2(TexCoord0.x + TimeOut*2, TexCoord0.y + TimeOut*2)) > 0.8) {
+						
+						if (temp > 0.2 && temp < 0.4) {
+							Color.r += rand(vec2(TexCoord0.x/5, TexCoord0.y/5));
+						}
+						
+						if (temp > 0.4 && temp < 0.6) {
+							Color.g += rand(vec2(TexCoord0.x/5, TexCoord0.y/5));
+						}
+						
+						if (temp > 0.6 && temp < 0.8) {
+							Color.b += rand(vec2(TexCoord0.x/5, TexCoord0.y/5));
+						}
+					}
+          
+          gl_FragColor = Color;
+        }
+        else {
+          gl_FragColor = Color0 * texture2D(Texture0, TexCoord0);
+        }
+      }
+    ]]>
+    </fragment>
+  </shader>
+  
+  <!-- Deep Dark shader -->
+  <shader name="ITMR_DeepDark">
+    <parameters>
+      <param name="Intensity" type="float"/>
+      <param name="PlayerPos" type="vec2"/>
+    </parameters>
+    <vertex>
+    <![CDATA[
+      attribute vec3 Position;
+      attribute vec4 Color;
+      attribute vec2 TexCoord;
+      attribute vec4 RenderData; 
+      attribute float Scale;
+      
+      varying vec4 Color0; 
+      varying vec2 TexCoord0; 
+      varying vec4 RenderDataOut; 
+      varying float ScaleOut;
+      uniform mat4 Transform;
+      
+      attribute float Intensity;
+      varying float IntensityOut;
+      
+      attribute vec2 PlayerPos;
+      varying vec2 PlayerPosOut;
+      varying vec3 PositionOut;
+      
+      void main(void) {
+        RenderDataOut = RenderData; 
+        ScaleOut = Scale;
+        IntensityOut = Intensity;
+        PlayerPosOut = PlayerPos;
+        PositionOut = Position;
+        Color0 = Color; 
+        TexCoord0 = TexCoord;
+        gl_Position = Transform * vec4(Position.xyz, 1.0); 
+      }
+    ]]>
+    </vertex>
+    <fragment>
+    <![CDATA[
+      varying lowp vec4 Color0; 
+      varying mediump vec2 TexCoord0; 
+      varying lowp vec4 RenderDataOut;
+      varying lowp float ScaleOut;
+      uniform sampler2D Texture0;
+      
+      varying lowp float IntensityOut;
+      varying lowp vec2 PlayerPosOut;
+      varying lowp vec3 PositionOut;
+      
+      void main(void) {
+        if (IntensityOut > 0) {
+          vec4 Color = Color0 * texture2D(Texture0, TexCoord0);
+          
+          Color.rgb -= (sqrt((PlayerPosOut.x-PositionOut.x)*(PlayerPosOut.x-PositionOut.x) +
+          (PlayerPosOut.y-PositionOut.y)*(PlayerPosOut.y-PositionOut.y))/((RenderDataOut.x * RenderDataOut.y)/4000))*IntensityOut;
+          
+          gl_FragColor = Color;
+        }
+        else {
+          gl_FragColor = Color0 * texture2D(Texture0, TexCoord0);
+        }
+      }
+    ]]>
+    </fragment>
+  </shader>
+  
+    <!-- Broken Lens shader -->
+  <shader name="ITMR_BrokenLens">
+    <parameters>
+      <param name="CameraPos" type="vec2"/>
+			<param name="Intensity" type="float"/>
+    </parameters>
+    <vertex>
+    <![CDATA[
+      attribute vec3 Position;
+      attribute vec4 Color;
+      attribute vec2 TexCoord;
+      attribute vec4 RenderData; 
+      attribute float Scale;
+      
+      varying vec4 Color0; 
+      varying vec2 TexCoord0; 
+      varying vec4 RenderDataOut; 
+      varying float ScaleOut;
+      uniform mat4 Transform;
+      
+      attribute float Intensity;
+      attribute vec2 CameraPos;
+      
+      void main(void) {
+        RenderDataOut = RenderData; 
+        ScaleOut = Scale;
+        Color0 = Color; 
+        TexCoord0 = TexCoord;
+        
+        if (Intensity >= 0) {
+          Intensity = abs(Intensity-2.5);
+					Position.xy += (Position.xy - CameraPos.xy)*(Intensity);
+					gl_Position = Transform * vec4(Position.xyz, 1);
+				}
+				else {
+					gl_Position = Transform * vec4(Position.xyz, 1);
+				}
+        
+      }
+    ]]>
+    </vertex>
+    <fragment>
+    <![CDATA[
+      varying lowp vec4 Color0; 
+      varying mediump vec2 TexCoord0; 
+      varying lowp vec4 RenderDataOut;
+      varying lowp float ScaleOut;
+      uniform sampler2D Texture0;
+      
+      void main(void) {
+        gl_FragColor = Color0 * texture2D(Texture0, TexCoord0);
+      }
+    ]]>
+    </fragment>
+  </shader>
+</shaders>

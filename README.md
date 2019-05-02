@@ -24,6 +24,10 @@ For debug, you can use next commands in Isaac command line (~):
 
 **<u>`itmr allactive`</u>** - spawn all active items from Twitch mod in current room
 
+**<u>`itmr toggleshader [shadername]`</u>** - enable/disable shader from mod
+
+**<u>`itmr setshader [shadername] [paramname] [paramvalue]`</u>** - set parameter for shader from mod
+
 
 
 ## File structure
@@ -41,6 +45,7 @@ For debug, you can use next commands in Isaac command line (~):
   - **`helper.lua`** - Additional functions for comfort developing
   - **`server.lua`** - Twitch mod server for receiveng/sending data
   - **`sprites.lua`** - Contains UI and etc sprites from mod
+  - **`shaders.lua`** - Contains shaders params
 - **`main.lua`** - Main mod script, contains root mod object
 
 - **`metadata.xml`** - Mod config

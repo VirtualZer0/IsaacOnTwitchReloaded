@@ -8,6 +8,7 @@ ITMR.Callbacks = require('scripts.callbacks') -- Callbacks
 ITMR.Classes = require('scripts.classes') -- Classes
 ITMR.Enums = require('scripts.enums') -- Enumerations
 ITMR.Cmd = require('scripts.cmd') -- Command line handler
+ITMR.Shaders = require('scripts.shaders') -- Command line handler
 ITMR._ = require('scripts.helper') -- Helper functions
 
 -- Items
@@ -187,6 +188,7 @@ ITMR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, ITMR.Callbacks.evaluateCache)
 ITMR:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, ITMR.Callbacks.postGameStarted)
 ITMR:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, ITMR.Callbacks.preGameExit)
 ITMR:AddCallback(ModCallbacks.MC_POST_GAME_END, ITMR.Callbacks.postGameEnd)
+ITMR:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, ITMR.Callbacks.getShaderParams)
 
 -- Set dynamic callbacks
 

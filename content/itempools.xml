@@ -6,7 +6,6 @@
 		<Item name="Curse Lit" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Drink Purple" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Kreygasm" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
-		<Item name="BCouch" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Brain Slug" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Twitch Raid" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="TTours" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
@@ -24,7 +23,6 @@
 		<Item name="Curse Lit" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Drink Purple" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Kreygasm" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
-		<Item name="BCouch" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Brain Slug" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Twitch Raid" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="TTours" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
@@ -42,7 +40,6 @@
 		<Item name="Curse Lit" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Drink Purple" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Kreygasm" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
-		<Item name="BCouch" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Brain Slug" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Twitch Raid" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="TTours" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>

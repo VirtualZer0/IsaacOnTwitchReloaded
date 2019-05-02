@@ -76,10 +76,26 @@ end
 
 -- Exit Game callback
 function callbacks:preGameExit (shouldSave)
-  -- Disabling ITMR server
+  -- Stop ITMR server
   ITMR.Server:close()
   
+  -- Reset callbacks for items
+  ITMR.DynamicCallbacks.onUpdate = {}
+  ITMR.DynamicCallbacks.onCacheUpdate = {}
+  ITMR.DynamicCallbacks.onEntityUpdate = {}
+  ITMR.DynamicCallbacks.onRoomChange = {}
+  ITMR.DynamicCallbacks.onTearUpdate = {}
+  ITMR.DynamicCallbacks.onDamage = {}
+  ITMR.DynamicCallbacks.onNPCDeath = {}
+  ITMR.DynamicCallbacks.onStageChange = {}
+  
+  -- Disable shaders
+  for shaderName, shader in pairs(ITMR.Shaders) do
+    shader.enabled = false
+  end
+  
   if shouldSave == false then
+    
     -- Clear current collectible items count
     for key,value in pairs(ITMR.Items.Passive) do
       ITMR.Items.Passive[key].count = 0
@@ -100,16 +116,6 @@ function callbacks:preGameExit (shouldSave)
       twitch = 0,
       rainbow = 0
     }
-    
-    -- Reset callbacks for items
-    ITMR.DynamicCallbacks.onUpdate = {}
-    ITMR.DynamicCallbacks.onCacheUpdate = {}
-    ITMR.DynamicCallbacks.onEntityUpdate = {}
-    ITMR.DynamicCallbacks.onRoomChange = {}
-    ITMR.DynamicCallbacks.onTearUpdate = {}
-    ITMR.DynamicCallbacks.onDamage = {}
-    ITMR.DynamicCallbacks.onNPCDeath = {}
-    ITMR.DynamicCallbacks.onStageChange = {}
   else
     ITMR.Cmd.send("Saving mod data")
     
@@ -130,6 +136,17 @@ end
 function callbacks:postGameEnd (gameover)
   
   
+end
+
+-- Shaders callback
+function callbacks:getShaderParams (name)
+  if (ITMR.Shaders[name] == nil) then return end
+  
+  if shaderAPI then
+    shaderAPI("ITMR_Blink", ITMR.Shaders[name].pass())
+  else
+    return ITMR.Shaders[name].pass()
+  end
 end
 
 
