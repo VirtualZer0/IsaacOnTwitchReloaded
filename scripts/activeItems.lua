@@ -21,7 +21,11 @@ local activeItems = {}
 activeItems.TwitchRaid = {
   
   id = Isaac.GetItemIdByName("Twitch Raid"),
-  description = "Summon friendly buddies",
+  
+  description = {
+    en = "Summon friendly buddies",
+    ru = "Спавнит дружелюбных мобов"
+  },
   
   onActivate = function ()
     
@@ -45,7 +49,11 @@ activeItems.TwitchRaid = {
 activeItems.TTours = {
   
   id = Isaac.GetItemIdByName("TTours"),
-  description = "Confuse all enemies in the room",
+  
+  description = {
+    en = "Confuse all enemies in the room",
+    ru = "Запутывает врагов в комнате"
+  },
   
   onActivate = function ()
     
@@ -72,7 +80,11 @@ activeItems.TTours = {
 activeItems.HumbleLife = {
   
   id = Isaac.GetItemIdByName("Humble Life"),
-  description = "Spawn multiple brimstone swirls",
+  
+  description = {
+    en = "Spawn multiple brimstone swirls",
+    ru = "Спавнит несколько бримстоун-воронок"
+  },
   
   onActivate = function ()
     

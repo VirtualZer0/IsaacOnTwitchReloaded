@@ -17,6 +17,9 @@ function callbacks:postRender ()
     ITMR.Server:update()
   end
   
+  -- Render text
+  ITMR.Text.render()
+  
 end
 
 -- Evaluate Cache Callback

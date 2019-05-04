@@ -6,7 +6,7 @@ local passiveItems = {}
 -- Example
 --passiveItems.ItemName= {
 --  id = Isaac.GetItemIdByName("Item Name"), <-- Item Id
---  description = "Item description", <-- Item description for external item description mod
+--  description = {en = "Item description", ru = "Описание" }, <-- Item description for external item description mod
 --  count = 0, <-- Player items count
 --  onPickup = nil, <-- Function, called on pickup item
 --  onUpdate = nil, <-- Function, called every update when player have item
@@ -27,7 +27,10 @@ local passiveItems = {}
 passiveItems.PI_Kappa = {
   
   id = Isaac.GetItemIdByName("Kappa"),
-  description = "\1 +2.5 Damage Up",
+  description = {
+    en = "\1 +2.5 Damage Up",
+    ru = "\1 +2.5 к урону"
+  },
   count = 0,
   cacheFlag = CacheFlag.CACHE_DAMAGE,
   
@@ -42,7 +45,12 @@ passiveItems.PI_Kappa = {
 passiveItems.PI_GoldenKappa = {
   
   id = Isaac.GetItemIdByName("Golden Kappa"),
-  description = "\015 + 15 Coins#\189 + Golden bomb#\5 + Golden key#\6 + 2 Golden hearts",
+  
+  description = {
+    en = "\015 + 15 Coins#\189 + Golden bomb#\5 + Golden key#\6 + 2 Golden hearts",
+    ru = "\015 + 15 монет#\5 + Золотая бомба#\5 + Золотой ключ#\6 + 2 золотых сердца"
+  },
+  
   count = 0,
   
   onPickup = function ()
@@ -58,7 +66,12 @@ passiveItems.PI_GoldenKappa = {
 passiveItems.PI_NotLikeThis = {
   
   id = Isaac.GetItemIdByName("Not Like This"),
-  description = "Reroll enemies on every room",
+  
+  description = {
+    en = "Reroll enemies on every room",
+    ru = "Реролит врагов в каждой комнате при входе в нее"
+  },
+  
   count = 0,
   
   onRoomChange = function ()
@@ -75,7 +88,12 @@ passiveItems.PI_NotLikeThis = {
 passiveItems.PI_KappaPride = {
   
   id = Isaac.GetItemIdByName("Kappa Pride"),
-  description = "Every tear have a chance to spawn 6 another tears with different effects#This tears deal 1/6 of your damage",
+  
+  description = {
+    en = "Every tear have a chance to spawn 6 another tears with different effects#This tears deal 1/6 of your damage",
+    ru = "Каждая слеза имеет шанс заспавнить 6 других слез с разными эффектами#Эти слезы наносят 1/6 от вашего урона"
+  },
+  
   count = 0,
   
   onTearUpdate = function (obj, e)
@@ -128,7 +146,12 @@ passiveItems.PI_KappaPride = {
 passiveItems.PI_SSSsss = {
   
   id = Isaac.GetItemIdByName("SSSsss"),
-  description = "Enemies exploding after death",
+  
+  description = {
+    en = "Enemies exploding after death",
+    ru = "Враги взрываются при смерти"
+  },
+  
   count = 0,
   
   onNPCDeath = function (obj, entity)
@@ -146,7 +169,12 @@ passiveItems.PI_SSSsss = {
 passiveItems.PI_CurseLit = {
   
   id = Isaac.GetItemIdByName("Curse Lit"),
-  description = "Curses give permanent random stats up",
+  
+  description = {
+    en = "Curses give permanent random stats up",
+    ru = "Проклятья навсегда увеличивают случайный стат"
+  },
+  
   count = 0,
   
   onStageChange = function ()
@@ -174,7 +202,12 @@ passiveItems.PI_CurseLit = {
 passiveItems.PI_DrinkPurple = {
   
   id = Isaac.GetItemIdByName("Drink Purple"),
-  description = "\1 +0.35 Speed Up#Spawn 1-2 Twtich hearts on pickup",
+  
+  description = {
+    en = "\1 +0.35 Speed Up#Spawn 1-2 Twtich hearts on pickup",
+    ru = "\1 +0.35 к скорости#Спавнит 1-2 Твич-сердца при поднятии"
+  },
+  
   count = 0,
   cacheFlag = CacheFlag.CACHE_SPEED,
   
@@ -199,14 +232,19 @@ passiveItems.PI_DrinkPurple = {
 passiveItems.PI_Kreygasm = {
   
   id = Isaac.GetItemIdByName("Kreygasm"),
-  description = "Random effect for enemies in room",
+  
+  description = {
+    en = "Random effect for enemies in room",
+    ru = "Накладывает случайный эффект на часть врагов в комнате"
+  },
+  
   count = 0,
   
   onRoomChange = function ()
     local p = Isaac.GetPlayer(0)
     local entities = Isaac.GetRoomEntities()
     for i = 1, #entities do
-      if (entities[i]:IsEnemy() == true and math.random() > 0.5) then
+      if (entities[i]:IsActiveEnemy(false) == true and math.random() > 0.5) then
         local rnd = math.random(0,9)
         local ref = EntityRef(p)
         if (rnd == 0) then entities[i]:AddPoison(ref, math.random(30,300), math.random())
@@ -227,7 +265,12 @@ passiveItems.PI_Kreygasm = {
 passiveItems.PI_FutureMan = {
   
   id = Isaac.GetItemIdByName("Future Man"),
-  description = "Spawn radial beam#Beam deals 5% of player damage",
+  
+  description = {
+    en = "Spawn rotating beam#Beam deals 5% of player damage",
+    ru = "Спавнит вращающийся луч#Луч наносит 5% от вашего урона"
+  },
+  
   count = 0,
   
   onRoomChange = function ()
@@ -254,7 +297,12 @@ passiveItems.PI_FutureMan = {
 passiveItems.PI_BrainSlug = {
   
   id = Isaac.GetItemIdByName("Brain Slug"),
-  description = "Enemies move to player shot direction",
+  
+  description = {
+    en = "Enemies move to player shot direction",
+    ru = "Враги смещаются в сторону вашего выстрела"
+  },
+  
   count = 0,
   
   onEntityUpdate = function (entity)

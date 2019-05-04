@@ -10,13 +10,15 @@ local shaders = {
     },
     
     pass = function ()
-      if (ITMR.Shaders.ITMR_Blink.enabled) then
+      if (ITMR.Shaders.ITMR_Blink.enabled and not Game():IsPaused()) then
         return ITMR.Shaders.ITMR_Blink.params
       else
         return {Time = 0}
       end
     end
   },
+  
+  
   
   ITMR_ScreenMirror = {
     enabled = false,
@@ -34,6 +36,8 @@ local shaders = {
     end
   },
   
+  
+  
   ITMR_VHS = {
     enabled = false,
     
@@ -49,6 +53,8 @@ local shaders = {
       end
     end
   },
+
+
 
   ITMR_ColorSides = {
   enabled = false,
@@ -69,6 +75,8 @@ local shaders = {
     end
   end
   },
+
+
 
   ITMR_Glitch = {
   enabled = false,
@@ -93,6 +101,8 @@ local shaders = {
   end
   },
 
+
+
   ITMR_DeepDark = {
   enabled = false,
   
@@ -115,6 +125,8 @@ local shaders = {
   end
   },
 
+
+
   ITMR_BrokenLens = {
   enabled = false,
   
@@ -126,7 +138,7 @@ local shaders = {
   selected = nil,
   
   pass = function ()
-    if (ITMR.Shaders.ITMR_BrokenLens.enabled) then
+    if (ITMR.Shaders.ITMR_BrokenLens.enabled and not Game():IsPaused()) then
       
       if (ITMR.Shaders.ITMR_BrokenLens.params.Intensity > 5) then
         ITMR.Shaders.ITMR_BrokenLens.params.Intensity = 0
@@ -154,6 +166,55 @@ local shaders = {
       return {
         Intensity = -1,
         PlayerPos = {0,0}
+      }
+    end
+  end
+  },
+
+
+
+  ITMR_Swirl = {
+  enabled = false,
+  
+  params = {
+    Angle = 1,
+    SwirlPos = {0.5,0.5}
+  },
+  
+  selected = nil,
+  
+  pass = function ()
+    if (ITMR.Shaders.ITMR_Swirl.enabled and not Game():IsPaused()) then
+      
+      local center = Isaac.WorldToScreen(Game():GetRoom():GetCenterPos())
+      ITMR.Shaders.ITMR_Swirl.params.SwirlPos = {center.X, center.Y}
+      
+      
+      return ITMR.Shaders.ITMR_Swirl.params
+    else
+      return {
+        Angle = 0,
+        SwirlPos = {0,0}
+      }
+    end
+  end
+  },
+
+ITMR_Bloody = {
+  enabled = false,
+  
+  params = {
+    Intensity = 0.6
+  },
+  
+  selected = nil,
+  
+  pass = function ()
+    if (ITMR.Shaders.ITMR_Bloody.enabled) then
+      return ITMR.Shaders.ITMR_Bloody.params
+    else
+      return {
+        Intensity = 0
       }
     end
   end

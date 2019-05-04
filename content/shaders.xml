@@ -449,4 +449,150 @@
     ]]>
     </fragment>
   </shader>
+  
+  <!-- Swirl shader -->
+  <shader name="ITMR_Swirl">
+    <parameters>
+      <param name="Angle" type="float"/>
+      <param name="SwirlPos" type="vec2"/>
+    </parameters>
+    <vertex>
+    <![CDATA[
+      attribute vec3 Position;
+      attribute vec4 Color;
+      attribute vec2 TexCoord;
+      attribute vec4 RenderData; 
+      attribute float Scale;
+      
+      varying vec4 Color0; 
+      varying vec2 TexCoord0; 
+      varying vec4 RenderDataOut; 
+      varying float ScaleOut;
+      varying vec3 PositionOut; 
+      uniform mat4 Transform;
+      
+      attribute float Angle;
+      varying float AngleOut;
+      
+      attribute vec2 SwirlPos;
+      varying vec2 SwirlPosOut;
+      
+      void main(void) {
+        RenderDataOut = RenderData; 
+        ScaleOut = Scale;
+        Color0 = Color; 
+        TexCoord0 = TexCoord;
+        AngleOut = Angle;
+        PositionOut = Position;
+        SwirlPosOut = SwirlPos;
+        
+        gl_Position = Transform * vec4(Position.xyz, 1);
+      }
+    ]]>
+    </vertex>
+    <fragment>
+    <![CDATA[
+      varying lowp vec4 Color0; 
+      varying mediump vec2 TexCoord0; 
+      varying lowp vec4 RenderDataOut;
+      varying lowp float ScaleOut;
+      varying lowp float AngleOut;
+      varying lowp vec2 SwirlPosOut;
+      varying lowp vec3 PositionOut;
+      uniform sampler2D Texture0;
+      
+      void main(void) {
+        
+        float ratioX = RenderDataOut.x / RenderDataOut.z;
+        float ratioY = RenderDataOut.y / RenderDataOut.w;
+        
+        if (AngleOut > 0) {
+          lowp vec2 textureCoordinateToUse = TexCoord0;
+          lowp vec2 center = SwirlPosOut*2/RenderDataOut.zw;
+          lowp float dist = distance(center, TexCoord0);
+          lowp float radius = 0.15;
+          textureCoordinateToUse -= center;
+            
+            
+          if (dist < radius)
+          {
+            lowp float percent = (radius - dist) / radius;
+            lowp float theta = percent * percent * AngleOut * 8.0;
+            lowp float s = sin(theta);
+            lowp float c = cos(theta);
+            textureCoordinateToUse = vec2(dot(textureCoordinateToUse, vec2(c, -s)), dot(textureCoordinateToUse, vec2(s, c)));
+          }
+          textureCoordinateToUse += center;
+            
+          gl_FragColor = Color0 * texture2D(Texture0, textureCoordinateToUse);
+        }
+        else {
+          gl_FragColor = Color0 * texture2D(Texture0, TexCoord0);
+        }
+      }
+    ]]>
+    </fragment>
+  </shader>
+  
+    <!-- Bloody shader -->
+  <shader name="ITMR_Bloody">
+    <parameters>
+      <param name="Intensity" type="float"/>
+    </parameters>
+    <vertex>
+    <![CDATA[
+      attribute vec3 Position;
+      attribute vec4 Color;
+      attribute vec2 TexCoord;
+      attribute vec4 RenderData; 
+      attribute float Scale;
+      
+      varying vec4 Color0; 
+      varying vec2 TexCoord0; 
+      varying vec4 RenderDataOut; 
+      varying float ScaleOut;
+      uniform mat4 Transform;
+      
+      attribute float Intensity;
+      varying float IntensityOut;
+      
+      void main(void) {
+        RenderDataOut = RenderData; 
+        ScaleOut = Scale;
+        Color0 = Color; 
+        TexCoord0 = TexCoord;
+        IntensityOut = Intensity;
+        
+        gl_Position = Transform * vec4(Position.xyz, 1);
+      }
+    ]]>
+    </vertex>
+    <fragment>
+    <![CDATA[
+      varying lowp vec4 Color0; 
+      varying mediump vec2 TexCoord0; 
+      varying lowp vec4 RenderDataOut;
+      varying lowp float ScaleOut;
+      varying lowp float IntensityOut;
+      uniform sampler2D Texture0;
+        
+      void main(void) {
+      
+        vec2 position = ( gl_FragCoord.xy / RenderDataOut.zw );
+        vec4 color = texture2D(Texture0, position);
+        
+        if (IntensityOut > 0) {
+          if (color.r > color.g*2.1 && color.r > color.b*2.1) {
+            Color0.r = 2.1;
+          }
+          else {
+            color.rgb = (color.r + color.g + color.b)/3*IntensityOut + color.rgb * (1-IntensityOut);
+          }
+        }
+        
+        gl_FragColor = Color0 * color;
+      }
+    ]]>
+    </fragment>
+  </shader>
 </shaders>

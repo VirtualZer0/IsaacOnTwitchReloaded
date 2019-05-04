@@ -4,6 +4,7 @@ local header =
 Server: ITMR Server 1.0
 Connection: close
 Content-Type: application/json
+Access-Control-Allow-Origin: *
 ]]
 
 -- Connect libraries
@@ -129,8 +130,13 @@ end
 function Server.getJSON (str)
   --str = Server.decodeURI(str)
   if (str == nil) then return end
-  str = string.match(str, "{{(.-)}}").."}"
-  return json.decode(str)
+  local strmatch = string.match(str, "{{(.-)}}")
+  if (strmatch ~= nil) then
+    str = strmatch .."}"
+    return json.decode(str)
+  else
+    return {m="empty"}
+  end
 end
 
 return Server;

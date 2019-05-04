@@ -1,6 +1,7 @@
 ITMR = RegisterMod("TwitchModReloaded", 1)
 
 require('mobdebug').start()
+local json = require('json')
 
 -- Creating subobjects
 ITMR.Server = require('scripts.server') -- ITMR Server
@@ -62,6 +63,75 @@ ITMR.DynamicCallbacks = {
   onStageChange = {},
 }
 
+----------- Text Rendering ---------------
+
+ITMR.Text = {
+  Storage = {},
+  Fonts = {
+    Terminus = Font()
+  },
+  
+  add = function (name, text, pos, color, size, isCenter, timeout)
+    -- Too lazy for write this every time
+    if (color == nil) then color = {r = 1, g = 1, b = 1, a = 1} end
+    if (size == nil) then size = 1 end
+    if (isCenter == nil) then isCenter = true end
+    if (timeout == nil) then timeout = -1 end
+    if (type(text) == "string") then text = {text} end
+    
+    -- Split text on strings
+    local strings = {}
+    local line = 1
+    
+    for ns, s in pairs(text) do
+      
+      s = ITMR._.fixtext(s)
+      
+      local sx = pos.X
+      
+      if (isCenter) then
+        sx = pos.X - Isaac.GetTextWidth(s)/2*size
+      end
+      
+      table.insert(strings, {
+        text = s,
+        x = sx,
+        y = pos.Y + (line * size * 10)
+      })
+      
+      line = line +1
+    end
+    
+    ITMR.Text.Storage[name] = {
+      text = strings,
+      isCenter = isCenter,
+      color = color,
+      size = size,
+      timeout = timeout
+    }
+  end,
+  
+  remove = function (name)
+    ITMR.Text.Storage[name] = nil
+  end,
+  
+  render = function ()
+    for name, text in pairs(ITMR.Text.Storage) do
+      
+      for snum, stext in pairs(text.text) do
+        
+        Isaac.RenderScaledText(stext.text, stext.x, stext.y, text.size, text.size, text.color.r, text.color.g, text.color.b, text.color.a)
+        
+      end
+    end
+  end
+}
+
+-- Loading fonts
+ITMR.Text.Fonts["Terminus"]:Load("font/terminus8.fnt")
+
+--ITMR.Text.add("test1", {"Тестируем тестовым тестом", "соси", "соси", tostring(56)}, {X = 200, Y = 60})
+
 ----------- Bind server handlers ---------------
 
 -- Change text on screen
@@ -84,9 +154,39 @@ ITMR.Server:setHandler("subtime", function (req)
   
 end)
 
+-- Give something
+ITMR.Server:setHandler("give", function (req) 
+  
+  if (req.give == "item") then
+    ITMR._.giveItem(req.name)
+  elseif (req.give == "trinket") then
+    ITMR._.giveTrinket(req.name)
+  elseif (req.give == "heart") then
+    ITMR._.giveHeart(req.name)
+  elseif (req.give == "pickup") then
+    ITMR._.givePickup(req.name, req.count)
+  elseif (req.give == "companion") then
+    ITMR._.giveCompanion(req.name)
+  elseif (req.give == "pocket") then
+    ITMR._.giveTrinket(req.name)
+  end
+  
+  local p = Isaac.GetPlayer(0)
+  
+  if (req.emote ~= nil) then
+    if (req.emote == "h") then p:AnimateHappy() else p:AnimateSad() end
+  end
+  
+  return {res = "ok"}
+end)
+
 -- Set tables for external item description mod
 if not __eidItemDescriptions then
   __eidItemDescriptions = {};
+end
+
+if not __eidRusItemDescriptions then
+  __eidRusItemDescriptions = {};
 end
 
 
@@ -94,8 +194,11 @@ end
 for key,value in pairs(ITMR.Items.Active) do
   ITMR:AddCallback(ModCallbacks.MC_USE_ITEM, ITMR.Items.Active[key].onActivate, ITMR.Items.Active[key].id);
   
-  __eidItemDescriptions[ITMR.Items.Active[key].id] = ITMR.Items.Active[key].description .. 
-  "#\3 From Isaac On Twitch";
+  __eidItemDescriptions[ITMR.Items.Active[key].id] = ITMR.Items.Active[key].description["en"] .. 
+  "#\3 From Twitch Mod"
+  
+  __eidRusItemDescriptions[ITMR.Items.Active[key].id] = ITMR._.fixtext(ITMR.Items.Active[key].description["ru"] .. 
+  "#\3 Предмет из Твич-мода")
 end
  
 
@@ -174,8 +277,11 @@ for key,value in pairs(ITMR.Items.Passive) do
   ITMR:AddCallback(ModCallbacks.MC_POST_UPDATE, pickupRemoveCheck);
   
   -- Add External Item Description support
-  __eidItemDescriptions[ITMR.Items.Passive[key].id] = ITMR.Items.Passive[key].description .. 
-  "#\3 From Isaac On Twitch";
+  __eidItemDescriptions[ITMR.Items.Passive[key].id] = ITMR.Items.Passive[key].description["en"] .. 
+  "#\3 From Twitch Mod"
+  
+  __eidRusItemDescriptions[ITMR.Items.Passive[key].id] = ITMR._.fixtext(ITMR.Items.Passive[key].description["ru"] .. 
+  "#\3 Предмет из Твич-мода")
 end
 
 
