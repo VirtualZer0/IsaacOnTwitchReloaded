@@ -82,18 +82,20 @@
       void main(void) {
         Color0 = Color; 
         
-        if (Pos == 0) {
-					TexCoord0 = TexCoord;
-				}
-				else if (Pos == 1) {
-					TexCoord0 = vec2(RenderData.w/RenderData.z - TexCoord.x, TexCoord.y);
-				}
-				else if (Pos == 2) {
-					TexCoord0 = vec2(TexCoord.x, RenderData.y/RenderData.x - TexCoord.y);
-				}
-				else {
-					TexCoord0 = vec2(RenderData.w/RenderData.z - TexCoord.x, RenderData.y/RenderData.x - TexCoord.y);
-				}
+        if (Pos > 0) {
+          if (Pos == 1) {
+            TexCoord0 = vec2(RenderData.w/RenderData.z - TexCoord.x, TexCoord.y);
+          }
+          else if (Pos == 2) {
+            TexCoord0 = vec2(TexCoord.x, RenderData.y/RenderData.x - TexCoord.y);
+          }
+          else {
+            TexCoord0 = vec2(RenderData.w/RenderData.z - TexCoord.x, RenderData.y/RenderData.x - TexCoord.y);
+          }
+        }
+        else {
+          TexCoord0 = TexCoord;
+        }
         
         gl_Position = Transform * vec4(Position.xyz, 1.0); 
       }

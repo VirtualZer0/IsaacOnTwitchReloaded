@@ -82,15 +82,13 @@ function callbacks:preGameExit (shouldSave)
   -- Stop ITMR server
   ITMR.Server:close()
   
-  -- Reset callbacks for items
-  ITMR.DynamicCallbacks.onUpdate = {}
-  ITMR.DynamicCallbacks.onCacheUpdate = {}
-  ITMR.DynamicCallbacks.onEntityUpdate = {}
-  ITMR.DynamicCallbacks.onRoomChange = {}
-  ITMR.DynamicCallbacks.onTearUpdate = {}
-  ITMR.DynamicCallbacks.onDamage = {}
-  ITMR.DynamicCallbacks.onNPCDeath = {}
-  ITMR.DynamicCallbacks.onStageChange = {}
+  -- Reset dynamic callbacks
+  
+  for cname, cval in pairs(ITMR.DynamicCallbacks) do
+    if (type(cval) ~= "function") then
+      cval = nil
+    end
+  end
   
   -- Disable shaders
   for shaderName, shader in pairs(ITMR.Shaders) do

@@ -16,6 +16,7 @@ ITMR._ = require('scripts.helper') -- Helper functions
 ITMR.Items = {
   Active = require('scripts.activeItems'), -- Active items
   Passive = require('scripts.passiveItems'), -- Passive items
+  Trinkets = require('scripts.trinkets'), -- Trinkets
 }
 
 -- Settings
@@ -58,6 +59,7 @@ ITMR.DynamicCallbacks = {
   onEntityUpdate = {},
   onRoomChange = {},
   onTearUpdate = {},
+  onProjectileUpdate = {},
   onDamage = {},
   onNPCDeath = {},
   onStageChange = {},
@@ -67,9 +69,6 @@ ITMR.DynamicCallbacks = {
 
 ITMR.Text = {
   Storage = {},
-  Fonts = {
-    Terminus = Font()
-  },
   
   add = function (name, text, pos, color, size, isCenter, timeout)
     -- Too lazy for write this every time
@@ -126,9 +125,6 @@ ITMR.Text = {
     end
   end
 }
-
--- Loading fonts
-ITMR.Text.Fonts["Terminus"]:Load("font/terminus8.fnt")
 
 --ITMR.Text.add("test1", {"Тестируем тестовым тестом", "соси", "соси", tostring(56)}, {X = 200, Y = 60})
 
@@ -189,16 +185,12 @@ if not __eidRusItemDescriptions then
   __eidRusItemDescriptions = {};
 end
 
+if not __eidTrinketDescriptions then
+  __eidTrinketDescriptions = {};
+end
 
--- Bind callbacks and descriptions for active items
-for key,value in pairs(ITMR.Items.Active) do
-  ITMR:AddCallback(ModCallbacks.MC_USE_ITEM, ITMR.Items.Active[key].onActivate, ITMR.Items.Active[key].id);
-  
-  __eidItemDescriptions[ITMR.Items.Active[key].id] = ITMR.Items.Active[key].description["en"] .. 
-  "#\3 From Twitch Mod"
-  
-  __eidRusItemDescriptions[ITMR.Items.Active[key].id] = ITMR._.fixtext(ITMR.Items.Active[key].description["ru"] .. 
-  "#\3 Предмет из Твич-мода")
+if not __eidRusTrinketDescriptions then
+  __eidRusTrinketDescriptions = {};
 end
  
 
@@ -232,7 +224,18 @@ function ITMR.DynamicCallbacks.unbind (from, key)
   end
 end
 
+----------- Bind items and trinkets ---------------
 
+-- Bind callbacks and descriptions for active items
+for key,value in pairs(ITMR.Items.Active) do
+  ITMR:AddCallback(ModCallbacks.MC_USE_ITEM, ITMR.Items.Active[key].onActivate, ITMR.Items.Active[key].id);
+  
+  __eidItemDescriptions[ITMR.Items.Active[key].id] = ITMR.Items.Active[key].description["en"] .. 
+  "#\3 From Twitch Mod"
+  
+  __eidRusItemDescriptions[ITMR.Items.Active[key].id] = ITMR._.fixtext(ITMR.Items.Active[key].description["ru"] .. 
+  "#\3 Предмет из Твич-мода")
+end
 
 -- Bind pickup/remove callbacks and descriptions for passive items
 for key,value in pairs(ITMR.Items.Passive) do
@@ -284,6 +287,15 @@ for key,value in pairs(ITMR.Items.Passive) do
   "#\3 Предмет из Твич-мода")
 end
 
+-- Bind callbacks and descriptions for trinkets
+for key,value in pairs(ITMR.Items.Trinkets) do
+  
+  __eidTrinketDescriptions[ITMR.Items.Trinkets[key].id] = ITMR.Items.Trinkets[key].description["en"] .. 
+  "#\3 From Twitch Mod"
+  
+  __eidRusTrinketDescriptions[ITMR.Items.Trinkets[key].id] = ITMR._.fixtext(ITMR.Items.Trinkets[key].description["ru"] .. 
+  "#\3 Предмет из Твич-мода")
+end
 
 
 -- Bind callbacks
@@ -342,6 +354,15 @@ ITMR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,
 ITMR:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, 
   function (obj, e)
     for key,value in pairs(ITMR.DynamicCallbacks.onTearUpdate) do
+      value(obj, e)
+    end
+  end
+)
+
+-- onProjectileUpdate Callback
+ITMR:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE, 
+  function (obj, e)
+    for key,value in pairs(ITMR.DynamicCallbacks.onProjectileUpdate) do
       value(obj, e)
     end
   end

@@ -21,11 +21,11 @@
   <familiar description="Yikes, it's stinky!" gfx="Collectibles_StinkyCheese.png" name="Stinky Cheese" />
   
   <trinket description="Like a pro" gfx="Trinket_twitch_Neonomi.png" name="Neo glasses" /> <!-- Neonomi -->
-  <trinket description="We need to free him!" gfx="Trinket_twitch_Smite.png" name="Yoshi shell" /> <!-- Smite -->
-  <trinket description="Everyone loves it" gfx="Trinket_twitch_Hutts.png" name="Hair clap" /> <!-- Hutts -->
-  <trinket description="Try it or suck it" gfx="Trinket_twitch_Tijoe.png" name="Torn cat ear" /> <!-- Tijoe -->
+  <trinket description="We need to free him" gfx="Trinket_twitch_Smite.png" name="Yoshi shell" /> <!-- Smite -->
+  <trinket description="Your Polling of Isaac in another castle" gfx="Trinket_twitch_Hutts.png" name="Hair clap" /> <!-- Hutts -->
+  <trinket description="What about run in Deadbolt?" gfx="Trinket_twitch_Tijoe.png" name="Torn cat ear" /> <!-- Tijoe -->
   <trinket description="Velichaishe!" gfx="Trinket_twitch_Rekvizit8Bit.png" name="Gribulya's piece" /> <!-- Rekvi -->
-  <trinket description="Bzzzzzz" gfx="Trinket_twitch_H4hen.png" name="Honey Lord Sting" /> <!-- H4hen -->
+  <trinket description="True Inglesh mun" gfx="Trinket_twitch_H4hen.png" name="Honey Lord Sting" /> <!-- H4hen -->
   <trinket description="Who turned out the lights?" gfx="Trinket_twitch_Vertroxmt.png" name="Spacesuit charge indicator" /> <!-- iVertox -->
   <trinket description="Hell's Heat" gfx="Trinket_twitch_VadPribalt.png" name="Ring of Eternal Flame" /> <!-- VadPribalt -->
   <trinket description="So greedy" gfx="Trinket_twitch_MrOSTsergey.png" name="Mr. Ost coin eye" /> <!-- Mr. Ost Sergey -->
