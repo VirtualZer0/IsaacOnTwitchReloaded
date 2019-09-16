@@ -23,8 +23,8 @@ ITMR.Items = {
 ITMR.Settings = {
   viewers = 0,
   textpos = {
-    l1 = {x = 16, y = 241},
-    l2 = {x = 16, y = 259}
+    l1 = {X = 16, Y = 220},
+    l2 = {X = 16, Y = 235}
   },
   subtime = 10*60*30,
   gift = nil
@@ -52,6 +52,11 @@ ITMR.Storage = {
   
 }
 
+-- Additional game state
+ITMR.GameState = {
+  renderSpecial = true
+}
+
 -- Dynamic callbacks storage
 ITMR.DynamicCallbacks = {
   onUpdate = {},
@@ -68,13 +73,17 @@ ITMR.DynamicCallbacks = {
 ----------- Text Rendering ---------------
 
 ITMR.Text = {
-  Storage = {},
   
+  Storage = {}, -- Current texts for render
+  FollowStorage = {}, -- Entities for binding text position
+  
+  -- Add new text to render
   add = function (name, text, pos, color, size, isCenter, timeout)
     -- Too lazy for write this every time
+    if (pos == nil) then pos = ITMR.Settings.textpos.l2 end
     if (color == nil) then color = {r = 1, g = 1, b = 1, a = 1} end
-    if (size == nil) then size = 1 end
-    if (isCenter == nil) then isCenter = true end
+    if (size == nil) then size = 1.5 end
+    if (isCenter == nil) then isCenter = false end
     if (timeout == nil) then timeout = -1 end
     if (type(text) == "string") then text = {text} end
     
@@ -110,12 +119,41 @@ ITMR.Text = {
     }
   end,
   
-  remove = function (name)
-    ITMR.Text.Storage[name] = nil
+  -- Bind text to entity position
+  follow = function (name, entity)
+    ITMR.Text.FollowStorage[name] = {
+      entity = entity
+    }
   end,
   
+  -- Remove text
+  remove = function (name)
+    ITMR.Text.Storage[name] = nil
+    ITMR.Text.FollowStorage[name] = nil
+  end,
+  
+  -- Render all current texts
   render = function ()
+    if (ITMR.GameState.renderSpecial == false) then return end
+    
     for name, text in pairs(ITMR.Text.Storage) do
+      
+      -- Check if the text bind to entity
+      if (ITMR.Text.FollowStorage[name] ~= nil) then
+        
+        -- If entity not exists anymore
+        if (ITMR.Text.FollowStorage[name].entity:Exists() ~= true) then 
+          -- Remove text
+          ITMR.Text.remove(name)
+        else
+          -- Change text position to entity position
+          for snum, stext in pairs(text.text) do
+            local epos = Isaac.WorldToRenderPosition(ITMR.Text.FollowStorage[name].entity.Position, true) + Game():GetRoom():GetRenderScrollOffset()
+            stext.x = epos.X-3 * #stext.text
+            stext.y = epos.Y - 40 - (snum * text.size * 10)
+          end
+        end
+      end
       
       for snum, stext in pairs(text.text) do
         
@@ -128,7 +166,26 @@ ITMR.Text = {
 
 --ITMR.Text.add("test1", {"Тестируем тестовым тестом", "соси", "соси", tostring(56)}, {X = 200, Y = 60})
 
+----------- Progress Bar Rendering ---------------
+ITMR.ProgressBar = {
+  Storage = {},
+  
+  add = function (name, text, min, max, value, signs)
+    
+  end
+}
+
 ----------- Bind server handlers ---------------
+-- Ping answer
+ITMR.Server:setHandler("ping", function (req)
+  return { out = "pong" }
+end)
+
+-- Set connection
+ITMR.Server:setHandler("connect", function (req) 
+  ITMR.Text.remove("siteMessage")
+  ITMR.Text.add("connectionDone", {"Connection done!"})
+end)
 
 -- Change text on screen
 ITMR.Server:setHandler("text", function (req) 
@@ -394,3 +451,6 @@ ITMR:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,
     end
   end
 )
+
+-- Initialize game launch
+--ITMR.Text.add("siteMessage", "Go to IsaacOnTwitch.com and select Start!")

@@ -121,4 +121,18 @@ function cmd.setshader (params)
   ITMR.Shaders[params[2]].params[params[3]] = tonumber(params[4])
 end
 
+-- Test following text render system
+function cmd.debugtextfollow (params)
+  if (params[2] == nil) then
+    params[2] = "hello"
+  end
+  
+  local e = Isaac.GetRoomEntities()
+  
+  for k, v in pairs(e) do
+    ITMR.Text.add("debugtextfollow"..k, params[2])
+    ITMR.Text.follow("debugtextfollow"..k, v)
+  end
+end
+
 return cmd

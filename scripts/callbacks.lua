@@ -5,7 +5,12 @@ local callbacks = {}
 
 -- Post Update callback
 function callbacks:postUpdate ()
-  
+  -- Hide text if boss screen active
+  if (Game():GetRoom():GetType() == RoomType.ROOM_BOSS and Game():GetRoom():GetFrameCount() == 0) then
+    ITMR.GameState.renderSpecial = false
+  else
+    ITMR.GameState.renderSpecial = true
+  end
 end
 
 

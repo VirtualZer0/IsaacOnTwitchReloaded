@@ -17,7 +17,9 @@ local Server =
  _port = 666,
  _header = header,
  _handlers = {},
- _running = false
+ _running = false,
+ 
+ output = {}
 }
 
 -- Bind handler for selected method
@@ -36,7 +38,7 @@ function Server:run()
   self._server = socket.tcp()
   self._server:bind("127.0.0.1", self._port)
   self._server:listen(10)
-  self._server:settimeout(.01)
+  self._server:settimeout(.02)
   self._running = true
   Isaac.ConsoleOutput("\nITMR Server: Running on 127.0.0.1:"..self._port.."\n")
 end
@@ -62,13 +64,18 @@ function Server:getRequest()
     
     if rec ~= nil then
       local req = Server.getJSON(rec)
-      if self._handlers[req.m] ~= nil then -- Check handler for requested method
+      Isaac.DebugString("ITMR Server: get "..rec.."\n")
+      if req.m == "out" then
+        client:send(self._header.."\n"..json.encode({out = Server.ouput}))
+        Server.ouput = {}
+      elseif self._handlers[req.m] ~= nil then -- Check handler for requested method        
         client:send(self._header.."\n"..json.encode(self._handlers[req.m](req))) -- Call handler
       else
         Isaac.ConsoleOutput("ITMR Server: Not found handler for "..req.m.."\n") -- Handler not found message
         client:send(self._header.."\n{\"res\":\"err\",\"msg\":\"Method not found\"}") -- Response for client
       end
     end
+    
     client:close()
   end
 end
@@ -137,6 +144,11 @@ function Server.getJSON (str)
   else
     return {m="empty"}
   end
+end
+
+--Add new output param
+function Server:addOutput (obj)
+  table.insert(Server.output, obj)
 end
 
 return Server;

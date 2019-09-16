@@ -425,7 +425,7 @@
         Color0 = Color; 
         TexCoord0 = TexCoord;
         
-        if (Intensity >= 0) {
+        if (Intensity >= 0.000001) {
           Intensity = abs(Intensity-2.5);
 					Position.xy += (Position.xy - CameraPos.xy)*(Intensity);
 					gl_Position = Transform * vec4(Position.xyz, 1);
