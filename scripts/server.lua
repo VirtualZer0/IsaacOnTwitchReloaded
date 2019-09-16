@@ -37,8 +37,8 @@ function Server:run()
   
   self._server = socket.tcp()
   self._server:bind("127.0.0.1", self._port)
-  self._server:listen(10)
-  self._server:settimeout(.02)
+  self._server:listen(15)
+  self._server:settimeout(0)
   self._running = true
   Isaac.ConsoleOutput("\nITMR Server: Running on 127.0.0.1:"..self._port.."\n")
 end
@@ -64,7 +64,6 @@ function Server:getRequest()
     
     if rec ~= nil then
       local req = Server.getJSON(rec)
-      Isaac.DebugString("ITMR Server: get "..rec.."\n")
       if req.m == "out" then
         client:send(self._header.."\n"..json.encode({out = Server.ouput}))
         Server.ouput = {}
