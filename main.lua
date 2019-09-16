@@ -70,6 +70,72 @@ ITMR.DynamicCallbacks = {
   onStageChange = {},
 }
 
+----------- Timer system ---------------
+ITMR.Timers = {
+  
+  Storage = {}, -- Current timers
+  _timerId = 1,
+  
+  addTimeout = function (func, interval)
+    
+    local timerId = ITMR.Timers._timerId
+    ITMR.Timers._timerId = ITMR.Timers._timerId + 1
+    
+    table.insert(ITMR.Timers.Storage, {
+      id = timerId,
+      func = func,
+      interval = interval,
+      currentInterval = interval,
+      repeats = 1
+    })
+  
+    return timerId
+    
+  end,
+  
+  addInterval = function (func, interval, repeats)
+    
+    local timerId = ITMR.Timers._timerId
+    ITMR.Timers._timerId = ITMR.Timers._timerId + 1
+    
+    if (repeats == nil) then repeats = -1 end
+    
+    table.insert(ITMR.Timers.Storage, {
+      id = timerId,
+      func = func,
+      interval = interval,
+      currentInterval = interval,
+      repeats = repeats
+    })
+  
+    return timerId
+    
+  end,
+  
+  stop = function (id)
+    for key, timer in pairs(ITMR.Timers.Storage) do
+      if timer.id == id then ITMR.Timers.Storage[key] = nil
+    end
+  end,
+  
+  tick = function ()
+    for key, timer in pairs(ITMR.Timers.Storage) do
+      timer.currentInterval = timer.currentInterval - 1
+      
+      if timer.currentInterval == 0 then
+        timer.repeats = timer.repeats - 1
+        timer.currentInterval = timer.interval
+        timer.func()
+      end
+      
+      if timer.repeats == 0 then
+        ITMR.Timers.Storage[key] = null
+      end
+    end
+  end
+  
+}
+
 ----------- Text Rendering ---------------
 
 ITMR.Text = {

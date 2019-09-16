@@ -11,6 +11,9 @@ function callbacks:postUpdate ()
   else
     ITMR.GameState.renderSpecial = true
   end
+  
+  -- Call timers
+  ITMR.Timers.tick()
 end
 
 
