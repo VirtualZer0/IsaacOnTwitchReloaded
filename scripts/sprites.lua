@@ -15,8 +15,11 @@ local sprites = {
     TwitchHeart = Sprite(),
     TwitchHeartHalf = Sprite(),
     RainbowHeart = Sprite(),
-    RainbowHeartHalf = Sprite()
+    RainbowHeartHalf = Sprite(),
     
+    -- Progress Bar
+    ProgressBarBg = Sprite(),
+    ProgressBarLine = Sprite()
   }
   
 }
@@ -38,6 +41,9 @@ function sprites.load ()
   sprites.UI.RainbowHeart:Load("gfx/ui/ui_twitch_mod_hearts.anm2", true)
   sprites.UI.RainbowHeartHalf:Load("gfx/ui/ui_twitch_mod_hearts.anm2", true)
   
+  sprites.UI.ProgressBarBg:Load("gfx/ui/ui_twitch_mod_pollbar.anm2", true)
+  sprites.UI.ProgressBarLine:Load("gfx/ui/ui_twitch_mod_pollbar.anm2", true)
+  
   -- Activate sprites
   sprites.UI.EventActive:Play("Event", true)
   sprites.UI.GrayBitsActive:Play("Gray", true)
@@ -51,7 +57,8 @@ function sprites.load ()
   sprites.UI.RainbowHeart:Play("RainbowHeartFull", false)
   sprites.UI.RainbowHeartHalf:Play("RainbowHeartHalf", false)
   
-  
+  sprites.UI.ProgressBarBg:PlayOverlay("BarBg", false)
+  sprites.UI.ProgressBarLine:PlayOverlay("BarLine", false)
 end
 
 return sprites;

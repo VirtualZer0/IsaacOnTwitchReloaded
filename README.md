@@ -28,7 +28,7 @@ For debug, you can use next commands in Isaac command line (~):
 
 **<u>`itmr setshader [shadername] [paramname] [paramvalue]`</u>** - set parameter for shader from mod
 
-**<u>`itmr debugtextfollow [text]`</u>** - added text for every entity in room
+**<u>`itmr debugtextfollow [text]`</u>** - add text for every entity in room
 
 
 

@@ -25,6 +25,9 @@ function callbacks:postRender ()
     ITMR.Server:update()
   end
   
+  -- Render progress bar
+  ITMR.ProgressBar.render()
+  
   -- Render text
   ITMR.Text.render()
   

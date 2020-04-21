@@ -4,19 +4,21 @@ require('mobdebug').start()
 local json = require('json')
 
 -- Creating subobjects
-ITMR.Server = require('scripts.server') -- ITMR Server
+ITMR.Server = require('scripts.server')       -- ITMR Server
 ITMR.Callbacks = require('scripts.callbacks') -- Callbacks
-ITMR.Classes = require('scripts.classes') -- Classes
-ITMR.Enums = require('scripts.enums') -- Enumerations
-ITMR.Cmd = require('scripts.cmd') -- Command line handler
-ITMR.Shaders = require('scripts.shaders') -- Command line handler
-ITMR._ = require('scripts.helper') -- Helper functions
+ITMR.Classes = require('scripts.classes')     -- Classes
+ITMR.Enums = require('scripts.enums')         -- Enumerations
+ITMR.Cmd = require('scripts.cmd')             -- Command line handler
+ITMR.Sprites = require('scripts.sprites')     -- Sprites
+ITMR.Shaders = require('scripts.shaders')     -- Shaders
+ITMR.Events = require('scripts.events')       -- Shaders
+ITMR._ = require('scripts.helper')            -- Helper functions
 
 -- Items
 ITMR.Items = {
-  Active = require('scripts.activeItems'), -- Active items
-  Passive = require('scripts.passiveItems'), -- Passive items
-  Trinkets = require('scripts.trinkets'), -- Trinkets
+  Active = require('scripts.activeItems'),    -- Active items
+  Passive = require('scripts.passiveItems'),  -- Passive items
+  Trinkets = require('scripts.trinkets'),     -- Trinkets
 }
 
 -- Settings
@@ -70,7 +72,7 @@ ITMR.DynamicCallbacks = {
   onStageChange = {},
 }
 
------------ Timer system ---------------
+----------- Timers system ---------------
 ITMR.Timers = {
   
   Storage = {}, -- Current timers
@@ -114,7 +116,7 @@ ITMR.Timers = {
   
   stop = function (id)
     for key, timer in pairs(ITMR.Timers.Storage) do
-      if timer.id == id then ITMR.Timers.Storage[key] = nil
+      if timer.id == id then ITMR.Timers.Storage[key] = nil end
     end
   end,
   
@@ -140,17 +142,16 @@ ITMR.Timers = {
 
 ITMR.Text = {
   
-  Storage = {}, -- Current texts for render
+  Storage = {},       -- Current texts for render
   FollowStorage = {}, -- Entities for binding text position
   
   -- Add new text to render
-  add = function (name, text, pos, color, size, isCenter, timeout)
+  add = function (name, text, pos, color, size, isCenter)
     -- Too lazy for write this every time
     if (pos == nil) then pos = ITMR.Settings.textpos.l2 end
     if (color == nil) then color = {r = 1, g = 1, b = 1, a = 1} end
     if (size == nil) then size = 1.5 end
     if (isCenter == nil) then isCenter = false end
-    if (timeout == nil) then timeout = -1 end
     if (type(text) == "string") then text = {text} end
     
     -- Split text on strings
@@ -180,8 +181,7 @@ ITMR.Text = {
       text = strings,
       isCenter = isCenter,
       color = color,
-      size = size,
-      timeout = timeout
+      size = size
     }
   end,
   
@@ -230,13 +230,56 @@ ITMR.Text = {
   end
 }
 
---ITMR.Text.add("test1", {"Тестируем тестовым тестом", "соси", "соси", tostring(56)}, {X = 200, Y = 60})
-
 ----------- Progress Bar Rendering ---------------
+
 ITMR.ProgressBar = {
-  Storage = {},
+  Storage = {
+    visible = false,
+    updated = true,
+    cropX = 0,
+    min = 0,
+    max = 100,
+    value = 50
+  },
   
-  add = function (name, text, min, max, value, signs)
+  -- Create progress bar
+  create = function (title, min, max, value, signs)
+    -- 1% = 2.6px
+    ITMR.ProgressBar.Storage.visible = true
+    ITMR.ProgressBar.Storage.min = min
+    ITMR.ProgressBar.Storage.max = max
+    ITMR.ProgressBar.Storage.value = value
+    ITMR.ProgressBar.Storage.cropX = 260 - ITMR.ProgressBar.interpolate(value)
+    ITMR.Text.add("progressbartitle", title, Isaac.WorldToScreen(Vector(300, 380)), nil, 1, true)
+  end,
+  
+  -- Set progress bar value
+  set = function (value)
+    ITMR.ProgressBar.Storage.value = value
+    ITMR.ProgressBar.Storage.cropX = 260 - ITMR.ProgressBar.interpolate(value)
+    ITMR.ProgressBar.Storage.updated = true
+  end,
+  
+  -- Interpolation
+  interpolate = function (val)
+    return 260* (val - ITMR.ProgressBar.Storage.min)/(ITMR.ProgressBar.Storage.max-ITMR.ProgressBar.Storage.min)
+  end,
+  
+  -- Render progress bar
+  render = function ()
+    
+    -- If progress bar not visible, end function
+    if not ITMR.ProgressBar.Storage.visible then return end
+    
+    ITMR.Sprites.UI.ProgressBarBg:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(0,0))
+    
+    ITMR.Sprites.UI.ProgressBarLine:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(ITMR.ProgressBar.Storage.cropX,0))
+    
+    if ITMR.ProgressBar.Storage.updated then
+      ITMR.ProgressBar.Storage.updated = false
+      ITMR.Sprites.UI.ProgressBarLine:PlayOverlay("BarLine", true)
+    end
+    ITMR.Sprites.UI.ProgressBarLine:Update()
     
   end
 }
@@ -251,6 +294,7 @@ end)
 ITMR.Server:setHandler("connect", function (req) 
   ITMR.Text.remove("siteMessage")
   ITMR.Text.add("connectionDone", {"Connection done!"})
+  return { out = "success" }
 end)
 
 -- Change text on screen
@@ -519,4 +563,5 @@ ITMR:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,
 )
 
 -- Initialize game launch
---ITMR.Text.add("siteMessage", "Go to IsaacOnTwitch.com and select Start!")
+ITMR.Sprites.load()
+ITMR.Text.add("siteMessage", "Go to IsaacOnTwitch.com and select Start!")
