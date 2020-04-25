@@ -1,5 +1,6 @@
 local enums = {}
 
+-- For "Twitch Raid" spacebar item
 enums.Buddies = {
   EntityType.ENTITY_GAPER,
   EntityType.ENTITY_HUSH_GAPER,
@@ -7,6 +8,7 @@ enums.Buddies = {
   EntityType.ENTITY_GURGLE,
   EntityType.ENTITY_GLOBIN
 }
+
 
 enums.Rainbow = {
   Color(1,0,0,1,0,0,0),
@@ -17,6 +19,7 @@ enums.Rainbow = {
   Color(0,0,1,1,0,0,0),
   Color(0.5,0,1,1,0,0,0)
 }
+
 
 enums.ChatColors = {
   Color(1,0,0,1,0,0,0),

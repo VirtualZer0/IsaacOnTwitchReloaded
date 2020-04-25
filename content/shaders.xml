@@ -1,6 +1,7 @@
 <shaders>
 
-  <!-- Blink shader -->
+
+  <!------------------------------------------ Blink shader ------------------------------------------>
   <shader name="ITMR_Blink">
     <parameters>
       <param name="Time" type="float"/>
@@ -20,6 +21,7 @@
       uniform mat4 Transform;
       
       attribute float Time;
+      
       varying float TimeOut;
       
       void main(void) {
@@ -43,7 +45,7 @@
       varying lowp float TimeOut;
       
       void main(void) {
-        if (TimeOut > 0) {
+        if (TimeOut > 0.0) {
           vec4 Color = Color0 * texture2D(Texture0, TexCoord0);
           Color.r *= 1 - TimeOut;
           Color.g *= 1 - TimeOut;
@@ -58,13 +60,15 @@
     </fragment>
   </shader>
   
-  <!-- Screen mirror shader -->
+  
+    <!------------------------------------------ Screen mirror shader ------------------------------------------>
   <shader name="ITMR_ScreenMirror">
     <parameters>
       <param name="Pos" type="float"/>
     </parameters>
     <vertex>
     <![CDATA[
+
       attribute vec3 Position;
       attribute vec4 Color;
       attribute vec2 TexCoord;
@@ -82,7 +86,7 @@
       void main(void) {
         Color0 = Color; 
         
-        if (Pos > 0) {
+        if (Pos > 0.0) {
           if (Pos == 1) {
             TexCoord0 = vec2(RenderData.w/RenderData.z - TexCoord.x, TexCoord.y);
           }
@@ -117,14 +121,15 @@
     </fragment>
   </shader>
   
-
-  <!-- VHS shader -->
+  
+  <!------------------------------------------ VHS shader ------------------------------------------>
   <shader name="ITMR_VHS">
     <parameters>
       <param name="Time" type="float"/>
     </parameters>
     <vertex>
     <![CDATA[
+
       attribute vec3 Position;
       attribute vec4 Color;
       attribute vec2 TexCoord;
@@ -165,7 +170,7 @@
 			}
       
       void main(void) {
-        if (TimeOut > 0) {
+        if (TimeOut > 0.0) {
           vec4 Color = Color0 * texture2D(Texture0, TexCoord0);
           
           float VHSPosWidth = rand(TexCoord0)/18;
@@ -186,7 +191,8 @@
     </fragment>
   </shader>
   
-    <!-- ColorSides shader -->
+  
+  <!------------------------------------------ ColorSides shader ------------------------------------------>
   <shader name="ITMR_ColorSides">
     <parameters>
       <param name="Intensity" type="float"/>
@@ -194,6 +200,7 @@
     </parameters>
     <vertex>
     <![CDATA[
+
       attribute vec3 Position;
       attribute vec4 Color;
       attribute vec2 TexCoord;
@@ -239,7 +246,7 @@
       varying lowp vec3 PositionOut;
       
       void main(void) {
-        if (IntensityOut > 0) {
+        if (IntensityOut > 0.0) {
           vec4 color = Color0 * texture2D(Texture0, TexCoord0);
           color.rgb = color.rgb + VColorOut.rgb * abs(PositionOut.x/RenderDataOut.z-0.2 + PositionOut.y/RenderDataOut.y-0.2)*IntensityOut;
           gl_FragColor = color;
@@ -252,13 +259,15 @@
     </fragment>
   </shader>
   
-  <!-- Glitch shader -->
+  
+  <!------------------------------------------ Glitch shader ------------------------------------------>
   <shader name="ITMR_Glitch">
     <parameters>
       <param name="Time" type="float"/>
     </parameters>
     <vertex>
     <![CDATA[
+
       attribute vec3 Position;
       attribute vec4 Color;
       attribute vec2 TexCoord;
@@ -299,7 +308,7 @@
 			}
       
       void main(void) {
-        if (TimeOut >= 0) {
+        if (TimeOut >= 0.0) {
           vec4 Color = Color0 * texture2D(Texture0, TexCoord0);
           float temp = rand(vec2(TexCoord0.x + TimeOut, TexCoord0.y + TimeOut));
 					
@@ -328,7 +337,8 @@
     </fragment>
   </shader>
   
-  <!-- Deep Dark shader -->
+  
+    <!------------------------------------------ Deep Dark shader ------------------------------------------>
   <shader name="ITMR_DeepDark">
     <parameters>
       <param name="Intensity" type="float"/>
@@ -336,6 +346,7 @@
     </parameters>
     <vertex>
     <![CDATA[
+
       attribute vec3 Position;
       attribute vec4 Color;
       attribute vec2 TexCoord;
@@ -396,7 +407,9 @@
     </fragment>
   </shader>
   
-    <!-- Broken Lens shader -->
+  
+  
+  <!------------------------------------------ Broken Lens shader ------------------------------------------>
   <shader name="ITMR_BrokenLens">
     <parameters>
       <param name="CameraPos" type="vec2"/>
@@ -404,6 +417,7 @@
     </parameters>
     <vertex>
     <![CDATA[
+
       attribute vec3 Position;
       attribute vec4 Color;
       attribute vec2 TexCoord;
@@ -452,7 +466,9 @@
     </fragment>
   </shader>
   
-  <!-- Swirl shader -->
+  
+  
+  <!------------------------------------------ Swirl shader ------------------------------------------>
   <shader name="ITMR_Swirl">
     <parameters>
       <param name="Angle" type="float"/>
@@ -460,6 +476,7 @@
     </parameters>
     <vertex>
     <![CDATA[
+
       attribute vec3 Position;
       attribute vec4 Color;
       attribute vec2 TexCoord;
@@ -508,7 +525,7 @@
         float ratioX = RenderDataOut.x / RenderDataOut.z;
         float ratioY = RenderDataOut.y / RenderDataOut.w;
         
-        if (AngleOut > 0) {
+        if (AngleOut > 0.0) {
           lowp vec2 textureCoordinateToUse = TexCoord0;
           lowp vec2 center = SwirlPosOut*2/RenderDataOut.zw;
           lowp float dist = distance(center, TexCoord0);
@@ -536,7 +553,9 @@
     </fragment>
   </shader>
   
-    <!-- Bloody shader -->
+  
+  
+  <!------------------------------------------ Bloody shader ------------------------------------------>
   <shader name="ITMR_Bloody">
     <parameters>
       <param name="Intensity" type="float"/>
@@ -583,7 +602,7 @@
         vec2 position = ( gl_FragCoord.xy / RenderDataOut.zw );
         vec4 color = texture2D(Texture0, position);
         
-        if (IntensityOut > 0) {
+        if (IntensityOut > 0.0) {
           if (color.r > color.g*2.1 && color.r > color.b*2.1) {
             Color0.r = 2.1;
           }
@@ -597,4 +616,5 @@
     ]]>
     </fragment>
   </shader>
+
 </shaders>

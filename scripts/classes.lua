@@ -2,18 +2,16 @@
 local classes = {}
 
 -- Event class
-classes.Event = {}
-function classes.Event:new (duration, byTime, triggerByRoom, ontrigger, onover)
+classes.ActiveEvent = {}
+function classes.ActiveEvent:new (event, name)
   local obj= {}
-  obj.duration = duration -- Event duration
-  obj.byTime = byTime -- TRUE - timer decreased every second
-  obj.triggerByRoom = triggerByRoom -- TRUE - trigger call after room changing. FALSE -- trigger call every postUpdate
-  obj.ontrigger = ontrigger -- Trigger function
-  obj.onover = onover -- Called after event
-  
+  obj.name = name                          -- Event name for dynamic callbacks
+  obj.event = event                        -- Original event link
+  obj.currentTime = event.duration or 0    -- Event countdown
   
   setmetatable(obj, self)
-  self.__index = self; return obj
+  self.__index = self
+  return obj
 end
 
 
@@ -22,12 +20,13 @@ classes.Subscriber = {}
 function classes.Subscriber:new (entity, name, time, color)
   local obj= {}
   obj.entity = entity -- Linked entity
-  obj.name = name -- Sub nickname
-  obj.time = time -- Time to disappear
-  obj.color = color -- Sub color
+  obj.name = name     -- Sub nickname
+  obj.time = time     -- Time to disappear
+  obj.color = color   -- Sub color
   
   setmetatable(obj, self)
-  self.__index = self; return obj
+  self.__index = self
+  return obj
 end
 
 return classes

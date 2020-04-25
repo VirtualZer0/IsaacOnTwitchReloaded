@@ -8,18 +8,18 @@ Access-Control-Allow-Origin: *
 ]]
 
 -- Connect libraries
-local socket = require('socket') -- This shit require luadebug, THANKYOU EDMOND MTHORFKER, I LOVE --LUADEBUG, ALL USERS LOVE F U C K I N G --LUADEBUG
+local socket = require('socket') -- This shit require --luadebug, THANKYOU EDMOND MTHORFKER, I LOVE --LUADEBUG, ALL USERS LOVE F U C K I N G --LUADEBUG
 local json = require('json')
 
 -- Root server object
 local Server =
 {
- _port = 666,
- _header = header,
- _handlers = {},
- _running = false,
+ _port = 666,       -- Server port
+ _header = header,  -- Default headers
+ _handlers = {},    -- Handlers for requests
+ _running = false,  -- Server state
  
- output = {}
+ output = {}        -- What is it? I don't remember
 }
 
 -- Bind handler for selected method

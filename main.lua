@@ -11,7 +11,7 @@ ITMR.Enums = require('scripts.enums')         -- Enumerations
 ITMR.Cmd = require('scripts.cmd')             -- Command line handler
 ITMR.Sprites = require('scripts.sprites')     -- Sprites
 ITMR.Shaders = require('scripts.shaders')     -- Shaders
-ITMR.Events = require('scripts.events')       -- Shaders
+ITMR.Events = require('scripts.events')       -- Events
 ITMR._ = require('scripts.helper')            -- Helper functions
 
 -- Items
@@ -23,20 +23,21 @@ ITMR.Items = {
 
 -- Settings
 ITMR.Settings = {
-  viewers = 0,
+  viewers = 0,              -- Viewers count
   textpos = {
-    l1 = {X = 16, Y = 220},
-    l2 = {X = 16, Y = 235}
+    l1 = {X = 16, Y = 220}, -- Firstline text position
+    l2 = {X = 16, Y = 235}  -- Secondline text position
   },
-  subtime = 10*60*30,
-  gift = nil
+  subtime = 10*60*30,       -- Time to life for subscribers
+  gift = nil                -- Gift trinket for streamer
 }
 
--- Current game storage
+-- Current game session storage
 ITMR.Storage = {
  
-  Subscribers = {},
-  Familiars = {},
+  Subscribers = {}, -- Current subscribers
+  Familiars = {},   -- Current familiars
+  ActiveEvents = {},-- Current events
   
   Stats = {
     speed = 0,
@@ -147,11 +148,13 @@ ITMR.Text = {
   
   -- Add new text to render
   add = function (name, text, pos, color, size, isCenter)
-    -- Too lazy for write this every time
+    -- Too lazy for writing this every time
     if (pos == nil) then pos = ITMR.Settings.textpos.l2 end
     if (color == nil) then color = {r = 1, g = 1, b = 1, a = 1} end
     if (size == nil) then size = 1.5 end
     if (isCenter == nil) then isCenter = false end
+    
+    -- If text is not array, make array
     if (type(text) == "string") then text = {text} end
     
     -- Split text on strings
@@ -160,6 +163,7 @@ ITMR.Text = {
     
     for ns, s in pairs(text) do
       
+      -- Replace symbols if it's needed
       s = ITMR._.fixtext(s)
       
       local sx = pos.X
@@ -200,6 +204,8 @@ ITMR.Text = {
   
   -- Render all current texts
   render = function ()
+    
+    -- Check if render not allowed
     if (ITMR.GameState.renderSpecial == false) then return end
     
     for name, text in pairs(ITMR.Text.Storage) do
@@ -209,15 +215,19 @@ ITMR.Text = {
         
         -- If entity not exists anymore
         if (ITMR.Text.FollowStorage[name].entity:Exists() ~= true) then 
-          -- Remove text
+          
+          -- then remove text
           ITMR.Text.remove(name)
+          
         else
-          -- Change text position to entity position
+          
+          -- else change text position to entity position
           for snum, stext in pairs(text.text) do
             local epos = Isaac.WorldToRenderPosition(ITMR.Text.FollowStorage[name].entity.Position, true) + Game():GetRoom():GetRenderScrollOffset()
             stext.x = epos.X-3 * #stext.text
             stext.y = epos.Y - 40 - (snum * text.size * 10)
           end
+          
         end
       end
       
@@ -233,6 +243,8 @@ ITMR.Text = {
 ----------- Progress Bar Rendering ---------------
 
 ITMR.ProgressBar = {
+  
+  -- Progress bar parameters
   Storage = {
     visible = false,
     updated = true,
@@ -271,20 +283,27 @@ ITMR.ProgressBar = {
     -- If progress bar not visible, end function
     if not ITMR.ProgressBar.Storage.visible then return end
     
+    -- Render progress bar background
     ITMR.Sprites.UI.ProgressBarBg:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(0,0))
     
+    -- Render progress bar line based on value
     ITMR.Sprites.UI.ProgressBarLine:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(ITMR.ProgressBar.Storage.cropX,0))
     
+    -- If value will be updated, play animation
     if ITMR.ProgressBar.Storage.updated then
       ITMR.ProgressBar.Storage.updated = false
       ITMR.Sprites.UI.ProgressBarLine:PlayOverlay("BarLine", true)
     end
+    
     ITMR.Sprites.UI.ProgressBarLine:Update()
     
   end
 }
 
 ----------- Bind server handlers ---------------
+-- Server handler receive deserialized JSON object
+-- from request body and return respoonse object
+
 -- Ping answer
 ITMR.Server:setHandler("ping", function (req)
   return { out = "pong" }
@@ -465,10 +484,11 @@ for key,value in pairs(ITMR.Items.Trinkets) do
 end
 
 
--- Bind callbacks
+-- Bind callbacks to Isaac
 ITMR:AddCallback(ModCallbacks.MC_EXECUTE_CMD, ITMR.Cmd.main)
 ITMR:AddCallback(ModCallbacks.MC_POST_UPDATE, ITMR.Callbacks.postUpdate)
 ITMR:AddCallback(ModCallbacks.MC_POST_RENDER, ITMR.Callbacks.postRender)
+ITMR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, ITMR.Callbacks.postNewRoom)
 ITMR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, ITMR.Callbacks.evaluateCache)
 ITMR:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, ITMR.Callbacks.postGameStarted)
 ITMR:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, ITMR.Callbacks.preGameExit)

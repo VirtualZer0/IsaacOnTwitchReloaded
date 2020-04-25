@@ -29,12 +29,15 @@ helper.giveHeart = function (name)
   elseif name == "Eternal" then p:AddEternalHearts(1)
   elseif name == "Bone" then p:AddBoneHearts(1)
   elseif name == "Twitch" then
+  
+    -- Copying black heart mechanic
     if ( p:GetSoulHearts() % 2 == 1) then
       p:AddSoulHearts(1)
       ITMR.Storage.Hearts.twitch = ITMR.Storage.Hearts.twitch + 1;
     else
       ITMR.Storage.Hearts.twitch = ITMR.Storage.Hearts.twitch + 2;
     end
+    
   elseif name == "Black" then p:AddBlackHearts(2) end
 end
 
@@ -48,7 +51,8 @@ end
 
 -- Give companion function
 helper.giveCompanion = function (name, count)
-    local p = Isaac.GetPlayer(0);
+  
+  local p = Isaac.GetPlayer(0);
   local game = Game()
   local room = game:GetRoom()
   
@@ -81,6 +85,7 @@ helper.giveCompanion = function (name, count)
     helper.closeDoors()
     
   elseif name == "PrettyFly" then p:AddPrettyFly() end
+  
 end
 
 -- Give pocket or effect function
@@ -95,21 +100,84 @@ helper.givePocket = function (name)
   elseif name == "Discharge" then p:DischargeActiveItem() end
 end
 
+-- Launch event function
+helper.launchEvent = function (eventName)
+  
+  local event = ITMR.Events[eventName]
+  
+  -- Create new ActiveEvent
+  local ev = ITMR.Classes.ActiveEvent:new(event, eventName)
+  
+  -- Trigger onStart and onRoomChange callbacks, if it possible
+  if ev.event.onStart ~= nil then ev.event.onStart() end
+  if ev.event.onRoomChange ~= nil then ev.event.onRoomChange() end
+  
+  -- Bind dynamic callbacks
+  ITMR.DynamicCallbacks.bind(ITMR.Events, eventName)
+  
+  -- Add ActiveEvent to current events storage
+  table.insert(ITMR.Storage.ActiveEvents, ev)
+  
+end
+
 -- Close doors function
 helper.closeDoors = function ()
   local room = Game():GetRoom()
   
   room:SetClear(false)
-    for i = 0,DoorSlot.NUM_DOOR_SLOTS-1 do
-      local door = room:GetDoor(i)
-      if door ~= nil then
-        door:Close() 
-      end
+  for i = 0,DoorSlot.NUM_DOOR_SLOTS-1 do
+    local door = room:GetDoor(i)
+    if door ~= nil then
+      door:Close() 
     end
+  end
 end
 
+-- Reset mod state
+helper.resetState = function ()
+  
+  -- Reset dynamic callbacks
+  for cname, cval in pairs(ITMR.DynamicCallbacks) do
+    if (type(cval) ~= "function") then
+      cval = nil
+    end
+  end
+  
+  -- Disable shaders
+  for shaderName, shader in pairs(ITMR.Shaders) do
+    shader.enabled = false
+  end
+  
+  -- Clear current collectible items count
+  for key,value in pairs(ITMR.Items.Passive) do
+    ITMR.Items.Passive[key].count = 0
+  end
+    
+  -- Reset stats
+  ITMR.Storage.Stats = {
+    speed = 0,
+    range = 0,
+    tears = 0,
+    tearspeed = 0,
+    damage = 0,
+    luck = 0
+  }
+  
+  -- Reset hearts
+  ITMR.Storage.Hearts = {
+    twitch = 0,
+    rainbow = 0
+  }
+  
+  -- Reset events
+  ITMR.Storage.ActiveEvents = {}
+  
+  -- Reset familiars
+  ITMR.Storage.ActiveEvents = {}
+  
+end
 
--- Fix text
+-- Fix text (check if Russian font available)
 helper.fixtext = function (text)
   if (Isaac.GetTextWidth("¨") ~= 5) then
     text = helper.translitrus(text)

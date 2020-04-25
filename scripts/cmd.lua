@@ -135,4 +135,9 @@ function cmd.debugtextfollow (params)
   end
 end
 
+-- Launch event
+function cmd.launchevent (params)
+  ITMR._.launchEvent("EV_"..params[2])
+end
+
 return cmd

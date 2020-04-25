@@ -3,7 +3,7 @@ local sprites = {
   
   UI = {
     
-    -- Events and bits indicator
+    -- Events and bits indicators
     EventActive = Sprite(),
     GrayBitsActive = Sprite(),
     PurpleBitsActive = Sprite(),

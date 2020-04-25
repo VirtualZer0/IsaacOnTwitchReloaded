@@ -5,21 +5,14 @@ local passiveItems = {}
 
 -- Example
 --passiveItems.ItemName= {
---  id = Isaac.GetItemIdByName("Item Name"), <-- Item Id
---  description = {en = "Item description", ru = "Описание" }, <-- Item description for external item description mod
---  count = 0, <-- Player items count
---  onPickup = nil, <-- Function, called on pickup item
---  onUpdate = nil, <-- Function, called every update when player have item
---  onCacheUpdate = nil, <-- Function, called when player stats evaluate
---  onEntityUpdate = nil, <-- Functon, called for every enemy on postUpdate
---  onRoomChange = nil, <-- Function, called when room changed
---  onDamage = nil, <-- Function, called when player get damage
---  onNPCDeath = nil, <-- Function, called when NPC died
---  onTearUpdate = nil, <-- Function, called when tier updated
---  onProjectileUpdate = nil, <-- Function, called when projectile updated
---  onStageChange = nil, <-- Function, called when stage changed
---  onRemove = nil <-- Function, called when item removed
-
+--  id = Isaac.GetItemIdByName("Item Name"),                    <-- Item Id
+--  description = {en = "Item description", ru = "Описание" },  <-- Item description for external item description mod
+--  count = 0,                                                  <-- Player items count
+--  onPickup = nil,                                             <-- Function, called on pickup item
+--  onRemove = nil                                              <-- Function, called when item removed
+--  
+--  Another callbacks equals DynamicCallbacks, you can see them on main.lua from line 497
+--
 --}
 
 

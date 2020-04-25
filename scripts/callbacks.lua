@@ -1,10 +1,12 @@
 -- Update functions for Isaac API Callbacks
 local json = require('json')
+local _ = require('scripts.helper')
 
 local callbacks = {}
 
 -- Post Update callback
 function callbacks:postUpdate ()
+  
   -- Hide text if boss screen active
   if (Game():GetRoom():GetType() == RoomType.ROOM_BOSS and Game():GetRoom():GetFrameCount() == 0) then
     ITMR.GameState.renderSpecial = false
@@ -14,6 +16,25 @@ function callbacks:postUpdate ()
   
   -- Call timers
   ITMR.Timers.tick()
+  
+  -- Update events countdown with byTime == true
+  for key,value in pairs(ITMR.Storage.ActiveEvents) do
+    if value.event.byTime or value.event.byTime == nil then
+      
+      if (value.currentTime > 0) then
+        value.currentTime = value.currentTime - 1
+        Isaac.ConsoleOutput(tostring(value.currentTime) .. " ")
+      else
+        -- Trigger onEnd callback, if it possible
+        if value.event.onEnd ~= nil then value.event.onEnd() end
+        
+        -- Remove event and callbacks
+        ITMR.DynamicCallbacks.unbind(ITMR.Events, value.name)
+        ITMR.Storage.ActiveEvents[key] = nil
+      end
+      
+    end
+  end
 end
 
 
@@ -30,6 +51,29 @@ function callbacks:postRender ()
   
   -- Render text
   ITMR.Text.render()
+  
+end
+
+-- Room change callback
+function callbacks:postNewRoom ()
+  
+  -- Update events countdown with byTime == false
+  for key,value in pairs(ITMR.Storage.ActiveEvents) do
+    if value.event.byTime == false then
+      
+      if (value.currentTime > 0) then
+        value.currentTime = value.currentTime - 1
+      else
+        -- Trigger onEnd callback, if it possible
+        if value.event.onEnd ~= nil then value.event.onEnd() end
+        
+        -- Remove event and callbacks
+        ITMR.DynamicCallbacks.unbind(ITMR.Events, value.name)
+        ITMR.Storage.ActiveEvents[key] = nil
+      end
+      
+    end
+  end
   
 end
 
@@ -64,8 +108,9 @@ end
 
 -- Start Game callback
 function callbacks:postGameStarted (fromSave)
-  -- Running ITMR server
-  ITMR.Server:run()
+  
+  -- Reset previous game state
+  _.resetState()
   
   if (fromSave) then
     Save = json.decode(Isaac.LoadModData(ITMR))
@@ -86,6 +131,10 @@ function callbacks:postGameStarted (fromSave)
       player:EvaluateItems()
     end
   end
+  
+  -- Running ITMR server
+  ITMR.Server:run()
+  
 end
 
 -- Exit Game callback
@@ -94,7 +143,6 @@ function callbacks:preGameExit (shouldSave)
   ITMR.Server:close()
   
   -- Reset dynamic callbacks
-  
   for cname, cval in pairs(ITMR.DynamicCallbacks) do
     if (type(cval) ~= "function") then
       cval = nil
@@ -148,6 +196,7 @@ end
 function callbacks:postGameEnd (gameover)
   
   
+  
 end
 
 -- Shaders callback
@@ -155,7 +204,7 @@ function callbacks:getShaderParams (name)
   if (ITMR.Shaders[name] == nil) then return end
   
   if shaderAPI then
-    shaderAPI("ITMR_Blink", ITMR.Shaders[name].pass())
+    shaderAPI(name, ITMR.Shaders[name].pass())
   else
     return ITMR.Shaders[name].pass()
   end
