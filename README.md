@@ -9,7 +9,7 @@ Rewrited and improved version of old TBoI mod, [Isaac On Twitch](https://github.
 - Fixed game saves
 
 ## Running
-As before, **run Isaac with `--luadebug` launch parameter**. If you don't, then please don't whine "NYEGH, the mod is broken and doesn't work".
+As before, **run Isaac with `--luadebug` launch parameter**
 
 ## Command line
 
