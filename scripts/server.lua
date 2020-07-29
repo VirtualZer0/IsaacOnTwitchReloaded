@@ -19,7 +19,7 @@ local Server =
  _handlers = {},    -- Handlers for requests
  _running = false,  -- Server state
  
- output = {}        -- What is it? I don't remember
+ output = {}        -- Output data object
 }
 
 -- Bind handler for selected method
@@ -63,12 +63,24 @@ function Server:getRequest()
     end
     
     if rec ~= nil then
+      
       local req = Server.getJSON(rec)
-      if req.m == "out" then
+      
+      if req == nil or req.m == "empty" or req.m == nil then
+        -- Do nothing
+      elseif req.m == "out" then
         client:send(self._header.."\n"..json.encode({out = Server.ouput}))
         Server.ouput = {}
-      elseif self._handlers[req.m] ~= nil then -- Check handler for requested method        
-        client:send(self._header.."\n"..json.encode(self._handlers[req.m](req))) -- Call handler
+      elseif self._handlers[req.m] ~= nil then -- Check handler for requested method     
+        
+        local response = self._handlers[req.m](req.d);
+        
+        if (response ~= nil) then
+          client:send(self._header.."\n"..json.encode(response)) -- Call handler with response
+        else
+          client:send(self._header.."\n{}") -- Call handler with empty object
+        end
+        
       else
         Isaac.ConsoleOutput("ITMR Server: Not found handler for "..req.m.."\n") -- Handler not found message
         client:send(self._header.."\n{\"res\":\"err\",\"msg\":\"Method not found\"}") -- Response for client
@@ -136,7 +148,7 @@ end
 function Server.getJSON (str)
   --str = Server.decodeURI(str)
   if (str == nil) then return end
-  local strmatch = string.match(str, "{{(.-)}}")
+  local strmatch = string.match(str, "||(.-)||")
   if (strmatch ~= nil) then
     str = strmatch .."}"
     return json.decode(str)

@@ -8,11 +8,12 @@ ITMR.Server = require('scripts.server')       -- ITMR Server
 ITMR.Callbacks = require('scripts.callbacks') -- Callbacks
 ITMR.Classes = require('scripts.classes')     -- Classes
 ITMR.Enums = require('scripts.enums')         -- Enumerations
-ITMR.Sounds = require('scripts.sounds')       -- ITMR Server
+ITMR.Sounds = require('scripts.sounds')       -- Sounds
 ITMR.Cmd = require('scripts.cmd')             -- Command line handler
 ITMR.Sprites = require('scripts.sprites')     -- Sprites
 ITMR.Shaders = require('scripts.shaders')     -- Shaders
 ITMR.Events = require('scripts.events')       -- Events
+ITMR.Locale = require('scripts.locale')       -- Localization
 ITMR._ = require('scripts.helper')            -- Helper functions
 
 -- Items
@@ -26,19 +27,19 @@ ITMR.Items = {
 ITMR.Settings = {
   viewers = 0,              -- Viewers count
   textpos = {
-    l1 = {X = 16, Y = 220}, -- Firstline text position
+    l1 = {X = 16, Y = 215}, -- Firstline text position
     l2 = {X = 16, Y = 235}  -- Secondline text position
   },
   subtime = 10*60*30,       -- Time to life for subscribers
-  gift = nil                -- Gift trinket for streamer
+  lang = "en"               -- Current language
 }
 
 -- Current game session storage
 ITMR.Storage = {
  
-  Subscribers = {}, -- Current subscribers
-  Familiars = {},   -- Current familiars
-  ActiveEvents = {},-- Current events
+  Subscribers = {},   -- Current subscribers
+  Familiars = {},     -- Current familiars
+  ActiveEvents = {},  -- Current events
   
   Stats = {
     speed = 0,
@@ -58,8 +59,7 @@ ITMR.Storage = {
 
 -- Additional game state
 ITMR.GameState = {
-  renderSpecial = true,
-  lang = 'en'
+  renderSpecial = true
 }
 
 -- Dynamic callbacks storage
@@ -313,15 +313,29 @@ end)
 
 -- Set connection
 ITMR.Server:setHandler("connect", function (req) 
-  ITMR.Text.remove("siteMessage")
-  ITMR.Text.add("connectionDone", {"Connection done! Poll will appear now"})
-  
+  ITMR.Text.remove("siteMessage");
+  ITMR.Sounds.play(SoundEffect.SOUND_THUMBSUP);
+  ITMR.Cmd.send("Web-client connected")
   return { out = "success" }
 end)
 
--- Change text on screen
-ITMR.Server:setHandler("text", function (req) 
+-- Add text to screen
+ITMR.Server:setHandler("addText", function (req) 
+    
+  local tpos = ITMR.Settings.textpos.l1;
   
+  if (req.pos ~= nil and req.pos ~= "empty" and req.pos == 'l2') then
+    tpos = ITMR.Settings.textpos.l2;
+  elseif (req.pos ~= nil and req.pos ~= "empty" and req.pos == 'l2' and req.pos ~= 'l1') then
+    tpos = req.pos;
+  end
+    
+  ITMR.Text.add(req.name, req.value, tpos, req.color, req.size, req.isCenter);
+end)
+
+-- Remove text from screen
+ITMR.Server:setHandler("removeText", function (req) 
+  ITMR.Text.remove(req.name);
 end)
 
 -- Change text position
@@ -586,5 +600,6 @@ ITMR:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,
 )
 
 -- Initialize game launch
+ITMR._.checkRussianFont()
 ITMR.Sprites.load()
-ITMR.Text.add("siteMessage", "Go to IsaacOnTwitch.com and select Start!")
+ITMR.Text.add("siteMessage", ITMR.Locale[ITMR.Settings.lang].welcomeMessage)

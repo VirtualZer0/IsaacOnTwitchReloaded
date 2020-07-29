@@ -1,5 +1,12 @@
 local helper = {}
 
+-- Helper storage
+helper.Storage = {
+  
+  haveRussianFont = false
+  
+}
+
 -- Give item function
 helper.giveItem = function (name)
   local p = Isaac.GetPlayer(0);
@@ -177,12 +184,21 @@ helper.resetState = function ()
   
 end
 
--- Fix text (check if Russian font available)
-helper.fixtext = function (text)
+-- Check if Russian font available
+helper.checkRussianFont = function ()
   if (Isaac.GetTextWidth("¨") ~= 5) then
-    text = helper.translitrus(text)
+    helper.Storage.haveRussianFont = false;
   else
-    text = helper.fixrus(text)
+    helper.Storage.haveRussianFont = true;
+  end
+end
+
+-- Fix text if Russian font available
+helper.fixtext = function (text)
+  if (helper.Storage.haveRussianFont) then
+    text = helper.fixrus(text);
+  else
+    text = helper.translitrus(text);
   end
   
   return text

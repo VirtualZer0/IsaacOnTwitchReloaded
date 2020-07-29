@@ -1,17 +1,25 @@
-local sounds = {}
+local sounds = {
+  list = {},
+  
+  play = function (sound)
+  
+    SFXManager():Play(sound, 1, 0, false, 1);
+    
+  end
+}
 
-sounds.bitsAppear = Isaac.GetSoundIdByName ("BitsAppear")
-sounds.bitsCollect = Isaac.GetSoundIdByName ("BitsCollect")
-sounds.superhotBreak = Isaac.GetSoundIdByName ("SuperhotBreak")
-sounds.rewind = Isaac.GetSoundIdByName ("Rewind")
-sounds.goodMusic = Isaac.GetSoundIdByName ("GoodMusic")
-sounds.ddosDialup = Isaac.GetSoundIdByName ("DdosDialup")
-sounds.attackOnTitan = Isaac.GetSoundIdByName ("AttackOnTitan")
-sounds.interstellar = Isaac.GetSoundIdByName ("Interstellar")
-sounds.rerunCharging = Isaac.GetSoundIdByName ("RerunCharging")
-sounds.allergia = Isaac.GetSoundIdByName ("Sneeze")
-sounds.heavyrain = Isaac.GetSoundIdByName ("Rain")
-sounds.qte_yes = Isaac.GetSoundIdByName ("QTEYes")
-sounds.qte_no = Isaac.GetSoundIdByName ("QTENo")
+sounds.list.bitsAppear = Isaac.GetSoundIdByName ("BitsAppear")
+sounds.list.bitsCollect = Isaac.GetSoundIdByName ("BitsCollect")
+sounds.list.superhotBreak = Isaac.GetSoundIdByName ("SuperhotBreak")
+sounds.list.rewind = Isaac.GetSoundIdByName ("Rewind")
+sounds.list.goodMusic = Isaac.GetSoundIdByName ("GoodMusic")
+sounds.list.ddosDialup = Isaac.GetSoundIdByName ("DdosDialup")
+sounds.list.attackOnTitan = Isaac.GetSoundIdByName ("AttackOnTitan")
+sounds.list.interstellar = Isaac.GetSoundIdByName ("Interstellar")
+sounds.list.rerunCharging = Isaac.GetSoundIdByName ("RerunCharging")
+sounds.list.allergia = Isaac.GetSoundIdByName ("Sneeze")
+sounds.list.heavyrain = Isaac.GetSoundIdByName ("Rain")
+sounds.list.qte_yes = Isaac.GetSoundIdByName ("QTEYes")
+sounds.list.qte_no = Isaac.GetSoundIdByName ("QTENo")
 
 return sounds
