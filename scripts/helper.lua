@@ -173,7 +173,7 @@ helper.resetState = function ()
   ITMR.Storage.ActiveEvents = {}
   
   -- Reset familiars
-  ITMR.Storage.ActiveEvents = {}
+  ITMR.Storage.Familiars = {}
   
 end
 
@@ -187,6 +187,7 @@ helper.fixtext = function (text)
   
   return text
 end
+
 
 -- Convert russian letters from utf-8 to win-1251. Oh my god...
 helper.fixrus = function (str)
@@ -303,8 +304,8 @@ helper.translitrus = function (str)
   str = str:gsub('Г', 'G')
   str = str:gsub('Д', 'D')
   str = str:gsub('Е', 'E')
-  str = str:gsub('Ё', 'Yo')
-  str = str:gsub('Ж', 'Zh')
+  str = str:gsub('Ё', 'YO')
+  str = str:gsub('Ж', 'ZH')
   str = str:gsub('З', 'Z')
   str = str:gsub('И', 'I')
   str = str:gsub('Й', 'Y')
@@ -321,15 +322,15 @@ helper.translitrus = function (str)
   str = str:gsub('Ф', 'F')
   str = str:gsub('Х', 'H')
   str = str:gsub('Ц', 'C')
-  str = str:gsub('Ч', 'Ch')
-  str = str:gsub('Ш', 'Sh')
-  str = str:gsub('Щ', 'Sch')
+  str = str:gsub('Ч', 'CH')
+  str = str:gsub('Ш', 'SH')
+  str = str:gsub('Щ', 'SCH')
   str = str:gsub('Ъ', '|')
   str = str:gsub('Ы', 'I')
   str = str:gsub('Ь', '`')
   str = str:gsub('Э', 'E')
-  str = str:gsub('Ю', 'Yu')
-  str = str:gsub('Я', 'Ya')
+  str = str:gsub('Ю', 'YU')
+  str = str:gsub('Я', 'YA')
   
   return str
 end

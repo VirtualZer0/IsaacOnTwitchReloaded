@@ -141,7 +141,7 @@ local shaders = {
     if (ITMR.Shaders.ITMR_BrokenLens.enabled and not Game():IsPaused()) then
       
       if (ITMR.Shaders.ITMR_BrokenLens.params.Intensity > 5) then
-        ITMR.Shaders.ITMR_BrokenLens.params.Intensity = 0
+        ITMR.Shaders.ITMR_BrokenLens.params.Intensity = 0.1
       else
         if (math.abs(ITMR.Shaders.ITMR_BrokenLens.params.Intensity-2.5) >= 0 and math.abs(ITMR.Shaders.ITMR_BrokenLens.params.Intensity-2.5) <= 0.1) then
           local entities = Isaac.GetRoomEntities()

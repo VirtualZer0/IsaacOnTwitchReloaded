@@ -9,6 +9,24 @@ enums.Buddies = {
   EntityType.ENTITY_GLOBIN
 }
 
+-- For Angel Rage event
+enums.AngelRage = {
+  EntityType.ENTITY_WIZOOB,
+  EntityType.ENTITY_LIL_HAUNT,
+  EntityType.ENTITY_BRAIN,
+  EntityType.ENTITY_BONY,
+  EntityType.ENTITY_BABY
+}
+
+-- For Devil Rage event
+enums.DevilRage = {
+  EntityType.ENTITY_BABY_LONG_LEGS,
+  EntityType.ENTITY_ONE_TOOTH,
+  EntityType.ENTITY_TARBOY,
+  EntityType.ENTITY_NULLS,
+  EntityType.ENTITY_BOOMFLY
+}
+
 
 enums.Rainbow = {
   Color(1,0,0,1,0,0,0),

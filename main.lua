@@ -8,6 +8,7 @@ ITMR.Server = require('scripts.server')       -- ITMR Server
 ITMR.Callbacks = require('scripts.callbacks') -- Callbacks
 ITMR.Classes = require('scripts.classes')     -- Classes
 ITMR.Enums = require('scripts.enums')         -- Enumerations
+ITMR.Sounds = require('scripts.sounds')       -- ITMR Server
 ITMR.Cmd = require('scripts.cmd')             -- Command line handler
 ITMR.Sprites = require('scripts.sprites')     -- Sprites
 ITMR.Shaders = require('scripts.shaders')     -- Shaders
@@ -57,7 +58,8 @@ ITMR.Storage = {
 
 -- Additional game state
 ITMR.GameState = {
-  renderSpecial = true
+  renderSpecial = true,
+  lang = 'en'
 }
 
 -- Dynamic callbacks storage
@@ -312,7 +314,8 @@ end)
 -- Set connection
 ITMR.Server:setHandler("connect", function (req) 
   ITMR.Text.remove("siteMessage")
-  ITMR.Text.add("connectionDone", {"Connection done!"})
+  ITMR.Text.add("connectionDone", {"Connection done! Poll will appear now"})
+  
   return { out = "success" }
 end)
 

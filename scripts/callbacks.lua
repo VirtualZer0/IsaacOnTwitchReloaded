@@ -23,7 +23,6 @@ function callbacks:postUpdate ()
       
       if (value.currentTime > 0) then
         value.currentTime = value.currentTime - 1
-        Isaac.ConsoleOutput(tostring(value.currentTime) .. " ")
       else
         -- Trigger onEnd callback, if it possible
         if value.event.onEnd ~= nil then value.event.onEnd() end

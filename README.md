@@ -51,6 +51,7 @@ For debug, you can use next commands in Isaac command line (~):
   - **`server.lua`** - Twitch mod server for receiveng/sending data
   - **`sprites.lua`** - Contains UI and etc sprites from mod
   - **`shaders.lua`** - Contains shaders params
+  - **`sounds.lua`** - Contains sounds from mod
   - **`trinkets.lua`** - List of all trinkets from mod
 - **`main.lua`** - Main mod script, contains root mod object
 
