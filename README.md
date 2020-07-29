@@ -1,6 +1,6 @@
 # Isaac Twitch Mod Reloaded
 
-Rewrited and improved version of old TBoI mod, [Isaac On Twitch](https://github.com/VFStudio/IsaacOnTwitch/). There is a new features in this mod:
+Rewrited and improved version of old TBoI mod, [Isaac On Twitch](https://github.com/VFStudio/IsaacOnTwitch/). There are new features in this mod:
 
 - Internal web server instead file input/output system for external data exchange
 - New callbacks system. Increase performance and code quality
@@ -8,7 +8,8 @@ Rewrited and improved version of old TBoI mod, [Isaac On Twitch](https://github.
 - External Item Description support
 - Fixed game saves
 
-
+## Running
+As before, **run Isaac with `--luadebug` launch parameter**
 
 ## Command line
 
