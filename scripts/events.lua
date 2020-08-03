@@ -4,6 +4,9 @@ local events = {}
 
 --events.EventName = {
 --
+--  name,       <-- Event name, using as key for locale, then sended to isaacontwitch.com when game connected
+--  weights,    <-- Array with weights for gamemodes: [easy, normal, crazy]
+--  good,       <-- If true, play happy animation, else - sad animation
 --  duration,   <-- Event duration, by room or by seconds, it depends on the variable byTime. If not defined, equals 0
 --  byTime,     <-- If TRUE, duration decrease every second, if FALSE - every room changing. If not defined, equals TRUE
 --  onStart,    <-- This function call when event started
@@ -13,43 +16,12 @@ local events = {}
 --
 --}
 
--- Debug event
-
-events.EV_Debug = {
-  
-  duration = 5*30,
-  byTime = true,
-  
-  onStart = function ()
-    
-    local player = Isaac.GetPlayer(0)
-    local room = Game():GetRoom()
-    
-    player:AnimateHappy()
-    
-  end,
-  
-  onEnd = function ()
-    
-    local player = Isaac.GetPlayer(0)
-    local room = Game():GetRoom()
-    
-    player:AnimateSad()
-    
-    Isaac.ConsoleOutput("Debug event end")
-    
-  end,
-  
-  onUpdate = function ()
-    
-    Isaac.ConsoleOutput(" bump ")
-    
-  end
-  
-}
-
 -- Richy
 events.EV_Richy = {
+  
+  name = "Richy",
+  weights = {1,1,1},
+  good = true,
   
   onStart = function ()
     
@@ -69,6 +41,10 @@ events.EV_Richy = {
 
 -- Poop
 events.EV_Poop = {
+  
+  name = "Poop",
+  weights = {1,1,1},
+  good = false,
   
   onStart = function ()
     
@@ -102,6 +78,10 @@ events.EV_Poop = {
 
 -- Hell
 events.EV_Hell = {
+  
+  name = "Hell",
+  weights = {0.9,1,1},
+  good = false,
   
   onStart = function ()
     
@@ -137,6 +117,10 @@ events.EV_Hell = {
 -- Spiky
 events.EV_Spiky = {
   
+  name = "Spiky",
+  weights = {0.9,1,1},
+  good = false,
+  
   onStart = function ()
     
     local player = Isaac.GetPlayer(0)
@@ -161,6 +145,10 @@ events.EV_Spiky = {
 
 -- Earthquake
 events.EV_Earthquake = {
+  
+  name = "Earthquake",
+  weights = {1,1,1},
+  good = false,
   
   byTime = false,
   duration = 3,
@@ -193,6 +181,10 @@ events.EV_Earthquake = {
 
 -- Angel Rage
 events.EV_AngelRage = {
+  
+  name = "AngelRage",
+  weights = {1,1,1},
+  good = true,
   
   byTime = false,
   duration = 5,
@@ -233,6 +225,10 @@ events.EV_AngelRage = {
 -- Devil Rage
 events.EV_DevilRage = {
   
+  name = "DevilRage",
+  weights = {0.9,1,1},
+  good = false,
+  
   byTime = false,
   duration = 5,
   
@@ -267,6 +263,10 @@ events.EV_DevilRage = {
 -- Rainbow Rain
 events.EV_RainbowRain = {
   
+  name = "RainbowRain",
+  weights = {1,1,1},
+  good = true,
+  
   onStart = function ()
     
     local player = Isaac.GetPlayer(0)
@@ -288,6 +288,10 @@ events.EV_RainbowRain = {
 
 -- RUN
 events.EV_RUN = {
+  
+  name = "RUN",
+  weights = {0.9,1,1},
+  good = false,
   
   duration = 15*30,
   
@@ -316,6 +320,10 @@ events.EV_RUN = {
 -- Flash Jump
 events.EV_FlashJump = {
   
+  name = "FlashJump",
+  weights = {1,1,1},
+  good = true,
+  
   duration = 7,
   byTime = false,
   
@@ -329,6 +337,10 @@ events.EV_FlashJump = {
 
 -- Enemy Regen
 events.EV_EnemyRegen = {
+  
+  name = "EnemyRegen",
+  weights = {1,1,1},
+  good = false,
   
   duration = 50*30,
   
@@ -347,6 +359,10 @@ events.EV_EnemyRegen = {
 
 -- Flasmob
 events.EV_Flashmob = {
+  
+  name = "Flashmob",
+  weights = {1,1,1},
+  good = true,
   
   duration = 45*30,
   
@@ -370,6 +386,10 @@ events.EV_Flashmob = {
 
 -- Attack on titan
 events.EV_AttackOnTitan = {
+  
+  name = "AttckOnTitan",
+  weights = {0.9,1,1},
+  good = false,
   
   duration = 45*30,
   
@@ -406,6 +426,10 @@ events.EV_AttackOnTitan = {
 -- Diarrhea
 events.EV_Diarrhea = {
   
+  name = "Diarrhea",
+  weights = {1,1,1},
+  good = false,
+  
   duration = 45*30,
   
   onUpdate = function (entity)
@@ -426,6 +450,10 @@ events.EV_Diarrhea = {
 
 -- Blade storm
 events.EV_BladeStorm = {
+  
+  name = "BladeStorm",
+  weights = {0.8,1,1},
+  good = false,
   
   duration = 40*30,
   
@@ -463,6 +491,10 @@ events.EV_BladeStorm = {
 -- More awards
 events.EV_MoreAwards = {
   
+  name = "MoreAwards",
+  weights = {1,1,1},
+  good = true,
+  
   duration = 5,
   byTime = false,
   
@@ -480,6 +512,10 @@ events.EV_MoreAwards = {
 
 -- Stanley Parable
 events.EV_StanleyParable = {
+  
+  name = "StanleyParable",
+  weights = {1,1,1},
+  good = true,
   
   onStart = function ()
     
@@ -502,6 +538,10 @@ events.EV_StanleyParable = {
 
 -- Supernova
 events.EV_Supernova  = {
+  
+  name = "Supernova",
+  weights = {0.2,1,1},
+  good = true,
   
   duration = 5,
   byTime = false,
@@ -541,6 +581,10 @@ events.EV_Supernova  = {
 -- DDoS
 events.EV_DDoS  = {
   
+  name = "DDoS",
+  weights = {0.4,0.8,1},
+  good = false,
+  
   duration = 30*30,
   
   onStart = function ()
@@ -576,6 +620,10 @@ events.EV_DDoS  = {
 
 -- Interstellar
 events.EV_Interstellar  = {
+  
+  name = "Interstellar",
+  weights = {0.8,1,1},
+  good = false,
   
   duration = 30*30,
   

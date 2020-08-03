@@ -3,6 +3,7 @@ local trinkets = {}
 -- Example
 --trinkets.ItemName= {
 --  id = Isaac.GetItemIdByName("Item Name"), <-- Item Id
+--  name = "Item name", <-- Item name, required for dynamic item loading on site
 --  description = {en = "Item description", ru = "Описание" }, <-- Item description for external item description mod
 --  hold = flase, <-- If player hold trinket now
 --  onPickup = nil, <-- Function, called on pickup item
@@ -21,6 +22,7 @@ local trinkets = {}
 
 trinkets.T_NeoGlasses = {
   id = Isaac.GetItemIdByName("Neo glasses"),
+  name = "Neo glasses",
   
   description = {
     en = "\1 Enemy projectiles have a chance to stop",

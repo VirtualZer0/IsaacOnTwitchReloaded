@@ -6,6 +6,7 @@ local passiveItems = {}
 -- Example
 --passiveItems.ItemName= {
 --  id = Isaac.GetItemIdByName("Item Name"),                    <-- Item Id
+--  name = "Item Name"  <-- Item name, required for dynamic item loading on site
 --  description = {en = "Item description", ru = "Описание" },  <-- Item description for external item description mod
 --  count = 0,                                                  <-- Player items count
 --  onPickup = nil,                                             <-- Function, called on pickup item
@@ -21,6 +22,7 @@ local passiveItems = {}
 passiveItems.PI_Kappa = {
   
   id = Isaac.GetItemIdByName("Kappa"),
+  name = "Kappa",
   description = {
     en = "\1 +2.5 Damage Up",
     ru = "\1 +2.5 к урону"
@@ -39,6 +41,7 @@ passiveItems.PI_Kappa = {
 passiveItems.PI_GoldenKappa = {
   
   id = Isaac.GetItemIdByName("Golden Kappa"),
+  name = "Golden Kappa",
   
   description = {
     en = "\015 + 15 Coins#\189 + Golden bomb#\5 + Golden key#\6 + 2 Golden hearts",
@@ -60,6 +63,7 @@ passiveItems.PI_GoldenKappa = {
 passiveItems.PI_NotLikeThis = {
   
   id = Isaac.GetItemIdByName("Not Like This"),
+  name = "Not Like This",
   
   description = {
     en = "Reroll enemies on every room",
@@ -82,6 +86,7 @@ passiveItems.PI_NotLikeThis = {
 passiveItems.PI_KappaPride = {
   
   id = Isaac.GetItemIdByName("Kappa Pride"),
+  name = "Kappa Pride",
   
   description = {
     en = "Every tear have a chance to spawn 6 another tears with different effects#This tears deal 1/6 of your damage",
@@ -140,6 +145,7 @@ passiveItems.PI_KappaPride = {
 passiveItems.PI_SSSsss = {
   
   id = Isaac.GetItemIdByName("SSSsss"),
+  name = "SSSsss",
   
   description = {
     en = "Enemies exploding after death",
@@ -163,6 +169,7 @@ passiveItems.PI_SSSsss = {
 passiveItems.PI_CurseLit = {
   
   id = Isaac.GetItemIdByName("Curse Lit"),
+  name = "Curse Lit",
   
   description = {
     en = "Curses give permanent random stats up",
@@ -196,6 +203,7 @@ passiveItems.PI_CurseLit = {
 passiveItems.PI_DrinkPurple = {
   
   id = Isaac.GetItemIdByName("Drink Purple"),
+  name = "Drink Purple",
   
   description = {
     en = "\1 +0.35 Speed Up#Spawn 1-2 Twtich hearts on pickup",
@@ -226,6 +234,7 @@ passiveItems.PI_DrinkPurple = {
 passiveItems.PI_Kreygasm = {
   
   id = Isaac.GetItemIdByName("Kreygasm"),
+  name = "Kreygasm",
   
   description = {
     en = "Random effect for enemies in room",
@@ -259,6 +268,7 @@ passiveItems.PI_Kreygasm = {
 passiveItems.PI_FutureMan = {
   
   id = Isaac.GetItemIdByName("Future Man"),
+  name = "Future Man",
   
   description = {
     en = "Spawn rotating beam#Beam deals 5% of player damage",
@@ -291,6 +301,7 @@ passiveItems.PI_FutureMan = {
 passiveItems.PI_BrainSlug = {
   
   id = Isaac.GetItemIdByName("Brain Slug"),
+  name = "Brain Slug",
   
   description = {
     en = "Enemies move to player shot direction",

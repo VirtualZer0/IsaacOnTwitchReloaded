@@ -22,6 +22,7 @@ function cmd.main (obj, mcmd, params)
 end
 
 function cmd.send(text)
+  Isaac.DebugString("ITMR: " ..text.. "\n")
   Isaac.ConsoleOutput("ITMR: " ..text.. "\n")
 end
   

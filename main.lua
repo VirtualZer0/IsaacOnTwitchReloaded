@@ -13,7 +13,7 @@ ITMR.Cmd = require('scripts.cmd')             -- Command line handler
 ITMR.Sprites = require('scripts.sprites')     -- Sprites
 ITMR.Shaders = require('scripts.shaders')     -- Shaders
 ITMR.Events = require('scripts.events')       -- Events
-ITMR.Locale = require('scripts.locale')       -- Localization
+ITMR.Locale = require('locale.main')          -- Localization
 ITMR._ = require('scripts.helper')            -- Helper functions
 
 -- Items
@@ -25,7 +25,6 @@ ITMR.Items = {
 
 -- Settings
 ITMR.Settings = {
-  viewers = 0,              -- Viewers count
   textpos = {
     l1 = {X = 16, Y = 215}, -- Firstline text position
     l2 = {X = 16, Y = 235}  -- Secondline text position
@@ -150,10 +149,11 @@ ITMR.Text = {
   
   -- Add new text to render
   add = function (name, text, pos, color, size, isCenter)
+        
     -- Too lazy for writing this every time
     if (pos == nil) then pos = ITMR.Settings.textpos.l2 end
     if (color == nil) then color = {r = 1, g = 1, b = 1, a = 1} end
-    if (size == nil) then size = 1.5 end
+    if (size == nil) then size = 1 end
     if (isCenter == nil) then isCenter = false end
     
     -- If text is not array, make array
@@ -324,9 +324,7 @@ ITMR.Server:setHandler("addText", function (req)
     
   local tpos = ITMR.Settings.textpos.l1;
   
-  if (req.pos ~= nil and req.pos ~= "empty" and req.pos == 'l2') then
-    tpos = ITMR.Settings.textpos.l2;
-  elseif (req.pos ~= nil and req.pos ~= "empty" and req.pos == 'l2' and req.pos ~= 'l1') then
+  if (req.pos ~= nil and req.pos ~= "empty") then
     tpos = req.pos;
   end
     
@@ -340,6 +338,27 @@ end)
 
 -- Change text position
 ITMR.Server:setHandler("textpos", function (req) 
+  
+end)
+
+-- Set settings
+ITMR.Server:setHandler("settings", function (req) 
+  
+  ITMR.Settings = req;
+  
+end)
+
+-- Return current player items
+ITMR.Server:setHandler("getPlayerItems", function (req) 
+  return { out = ITMR._.getPlayerItems() }
+end)
+
+-- Return items from ITMR
+ITMR.Server:setHandler("getItems", function (req) 
+    
+  return {
+    out = ITMR._.getAllContent()
+  }
   
 end)
 

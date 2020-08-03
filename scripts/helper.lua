@@ -107,6 +107,75 @@ helper.givePocket = function (name)
   elseif name == "Discharge" then p:DischargeActiveItem() end
 end
 
+-- Get all game items, trinkets and events
+helper.getAllContent = function ()
+  
+  -- Get ItemConfig
+  local iconf = Isaac.GetItemConfig()
+  
+  -- Create content storage
+  local content = {
+    passive = {},
+    active = {},
+    trinkets = {},
+    familiars = {},
+    events = {}
+  }
+  
+  -- Get every collectible item in game
+  for i = 1, CollectibleType.NUM_COLLECTIBLES do
+    local rawItem = iconf:GetCollectible(i)
+    if rawItem == nil then goto skipIteration end
+    
+    -- Save only basic fields
+    local item = {
+      id = rawItem.ID,
+      name = rawItem.Name,
+      special = rawItem.Special
+    }
+    
+    -- Check item type and push to storage
+    if (rawItem.Type == ItemType.ITEM_PASSIVE) then table.insert(content.passive, item)
+    elseif (rawItem.Type == ItemType.ITEM_ACTIVE) then table.insert(content.active, item)
+    elseif (rawItem.Type == ItemType.ITEM_TRINKET) then table.insert(content.trinkets, item)
+    elseif (rawItem.Type == ItemType.ITEM_FAMILIAR) then table.insert(content.familiars, item)
+    end
+  
+  ::skipIteration::
+  end
+  
+  -- Get all ITMR events
+  for key, rawEvent in pairs(ITMR.Events) do
+    local event = {
+      name = ITMR.Locale[ITMR.Settings.lang]["ev" .. rawEvent.name .. "Name"],
+      desc = ITMR.Locale[ITMR.Settings.lang]["ev" .. rawEvent.name .. "Desc"],
+      weights = rawEvent.weights,
+      good = rawEvent.good
+    }
+    
+    table.insert(content.events, event)
+  end
+  
+  return content
+end
+
+-- Get all player items
+helper.getPlayerItems = function ()
+  local p = Isaac.GetPlayer(0);
+  if p:GetCollectibleCount() > 0 then --If the player has collectibles
+      local items = {}
+      for i=1, CollectibleType.NUM_COLLECTIBLES do --Iterate over all collectibles to see if the player has it
+          if p:HasCollectible(i) then --If they have it add it to the table
+              table.insert(items, i)
+          end
+      end
+      
+      return items;
+  else
+    return {};
+  end
+end
+
 -- Launch event function
 helper.launchEvent = function (eventName)
   

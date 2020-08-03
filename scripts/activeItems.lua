@@ -9,6 +9,7 @@ local activeItems = {}
 -- Example
 --activeItems.ItemName= {
 --  id = Isaac.GetItemIdByName("Item Name"), <-- Item Id
+--  name = "Item Name"  <-- Item name, required for dynamic item loading on site
 --  description = "Item description", <-- Item description for external item description mod
 --  current = false, <-- This item is current spacebar item
 --  onActivate = nil, <-- Function, called on activate item
@@ -21,6 +22,7 @@ local activeItems = {}
 activeItems.TwitchRaid = {
   
   id = Isaac.GetItemIdByName("Twitch Raid"),
+  name = "Twitch Raid",
   
   description = {
     en = "Summon friendly buddies",
@@ -49,6 +51,7 @@ activeItems.TwitchRaid = {
 activeItems.TTours = {
   
   id = Isaac.GetItemIdByName("TTours"),
+  name = "TTours",
   
   description = {
     en = "Confuse all enemies in the room",
@@ -80,6 +83,7 @@ activeItems.TTours = {
 activeItems.HumbleLife = {
   
   id = Isaac.GetItemIdByName("Humble Life"),
+  name = "Humble Life",
   
   description = {
     en = "Spawn multiple brimstone swirls",
