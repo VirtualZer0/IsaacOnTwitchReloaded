@@ -2,7 +2,7 @@
 local header =
 [[HTTP/1.1 200 OK
 Server: ITMR Server 1.0
-Connection: close
+Connection: keep-alive
 Content-Type: application/json
 Access-Control-Allow-Origin: *
 ]]
@@ -37,7 +37,10 @@ function Server:run()
   
   self._server = socket.tcp()
   self._server:bind("127.0.0.1", self._port)
-  self._server:listen(15)
+  self._server:setoption("keepalive", true)
+  self._server:setoption("reuseaddr", true)
+  self._server:setoption("tcp-nodelay", true)
+  self._server:listen(10)
   self._server:settimeout(0)
   self._running = true
   Isaac.ConsoleOutput("\nITMR Server: Running on 127.0.0.1:"..self._port.."\n")

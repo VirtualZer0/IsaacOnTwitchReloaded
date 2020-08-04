@@ -26,8 +26,8 @@ ITMR.Items = {
 -- Settings
 ITMR.Settings = {
   textpos = {
-    l1 = {X = 16, Y = 215}, -- Firstline text position
-    l2 = {X = 16, Y = 235}  -- Secondline text position
+    l1 = {X = 16, Y = 205}, -- Firstline text position
+    l2 = {X = 16, Y = 220}  -- Secondline text position
   },
   subtime = 10*60*30,       -- Time to life for subscribers
   lang = "en"               -- Current language
@@ -148,13 +148,14 @@ ITMR.Text = {
   FollowStorage = {}, -- Entities for binding text position
   
   -- Add new text to render
-  add = function (name, text, pos, color, size, isCenter)
+  add = function (name, text, pos, color, size, isCenter, blink)
         
     -- Too lazy for writing this every time
     if (pos == nil) then pos = ITMR.Settings.textpos.l2 end
     if (color == nil) then color = {r = 1, g = 1, b = 1, a = 1} end
     if (size == nil) then size = 1 end
     if (isCenter == nil) then isCenter = false end
+    if (blink == nil) then blink = nil end
     
     -- If text is not array, make array
     if (type(text) == "string") then text = {text} end
@@ -187,7 +188,8 @@ ITMR.Text = {
       text = strings,
       isCenter = isCenter,
       color = color,
-      size = size
+      size = size,
+      blink = blink
     }
   end,
   
@@ -234,6 +236,12 @@ ITMR.Text = {
       end
       
       for snum, stext in pairs(text.text) do
+        
+        if (text.blink ~= nil and Isaac.GetFrameCount() % 10 == 0) then
+          local swapColors = text.color;
+          text.color = text.blink;
+          text.blink = swapColors;
+        end
         
         Isaac.RenderScaledText(stext.text, stext.x, stext.y, text.size, text.size, text.color.r, text.color.g, text.color.b, text.color.a)
         
@@ -321,14 +329,16 @@ end)
 
 -- Add text to screen
 ITMR.Server:setHandler("addText", function (req) 
-    
-  local tpos = ITMR.Settings.textpos.l1;
   
-  if (req.pos ~= nil and req.pos ~= "empty") then
-    tpos = req.pos;
-  end
+  for key, value in ipairs(req) do
+    local tpos = ITMR.Settings.textpos.l1;
+    if (value.pos ~= nil and value.pos ~= "empty") then
+      tpos = value.pos;
+    end
     
-  ITMR.Text.add(req.name, req.value, tpos, req.color, req.size, req.isCenter);
+    ITMR.Text.add(value.name, value.value, tpos, value.color, value.size, value.isCenter, value.blink);
+  end
+  
 end)
 
 -- Remove text from screen
@@ -359,6 +369,21 @@ ITMR.Server:setHandler("getItems", function (req)
   return {
     out = ITMR._.getAllContent()
   }
+  
+end)
+
+-- Give or remove item
+ITMR.Server:setHandler("itemAction", function (req) 
+    
+  local player = Isaac.GetPlayer(0);  
+  
+  if (req.remove == true) then
+    player:RemoveCollectible(req.item);
+    player:AnimateSad();
+  else
+    player:AddCollectible(req.item, 0, true);
+    player:AnimateHappy();
+  end
   
 end)
 
