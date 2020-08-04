@@ -38,6 +38,9 @@ For debug, you can use next commands in Isaac command line (~):
 ## File structure
 
 - **`content`** - Contains xml-files for Isaac mod API
+- **`locale`** - Contains localization files
+  - **`main.lua`** - Root localization storage
+  - **`[language_code].lua`** - Localization for different languages
 - **`resources`** - Contains media-sources and files for replacing
 
 - **`scripts`** - Contains .lua files for Twitch mod

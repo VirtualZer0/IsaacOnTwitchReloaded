@@ -14,7 +14,7 @@ local json = require('json')
 -- Root server object
 local Server =
 {
- _port = 666,       -- Server port
+ _port = 8666,       -- Server port
  _header = header,  -- Default headers
  _handlers = {},    -- Handlers for requests
  _running = false,  -- Server state
