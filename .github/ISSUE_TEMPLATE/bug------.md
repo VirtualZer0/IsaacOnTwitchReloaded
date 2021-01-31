@@ -1,7 +1,7 @@
 ---
 name: Bug | Баг
 about: I have a problem with mod | У меня проблема c модом
-title: "[BUG]"
+title: "[BUG] Краткое описание проблемы | Short issue description"
 labels: bug
 assignees: ''
 

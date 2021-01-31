@@ -1,7 +1,7 @@
 ---
 name: Help | Помощь
 about: I have a question about mod | У меня вопрос по поводу мода
-title: "[HELP]"
+title: "[HELP] Краткое описание | Short description"
 labels: question
 assignees: ''
 
