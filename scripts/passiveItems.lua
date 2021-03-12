@@ -32,7 +32,7 @@ passiveItems.PI_Kappa = {
   
   onCacheUpdate = function (obj, player, cacheFlag)
     if (cacheFlag == CacheFlag.CACHE_DAMAGE or cacheFlag == CacheFlag.CACHE_ALL) then
-      player.Damage = player.Damage + player:GetCollectibleNum(ITMR.Items.Passive.PI_Kappa.id) * 2.5
+      player.Damage = player.Damage + player:GetCollectibleNum(IOTR.Items.Passive.PI_Kappa.id) * 2.5
     end
   end
 }
@@ -103,37 +103,37 @@ passiveItems.PI_KappaPride = {
       
       local rotate = math.random(0,360)
       local t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(0 + rotate):__mul(0.4), e)
-      t:SetColor(ITMR.Enums.Rainbow[1], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.Rainbow[1], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_STICKY + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(60 + rotate):__mul(0.4), e)
-      t:SetColor(ITMR.Enums.Rainbow[2], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.Rainbow[2], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_BURN + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(120 + rotate):__mul(0.4), e)
-      t:SetColor(ITMR.Enums.Rainbow[3], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.Rainbow[3], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_GREED_COIN + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(180 + rotate):__mul(0.4), e)
-      t:SetColor(ITMR.Enums.Rainbow[4], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.Rainbow[4], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(240 + rotate):__mul(0.4), e)
-      t:SetColor(ITMR.Enums.Rainbow[6], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.Rainbow[6], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_FREEZE + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(300 + rotate):__mul(0.4), e)
-      t:SetColor(ITMR.Enums.Rainbow[7], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.Rainbow[7], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_FEAR + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
@@ -184,11 +184,11 @@ passiveItems.PI_CurseLit = {
     
     if Game():GetLevel():GetCurses() ~= LevelCurse.CURSE_NONE then
       local rnd = math.random(0,5)
-      if (rnd == 0) then ITMR.Storage.Stats.damage = ITMR.Storage.Stats.damage + 0.5
-      elseif (rnd == 1 and p.FireDelay > p.MaxFireDelay) then ITMR.Storage.Stats.tears = ITMR.Storage.Stats.tears - 1
-      elseif (rnd == 2) then ITMR.Storage.Stats.tearspeed = ITMR.Storage.Stats.tearspeed + 0.2
-      elseif (rnd == 3 and p.MoveSpeed < 2) then ITMR.Storage.Stats.speed = ITMR.Storage.Stats.speed + 0.2
-      else p.Luck = p.Luck + 1; ITMR.Storage.Stats.luck = ITMR.Storage.Stats.luck + 1 end
+      if (rnd == 0) then IOTR.Storage.Stats.damage = IOTR.Storage.Stats.damage + 0.5
+      elseif (rnd == 1 and p.FireDelay > p.MaxFireDelay) then IOTR.Storage.Stats.tears = IOTR.Storage.Stats.tears - 1
+      elseif (rnd == 2) then IOTR.Storage.Stats.tearspeed = IOTR.Storage.Stats.tearspeed + 0.2
+      elseif (rnd == 3 and p.MoveSpeed < 2) then IOTR.Storage.Stats.speed = IOTR.Storage.Stats.speed + 0.2
+      else p.Luck = p.Luck + 1; IOTR.Storage.Stats.luck = IOTR.Storage.Stats.luck + 1 end
       p:AddCacheFlags(CacheFlag.CACHE_ALL)
       p:EvaluateItems()
     end
@@ -215,7 +215,7 @@ passiveItems.PI_DrinkPurple = {
   
   onCacheUpdate = function (obj, player, cacheFlag)
     if (cacheFlag == CacheFlag.CACHE_SPEED or cacheFlag == CacheFlag.CACHE_ALL) then
-      player.MoveSpeed = player.MoveSpeed + player:GetCollectibleNum(ITMR.Items.Passive.PI_DrinkPurple.id) * 0.35
+      player.MoveSpeed = player.MoveSpeed + player:GetCollectibleNum(IOTR.Items.Passive.PI_DrinkPurple.id) * 0.35
     end
   end,
   

@@ -1,4 +1,4 @@
-# Isaac Twitch Mod Reloaded
+# Isaac On Twitch Reloaded
 
 Rewrited and improved version of old TBoI mod, [Isaac On Twitch](https://github.com/VFStudio/IsaacOnTwitch/). There are new features in this mod:
 
@@ -17,21 +17,21 @@ For debug, you can use next commands in Isaac command line (~):
 
 
 
-**<u>`itmr showcallbacks`</u>** - show all active callbacks for items, trinkets and events
+**<u>`iotr showcallbacks`</u>** - show all active callbacks for items, trinkets and events
 
-**<u>`itmr storage`</u>** - show current mod storage in JSON format
+**<u>`iotr storage`</u>** - show current mod storage in JSON format
 
-**<u>`itmr allpassive`</u>** - spawn all passive items from Twitch mod in current room
+**<u>`iotr allpassive`</u>** - spawn all passive items from Twitch mod in current room
 
-**<u>`itmr allactive`</u>** - spawn all active items from Twitch mod in current room
+**<u>`iotr allactive`</u>** - spawn all active items from Twitch mod in current room
 
-**<u>`itmr toggleshader [shadername]`</u>** - enable/disable shader from mod
+**<u>`iotr toggleshader [shadername]`</u>** - enable/disable shader from mod
 
-**<u>`itmr setshader [shadername] [paramname] [paramvalue]`</u>** - set parameter for shader from mod
+**<u>`iotr setshader [shadername] [paramname] [paramvalue]`</u>** - set parameter for shader from mod
 
-**<u>`itmr debugtextfollow [text]`</u>** - add text for every entity in room
+**<u>`iotr debugtextfollow [text]`</u>** - add text for every entity in room
 
-**<u>`itmr launchevent [eventname]`</u>** - launch event by name
+**<u>`iotr launchevent [eventname]`</u>** - launch event by name
 
 
 

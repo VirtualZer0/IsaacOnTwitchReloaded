@@ -10,6 +10,10 @@
 		<sample weight="1" path="events/superhot/break1.wav" />
 		<sample weight="1" path="events/superhot/break2.wav" />
 	</sound>
+  
+  <sound name="SuperhotVoice">
+		<sample weight="1" path="events/superhot/voice.wav" />
+	</sound>
 	
 	<sound name="Sneeze">
 		<sample weight="1" path="events/allergia/sneeze1.wav" />
@@ -51,5 +55,9 @@
 	
 	<sound name="QTENo">
 		<sample weight="1" path="events/qte/no.wav" />
+	</sound>
+  
+  <sound name="MachgineGunShot">
+		<sample weight="1" path="events/machinegun/shot.wav" />
 	</sound>
 </sounds>

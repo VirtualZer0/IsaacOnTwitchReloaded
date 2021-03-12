@@ -1,7 +1,7 @@
 -- Response headers
 local header =
 [[HTTP/1.1 200 OK
-Server: ITMR Server 1.0
+Server: IOTR Server 1.0
 Connection: keep-alive
 Content-Type: application/json
 Access-Control-Allow-Origin: *
@@ -31,7 +31,7 @@ end
 function Server:run()
   
   if (self._running == true) then
-    Isaac.ConsoleOutput("ITMR Server: Already running\n")
+    Isaac.ConsoleOutput("IOTR Server: Already running\n")
     return
   end
   
@@ -43,7 +43,7 @@ function Server:run()
   self._server:listen(10)
   self._server:settimeout(0)
   self._running = true
-  Isaac.ConsoleOutput("\nITMR Server: Running on 127.0.0.1:"..self._port.."\n")
+  Isaac.ConsoleOutput("\nIOTR Server: Running on 127.0.0.1:"..self._port.."\n")
 end
 
 -- Checking new clients
@@ -85,7 +85,7 @@ function Server:getRequest()
         end
         
       else
-        Isaac.ConsoleOutput("ITMR Server: Not found handler for "..req.m.."\n") -- Handler not found message
+        Isaac.ConsoleOutput("IOTR Server: Not found handler for "..req.m.."\n") -- Handler not found message
         client:send(self._header.."\n{\"res\":\"err\",\"msg\":\"Method not found\"}") -- Response for client
       end
     end
@@ -134,7 +134,7 @@ function Server:close()
   if (Server._running == false) then return end
   self._running = false
   self._server:close()
-  Isaac.ConsoleOutput("ITMR Server: Stopped\n")
+  Isaac.ConsoleOutput("IOTR Server: Stopped\n")
 end
 
 -- Convert string with URI encoded symbols into normal

@@ -57,4 +57,17 @@ enums.ChatColors = {
   Color(0, 1, 0.498,1,0,0,0)
 }
 
+enums.Doors = {
+  RoomType.ROOM_DEFAULT,
+  RoomType.ROOM_SHOP,
+  RoomType.ROOM_TREASURE,
+  RoomType.ROOM_BOSS,
+  RoomType.ROOM_SECRET,
+  RoomType.ROOM_ARCADE,
+  RoomType.ROOM_CURSE,
+  RoomType.ROOM_SACRIFICE,
+  RoomType.ROOM_DEVIL,
+  RoomType.ROOM_ANGEL
+}
+
 return enums

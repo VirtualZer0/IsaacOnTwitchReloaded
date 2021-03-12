@@ -35,7 +35,7 @@ activeItems.TwitchRaid = {
     local game = Game()
     local room = game:GetRoom()
     for i = 0, math.random(3,6) do
-      followers[i] = Isaac.Spawn(ITMR.Enums.Buddies[math.random(#ITMR.Enums.Buddies)], 0,  0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true), Vector(0, 0), Isaac.GetPlayer(0))
+      followers[i] = Isaac.Spawn(IOTR.Enums.Buddies[math.random(#IOTR.Enums.Buddies)], 0,  0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true), Vector(0, 0), Isaac.GetPlayer(0))
       followers[i]:AddCharmed(-1)
       followers[i]:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
     end

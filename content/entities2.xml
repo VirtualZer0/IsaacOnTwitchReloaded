@@ -46,7 +46,7 @@
   </entity>
 	
 	<entity anm2path="mod.twitch_effect_blackhole.anm2" reroll="false" baseHP="20" boss="0" champion="0" collisionDamage="2" collisionMass="7" collisionRadius="256" friction="0" id="1000" name="Twitch Black Hole" numGridCollisionPoints="0" shadowSize="0" stageHP="0" variant="5730">
-    <gibs amount="6" blood="0" bone="0" eye="0" gut="0" large="0" worm="0" />
+    <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" worm="0" />
   </entity>
 	
 	<entity anm2path="mod.twitch_arrowUp.anm2" reroll="false" baseHP="20" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="0" id="1000" name="Twitch Arrow Up" numGridCollisionPoints="0" shadowSize="0" stageHP="0" variant="5731">

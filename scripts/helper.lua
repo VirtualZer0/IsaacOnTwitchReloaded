@@ -40,9 +40,9 @@ helper.giveHeart = function (name)
     -- Copying black heart mechanic
     if ( p:GetSoulHearts() % 2 == 1) then
       p:AddSoulHearts(1)
-      ITMR.Storage.Hearts.twitch = ITMR.Storage.Hearts.twitch + 1;
+      IOTR.Storage.Hearts.twitch = IOTR.Storage.Hearts.twitch + 1;
     else
-      ITMR.Storage.Hearts.twitch = ITMR.Storage.Hearts.twitch + 2;
+      IOTR.Storage.Hearts.twitch = IOTR.Storage.Hearts.twitch + 2;
     end
     
   elseif name == "Black" then p:AddBlackHearts(2) end
@@ -144,11 +144,11 @@ helper.getAllContent = function ()
   ::skipIteration::
   end
   
-  -- Get all ITMR events
-  for key, rawEvent in pairs(ITMR.Events) do
+  -- Get all IOTR events
+  for key, rawEvent in pairs(IOTR.Events) do
     local event = {
-      name = ITMR.Locale[ITMR.Settings.lang]["ev" .. rawEvent.name .. "Name"],
-      desc = ITMR.Locale[ITMR.Settings.lang]["ev" .. rawEvent.name .. "Desc"],
+      name = IOTR.Locale[IOTR.Settings.lang]["ev" .. rawEvent.name .. "Name"],
+      desc = IOTR.Locale[IOTR.Settings.lang]["ev" .. rawEvent.name .. "Desc"],
       weights = rawEvent.weights,
       good = rawEvent.good
     }
@@ -179,20 +179,27 @@ end
 -- Launch event function
 helper.launchEvent = function (eventName)
   
-  local event = ITMR.Events[eventName]
+  local event = IOTR.Events[eventName]
   
   -- Create new ActiveEvent
-  local ev = ITMR.Classes.ActiveEvent:new(event, eventName)
+  local ev = IOTR.Classes.ActiveEvent:new(event, eventName)
   
   -- Trigger onStart and onRoomChange callbacks, if it possible
   if ev.event.onStart ~= nil then ev.event.onStart() end
   if ev.event.onRoomChange ~= nil then ev.event.onRoomChange() end
   
   -- Bind dynamic callbacks
-  ITMR.DynamicCallbacks.bind(ITMR.Events, eventName)
+  IOTR.DynamicCallbacks.bind(IOTR.Events, eventName)
   
   -- Add ActiveEvent to current events storage
-  table.insert(ITMR.Storage.ActiveEvents, ev)
+  table.insert(IOTR.Storage.ActiveEvents, ev)
+  
+  -- Launch happy or bad animation
+  if ev.event.good then
+    Isaac.GetPlayer(0):AnimateHappy()
+  else
+    Isaac.GetPlayer(0):AnimateSad()
+  end
   
 end
 
@@ -213,24 +220,24 @@ end
 helper.resetState = function ()
   
   -- Reset dynamic callbacks
-  for cname, cval in pairs(ITMR.DynamicCallbacks) do
+  for cname, cval in pairs(IOTR.DynamicCallbacks) do
     if (type(cval) ~= "function") then
       cval = nil
     end
   end
   
   -- Disable shaders
-  for shaderName, shader in pairs(ITMR.Shaders) do
+  for shaderName, shader in pairs(IOTR.Shaders) do
     shader.enabled = false
   end
   
   -- Clear current collectible items count
-  for key,value in pairs(ITMR.Items.Passive) do
-    ITMR.Items.Passive[key].count = 0
+  for key,value in pairs(IOTR.Items.Passive) do
+    IOTR.Items.Passive[key].count = 0
   end
     
   -- Reset stats
-  ITMR.Storage.Stats = {
+  IOTR.Storage.Stats = {
     speed = 0,
     range = 0,
     tears = 0,
@@ -240,16 +247,16 @@ helper.resetState = function ()
   }
   
   -- Reset hearts
-  ITMR.Storage.Hearts = {
+  IOTR.Storage.Hearts = {
     twitch = 0,
     rainbow = 0
   }
   
   -- Reset events
-  ITMR.Storage.ActiveEvents = {}
+  IOTR.Storage.ActiveEvents = {}
   
   -- Reset familiars
-  ITMR.Storage.Familiars = {}
+  IOTR.Storage.Familiars = {}
   
 end
 

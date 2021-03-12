@@ -1,40 +1,47 @@
-ITMR = RegisterMod("TwitchModReloaded", 1)
+IOTR = RegisterMod("IsaacOnTwitchReloaded", 1)
 
-require('mobdebug').start()
+--require('mobdebug').start()
+StartDebug()
 local json = require('json')
 
 -- Creating subobjects
-ITMR.Server = require('scripts.server')       -- ITMR Server
-ITMR.Callbacks = require('scripts.callbacks') -- Callbacks
-ITMR.Classes = require('scripts.classes')     -- Classes
-ITMR.Enums = require('scripts.enums')         -- Enumerations
-ITMR.Sounds = require('scripts.sounds')       -- Sounds
-ITMR.Cmd = require('scripts.cmd')             -- Command line handler
-ITMR.Sprites = require('scripts.sprites')     -- Sprites
-ITMR.Shaders = require('scripts.shaders')     -- Shaders
-ITMR.Events = require('scripts.events')       -- Events
-ITMR.Locale = require('locale.main')          -- Localization
-ITMR._ = require('scripts.helper')            -- Helper functions
+IOTR.Server = require('scripts.server')       -- IOTR Server
+IOTR.Callbacks = require('scripts.callbacks') -- Callbacks
+IOTR.Classes = require('scripts.classes')     -- Classes
+IOTR.Enums = require('scripts.enums')         -- Enumerations
+IOTR.Sounds = require('scripts.sounds')       -- Sounds
+IOTR.Cmd = require('scripts.cmd')             -- Command line handler
+IOTR.Sprites = require('scripts.sprites')     -- Sprites
+IOTR.Shaders = require('scripts.shaders')     -- Shaders
+IOTR.Events = require('scripts.events')       -- Events
+IOTR.Locale = require('locale.main')          -- Localization
+IOTR._ = require('scripts.helper')            -- Helper functions
 
 -- Items
-ITMR.Items = {
+IOTR.Items = {
   Active = require('scripts.activeItems'),    -- Active items
   Passive = require('scripts.passiveItems'),  -- Passive items
   Trinkets = require('scripts.trinkets'),     -- Trinkets
 }
 
+-- Additional game state
+IOTR.GameState = {
+  renderSpecial = true,
+  screenSize = (Isaac.WorldToScreen(Vector (320, 280)) - Game ():GetRoom ():GetRenderScrollOffset() - Game().ScreenShakeOffset) * 2
+}
+
 -- Settings
-ITMR.Settings = {
+IOTR.Settings = {
   textpos = {
-    l1 = {X = 16, Y = 205}, -- Firstline text position
-    l2 = {X = 16, Y = 220}  -- Secondline text position
+    l1 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .75}, -- First line text position
+    l2 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .75 + 15}  -- Second line text position
   },
   subtime = 10*60*30,       -- Time to life for subscribers
   lang = "en"               -- Current language
 }
 
 -- Current game session storage
-ITMR.Storage = {
+IOTR.Storage = {
  
   Subscribers = {},   -- Current subscribers
   Familiars = {},     -- Current familiars
@@ -56,13 +63,8 @@ ITMR.Storage = {
   
 }
 
--- Additional game state
-ITMR.GameState = {
-  renderSpecial = true
-}
-
 -- Dynamic callbacks storage
-ITMR.DynamicCallbacks = {
+IOTR.DynamicCallbacks = {
   onUpdate = {},
   onCacheUpdate = {},
   onEntityUpdate = {},
@@ -75,17 +77,17 @@ ITMR.DynamicCallbacks = {
 }
 
 ----------- Timers system ---------------
-ITMR.Timers = {
+IOTR.Timers = {
   
   Storage = {}, -- Current timers
   _timerId = 1,
   
   addTimeout = function (func, interval)
     
-    local timerId = ITMR.Timers._timerId
-    ITMR.Timers._timerId = ITMR.Timers._timerId + 1
+    local timerId = IOTR.Timers._timerId
+    IOTR.Timers._timerId = IOTR.Timers._timerId + 1
     
-    table.insert(ITMR.Timers.Storage, {
+    table.insert(IOTR.Timers.Storage, {
       id = timerId,
       func = func,
       interval = interval,
@@ -99,12 +101,12 @@ ITMR.Timers = {
   
   addInterval = function (func, interval, repeats)
     
-    local timerId = ITMR.Timers._timerId
-    ITMR.Timers._timerId = ITMR.Timers._timerId + 1
+    local timerId = IOTR.Timers._timerId
+    IOTR.Timers._timerId = IOTR.Timers._timerId + 1
     
     if (repeats == nil) then repeats = -1 end
     
-    table.insert(ITMR.Timers.Storage, {
+    table.insert(IOTR.Timers.Storage, {
       id = timerId,
       func = func,
       interval = interval,
@@ -117,13 +119,13 @@ ITMR.Timers = {
   end,
   
   stop = function (id)
-    for key, timer in pairs(ITMR.Timers.Storage) do
-      if timer.id == id then ITMR.Timers.Storage[key] = nil end
+    for key, timer in pairs(IOTR.Timers.Storage) do
+      if timer.id == id then IOTR.Timers.Storage[key] = nil end
     end
   end,
   
   tick = function ()
-    for key, timer in pairs(ITMR.Timers.Storage) do
+    for key, timer in pairs(IOTR.Timers.Storage) do
       timer.currentInterval = timer.currentInterval - 1
       
       if timer.currentInterval == 0 then
@@ -133,7 +135,7 @@ ITMR.Timers = {
       end
       
       if timer.repeats == 0 then
-        ITMR.Timers.Storage[key] = null
+        IOTR.Timers.Storage[key] = null
       end
     end
   end
@@ -142,7 +144,7 @@ ITMR.Timers = {
 
 ----------- Text Rendering ---------------
 
-ITMR.Text = {
+IOTR.Text = {
   
   Storage = {},       -- Current texts for render
   FollowStorage = {}, -- Entities for binding text position
@@ -151,7 +153,7 @@ ITMR.Text = {
   add = function (name, text, pos, color, size, isCenter, blink)
         
     -- Too lazy for writing this every time
-    if (pos == nil) then pos = ITMR.Settings.textpos.l2 end
+    if (pos == nil) then pos = IOTR.Settings.textpos.l2 end
     if (color == nil) then color = {r = 1, g = 1, b = 1, a = 1} end
     if (size == nil) then size = 1 end
     if (isCenter == nil) then isCenter = false end
@@ -167,7 +169,7 @@ ITMR.Text = {
     for ns, s in pairs(text) do
       
       -- Replace symbols if it's needed
-      s = ITMR._.fixtext(s)
+      s = IOTR._.fixtext(s)
       
       local sx = pos.X
       
@@ -184,7 +186,7 @@ ITMR.Text = {
       line = line +1
     end
     
-    ITMR.Text.Storage[name] = {
+    IOTR.Text.Storage[name] = {
       text = strings,
       isCenter = isCenter,
       color = color,
@@ -195,39 +197,39 @@ ITMR.Text = {
   
   -- Bind text to entity position
   follow = function (name, entity)
-    ITMR.Text.FollowStorage[name] = {
+    IOTR.Text.FollowStorage[name] = {
       entity = entity
     }
   end,
   
   -- Remove text
   remove = function (name)
-    ITMR.Text.Storage[name] = nil
-    ITMR.Text.FollowStorage[name] = nil
+    IOTR.Text.Storage[name] = nil
+    IOTR.Text.FollowStorage[name] = nil
   end,
   
   -- Render all current texts
   render = function ()
     
     -- Check if render not allowed
-    if (ITMR.GameState.renderSpecial == false) then return end
+    if (IOTR.GameState.renderSpecial == false) then return end
     
-    for name, text in pairs(ITMR.Text.Storage) do
+    for name, text in pairs(IOTR.Text.Storage) do
       
       -- Check if the text bind to entity
-      if (ITMR.Text.FollowStorage[name] ~= nil) then
+      if (IOTR.Text.FollowStorage[name] ~= nil) then
         
         -- If entity not exists anymore
-        if (ITMR.Text.FollowStorage[name].entity:Exists() ~= true) then 
+        if (IOTR.Text.FollowStorage[name].entity:Exists() ~= true) then 
           
           -- then remove text
-          ITMR.Text.remove(name)
+          IOTR.Text.remove(name)
           
         else
           
           -- else change text position to entity position
           for snum, stext in pairs(text.text) do
-            local epos = Isaac.WorldToRenderPosition(ITMR.Text.FollowStorage[name].entity.Position, true) + Game():GetRoom():GetRenderScrollOffset()
+            local epos = Isaac.WorldToRenderPosition(IOTR.Text.FollowStorage[name].entity.Position, true) + Game():GetRoom():GetRenderScrollOffset()
             stext.x = epos.X-3 * #stext.text
             stext.y = epos.Y - 40 - (snum * text.size * 10)
           end
@@ -252,7 +254,7 @@ ITMR.Text = {
 
 ----------- Progress Bar Rendering ---------------
 
-ITMR.ProgressBar = {
+IOTR.ProgressBar = {
   
   -- Progress bar parameters
   Storage = {
@@ -267,45 +269,45 @@ ITMR.ProgressBar = {
   -- Create progress bar
   create = function (title, min, max, value, signs)
     -- 1% = 2.6px
-    ITMR.ProgressBar.Storage.visible = true
-    ITMR.ProgressBar.Storage.min = min
-    ITMR.ProgressBar.Storage.max = max
-    ITMR.ProgressBar.Storage.value = value
-    ITMR.ProgressBar.Storage.cropX = 260 - ITMR.ProgressBar.interpolate(value)
-    ITMR.Text.add("progressbartitle", title, Isaac.WorldToScreen(Vector(300, 380)), nil, 1, true)
+    IOTR.ProgressBar.Storage.visible = true
+    IOTR.ProgressBar.Storage.min = min
+    IOTR.ProgressBar.Storage.max = max
+    IOTR.ProgressBar.Storage.value = value
+    IOTR.ProgressBar.Storage.cropX = 260 - IOTR.ProgressBar.interpolate(value)
+    IOTR.Text.add("progressbartitle", title, Isaac.WorldToScreen(Vector(300, 380)), nil, 1, true)
   end,
   
   -- Set progress bar value
   set = function (value)
-    ITMR.ProgressBar.Storage.value = value
-    ITMR.ProgressBar.Storage.cropX = 260 - ITMR.ProgressBar.interpolate(value)
-    ITMR.ProgressBar.Storage.updated = true
+    IOTR.ProgressBar.Storage.value = value
+    IOTR.ProgressBar.Storage.cropX = 260 - IOTR.ProgressBar.interpolate(value)
+    IOTR.ProgressBar.Storage.updated = true
   end,
   
   -- Interpolation
   interpolate = function (val)
-    return 260* (val - ITMR.ProgressBar.Storage.min)/(ITMR.ProgressBar.Storage.max-ITMR.ProgressBar.Storage.min)
+    return 260* (val - IOTR.ProgressBar.Storage.min)/(IOTR.ProgressBar.Storage.max-IOTR.ProgressBar.Storage.min)
   end,
   
   -- Render progress bar
   render = function ()
     
     -- If progress bar not visible, end function
-    if not ITMR.ProgressBar.Storage.visible then return end
+    if not IOTR.ProgressBar.Storage.visible then return end
     
     -- Render progress bar background
-    ITMR.Sprites.UI.ProgressBarBg:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(0,0))
+    IOTR.Sprites.UI.ProgressBarBg:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(0,0))
     
     -- Render progress bar line based on value
-    ITMR.Sprites.UI.ProgressBarLine:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(ITMR.ProgressBar.Storage.cropX,0))
+    IOTR.Sprites.UI.ProgressBarLine:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(IOTR.ProgressBar.Storage.cropX,0))
     
     -- If value will be updated, play animation
-    if ITMR.ProgressBar.Storage.updated then
-      ITMR.ProgressBar.Storage.updated = false
-      ITMR.Sprites.UI.ProgressBarLine:PlayOverlay("BarLine", true)
+    if IOTR.ProgressBar.Storage.updated then
+      IOTR.ProgressBar.Storage.updated = false
+      IOTR.Sprites.UI.ProgressBarLine:PlayOverlay("BarLine", true)
     end
     
-    ITMR.Sprites.UI.ProgressBarLine:Update()
+    IOTR.Sprites.UI.ProgressBarLine:Update()
     
   end
 }
@@ -315,65 +317,65 @@ ITMR.ProgressBar = {
 -- from request body and return respoonse object
 
 -- Ping answer
-ITMR.Server:setHandler("ping", function (req)
+IOTR.Server:setHandler("ping", function (req)
   return { out = "pong" }
 end)
 
 -- Set connection
-ITMR.Server:setHandler("connect", function (req) 
-  ITMR.Text.remove("siteMessage");
-  ITMR.Sounds.play(SoundEffect.SOUND_THUMBSUP);
-  ITMR.Cmd.send("Web-client connected")
+IOTR.Server:setHandler("connect", function (req) 
+  IOTR.Text.remove("siteMessage");
+  IOTR.Sounds.play(SoundEffect.SOUND_THUMBSUP);
+  IOTR.Cmd.send("Web-client connected")
   return { out = "success" }
 end)
 
 -- Add text to screen
-ITMR.Server:setHandler("addText", function (req) 
+IOTR.Server:setHandler("addText", function (req) 
   
   for key, value in ipairs(req) do
-    local tpos = ITMR.Settings.textpos.l1;
+    local tpos = IOTR.Settings.textpos.l1;
     if (value.pos ~= nil and value.pos ~= "empty") then
       tpos = value.pos;
     end
     
-    ITMR.Text.add(value.name, value.value, tpos, value.color, value.size, value.isCenter, value.blink);
+    IOTR.Text.add(value.name, value.value, tpos, value.color, value.size, value.isCenter, value.blink);
   end
   
 end)
 
 -- Remove text from screen
-ITMR.Server:setHandler("removeText", function (req) 
-  ITMR.Text.remove(req.name);
+IOTR.Server:setHandler("removeText", function (req) 
+  IOTR.Text.remove(req.name);
 end)
 
 -- Change text position
-ITMR.Server:setHandler("textpos", function (req) 
+IOTR.Server:setHandler("textpos", function (req) 
   
 end)
 
 -- Set settings
-ITMR.Server:setHandler("settings", function (req) 
+IOTR.Server:setHandler("settings", function (req) 
   
-  ITMR.Settings = req;
+  IOTR.Settings = req;
   
 end)
 
 -- Return current player items
-ITMR.Server:setHandler("getPlayerItems", function (req) 
-  return { out = ITMR._.getPlayerItems() }
+IOTR.Server:setHandler("getPlayerItems", function (req) 
+  return { out = IOTR._.getPlayerItems() }
 end)
 
--- Return items from ITMR
-ITMR.Server:setHandler("getItems", function (req) 
+-- Return items from IOTR
+IOTR.Server:setHandler("getItems", function (req) 
     
   return {
-    out = ITMR._.getAllContent()
+    out = IOTR._.getAllContent()
   }
   
 end)
 
 -- Give or remove item
-ITMR.Server:setHandler("itemAction", function (req) 
+IOTR.Server:setHandler("itemAction", function (req) 
     
   local player = Isaac.GetPlayer(0);  
   
@@ -388,30 +390,30 @@ ITMR.Server:setHandler("itemAction", function (req)
 end)
 
 -- Give personal trinket
-ITMR.Server:setHandler("gift", function (req) 
+IOTR.Server:setHandler("gift", function (req) 
   
 end)
 
 -- Set subscribers remove time
-ITMR.Server:setHandler("subtime", function (req) 
+IOTR.Server:setHandler("subtime", function (req) 
   
 end)
 
 -- Give something
-ITMR.Server:setHandler("give", function (req) 
+IOTR.Server:setHandler("give", function (req) 
   
   if (req.give == "item") then
-    ITMR._.giveItem(req.name)
+    IOTR._.giveItem(req.name)
   elseif (req.give == "trinket") then
-    ITMR._.giveTrinket(req.name)
+    IOTR._.giveTrinket(req.name)
   elseif (req.give == "heart") then
-    ITMR._.giveHeart(req.name)
+    IOTR._.giveHeart(req.name)
   elseif (req.give == "pickup") then
-    ITMR._.givePickup(req.name, req.count)
+    IOTR._.givePickup(req.name, req.count)
   elseif (req.give == "companion") then
-    ITMR._.giveCompanion(req.name)
+    IOTR._.giveCompanion(req.name)
   elseif (req.give == "pocket") then
-    ITMR._.giveTrinket(req.name)
+    IOTR._.giveTrinket(req.name)
   end
   
   local p = Isaac.GetPlayer(0)
@@ -444,11 +446,11 @@ end
 -- Adding function for bind/unbind items callbacks. This system using for less unusable conditions on postUpdate.
 
 -- Bind callbacks
-function ITMR.DynamicCallbacks.bind (from, key)
+function IOTR.DynamicCallbacks.bind (from, key)
   
-  Isaac.ConsoleOutput("ITMR: Added new dynamic callbacks for "..key.."\n")
+  Isaac.ConsoleOutput("IOTR: Added new dynamic callbacks for "..key.."\n")
   
-  for callbackName, callbackValue in pairs(ITMR.DynamicCallbacks) do
+  for callbackName, callbackValue in pairs(IOTR.DynamicCallbacks) do
     if (type(callbackValue) ~= "function") then
       if (from[key][callbackName] ~= nil and callbackValue[key] == nil) then
         callbackValue[key] = from[key][callbackName]
@@ -458,11 +460,11 @@ function ITMR.DynamicCallbacks.bind (from, key)
 end
 
 -- Unbind callbacks
-function ITMR.DynamicCallbacks.unbind (from, key)
+function IOTR.DynamicCallbacks.unbind (from, key)
   
-  Isaac.ConsoleOutput("ITMR: Remove dynamic callbacks for "..key.."\n")
+  Isaac.ConsoleOutput("IOTR: Remove dynamic callbacks for "..key.."\n")
   
-  for callbackName, callbackValue in pairs(ITMR.DynamicCallbacks) do
+  for callbackName, callbackValue in pairs(IOTR.DynamicCallbacks) do
     if (type(callbackValue) ~= "function") then
       if (callbackValue[key] ~= nil) then
         callbackValue[key] = nil
@@ -474,115 +476,115 @@ end
 ----------- Bind items and trinkets ---------------
 
 -- Bind callbacks and descriptions for active items
-for key,value in pairs(ITMR.Items.Active) do
-  ITMR:AddCallback(ModCallbacks.MC_USE_ITEM, ITMR.Items.Active[key].onActivate, ITMR.Items.Active[key].id);
+for key,value in pairs(IOTR.Items.Active) do
+  IOTR:AddCallback(ModCallbacks.MC_USE_ITEM, IOTR.Items.Active[key].onActivate, IOTR.Items.Active[key].id);
   
-  __eidItemDescriptions[ITMR.Items.Active[key].id] = ITMR.Items.Active[key].description["en"] .. 
+  __eidItemDescriptions[IOTR.Items.Active[key].id] = IOTR.Items.Active[key].description["en"] .. 
   "#\3 From Twitch Mod"
   
-  __eidRusItemDescriptions[ITMR.Items.Active[key].id] = ITMR._.fixtext(ITMR.Items.Active[key].description["ru"] .. 
+  __eidRusItemDescriptions[IOTR.Items.Active[key].id] = IOTR._.fixtext(IOTR.Items.Active[key].description["ru"] .. 
   "#\3 Предмет из Твич-мода")
 end
 
 -- Bind pickup/remove callbacks and descriptions for passive items
-for key,value in pairs(ITMR.Items.Passive) do
+for key,value in pairs(IOTR.Items.Passive) do
   
   
   -- Add item pickup|remove callbacks
   local pickupRemoveCheck = function ()
     
     -- Check item pickup
-    if (Isaac.GetPlayer(0):GetCollectibleNum(ITMR.Items.Passive[key].id) > ITMR.Items.Passive[key].count) then
+    if (Isaac.GetPlayer(0):GetCollectibleNum(IOTR.Items.Passive[key].id) > IOTR.Items.Passive[key].count) then
       
       -- Increase item counter
-      ITMR.Items.Passive[key].count = ITMR.Items.Passive[key].count + 1
+      IOTR.Items.Passive[key].count = IOTR.Items.Passive[key].count + 1
       
       -- Adding dynamic callback
-      if (Isaac.GetPlayer(0):GetCollectibleNum(ITMR.Items.Passive[key].id) > 0) then ITMR.DynamicCallbacks.bind(ITMR.Items.Passive, key) end
+      if (Isaac.GetPlayer(0):GetCollectibleNum(IOTR.Items.Passive[key].id) > 0) then IOTR.DynamicCallbacks.bind(IOTR.Items.Passive, key) end
       
       -- Call onPickup callback
-      if ITMR.Items.Passive[key].onPickup ~= nil then ITMR.Items.Passive[key].onPickup() end
+      if IOTR.Items.Passive[key].onPickup ~= nil then IOTR.Items.Passive[key].onPickup() end
       
       -- Update cache if need
-      if ITMR.Items.Passive[key].cacheFlag ~= nil then
+      if IOTR.Items.Passive[key].cacheFlag ~= nil then
         local player = Isaac.GetPlayer(0)
-        player:AddCacheFlags(ITMR.Items.Passive[key].cacheFlag)
+        player:AddCacheFlags(IOTR.Items.Passive[key].cacheFlag)
         player:EvaluateItems()
       end
       
     -- Check item remove
-    elseif (Isaac.GetPlayer(0):GetCollectibleNum(ITMR.Items.Passive[key].id) < ITMR.Items.Passive[key].count) then
+    elseif (Isaac.GetPlayer(0):GetCollectibleNum(IOTR.Items.Passive[key].id) < IOTR.Items.Passive[key].count) then
       -- Decrease item counter
-      ITMR.Items.Passive[key].count = ITMR.Items.Passive[key].count - 1
+      IOTR.Items.Passive[key].count = IOTR.Items.Passive[key].count - 1
       
       -- Remove dynamic callbacks
-      if (Isaac.GetPlayer(0):GetCollectibleNum(ITMR.Items.Passive[key].id) == 0) then ITMR.DynamicCallbacks.unbind(ITMR.Items.Passive, key) end
+      if (Isaac.GetPlayer(0):GetCollectibleNum(IOTR.Items.Passive[key].id) == 0) then IOTR.DynamicCallbacks.unbind(IOTR.Items.Passive, key) end
       
       -- Call onRemove callback
-      if ITMR.Items.Passive[key].onRemove ~= nil then ITMR.Items.Passive[key].onRemove() end
+      if IOTR.Items.Passive[key].onRemove ~= nil then IOTR.Items.Passive[key].onRemove() end
     end
     
   end
     
-  ITMR:AddCallback(ModCallbacks.MC_POST_UPDATE, pickupRemoveCheck);
+  IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE, pickupRemoveCheck);
   
   -- Add External Item Description support
-  __eidItemDescriptions[ITMR.Items.Passive[key].id] = ITMR.Items.Passive[key].description["en"] .. 
+  __eidItemDescriptions[IOTR.Items.Passive[key].id] = IOTR.Items.Passive[key].description["en"] .. 
   "#\3 From Twitch Mod"
   
-  __eidRusItemDescriptions[ITMR.Items.Passive[key].id] = ITMR._.fixtext(ITMR.Items.Passive[key].description["ru"] .. 
+  __eidRusItemDescriptions[IOTR.Items.Passive[key].id] = IOTR._.fixtext(IOTR.Items.Passive[key].description["ru"] .. 
   "#\3 Предмет из Твич-мода")
 end
 
 -- Bind callbacks and descriptions for trinkets
-for key,value in pairs(ITMR.Items.Trinkets) do
+for key,value in pairs(IOTR.Items.Trinkets) do
   
-  __eidTrinketDescriptions[ITMR.Items.Trinkets[key].id] = ITMR.Items.Trinkets[key].description["en"] .. 
+  __eidTrinketDescriptions[IOTR.Items.Trinkets[key].id] = IOTR.Items.Trinkets[key].description["en"] .. 
   "#\3 From Twitch Mod"
   
-  __eidRusTrinketDescriptions[ITMR.Items.Trinkets[key].id] = ITMR._.fixtext(ITMR.Items.Trinkets[key].description["ru"] .. 
+  __eidRusTrinketDescriptions[IOTR.Items.Trinkets[key].id] = IOTR._.fixtext(IOTR.Items.Trinkets[key].description["ru"] .. 
   "#\3 Предмет из Твич-мода")
 end
 
 
 -- Bind callbacks to Isaac
-ITMR:AddCallback(ModCallbacks.MC_EXECUTE_CMD, ITMR.Cmd.main)
-ITMR:AddCallback(ModCallbacks.MC_POST_UPDATE, ITMR.Callbacks.postUpdate)
-ITMR:AddCallback(ModCallbacks.MC_POST_RENDER, ITMR.Callbacks.postRender)
-ITMR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, ITMR.Callbacks.postNewRoom)
-ITMR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, ITMR.Callbacks.evaluateCache)
-ITMR:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, ITMR.Callbacks.postGameStarted)
-ITMR:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, ITMR.Callbacks.preGameExit)
-ITMR:AddCallback(ModCallbacks.MC_POST_GAME_END, ITMR.Callbacks.postGameEnd)
-ITMR:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, ITMR.Callbacks.getShaderParams)
+IOTR:AddCallback(ModCallbacks.MC_EXECUTE_CMD, IOTR.Cmd.main)
+IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE, IOTR.Callbacks.postUpdate)
+IOTR:AddCallback(ModCallbacks.MC_POST_RENDER, IOTR.Callbacks.postRender)
+IOTR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, IOTR.Callbacks.postNewRoom)
+IOTR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, IOTR.Callbacks.evaluateCache)
+IOTR:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, IOTR.Callbacks.postGameStarted)
+IOTR:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, IOTR.Callbacks.preGameExit)
+IOTR:AddCallback(ModCallbacks.MC_POST_GAME_END, IOTR.Callbacks.postGameEnd)
+IOTR:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, IOTR.Callbacks.getShaderParams)
 
 -- Set dynamic callbacks
 
 -- onUpdate Callback
-ITMR:AddCallback(ModCallbacks.MC_POST_UPDATE, 
+IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE, 
   function ()
-    for key,value in pairs(ITMR.DynamicCallbacks.onUpdate) do
+    for key,value in pairs(IOTR.DynamicCallbacks.onUpdate) do
       value()
     end
   end
 )
 
 -- onCacheUpdate Callback
-ITMR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, 
+IOTR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, 
   function (obj, player, cacheFlag)
-    for key,value in pairs(ITMR.DynamicCallbacks.onCacheUpdate) do
+    for key,value in pairs(IOTR.DynamicCallbacks.onCacheUpdate) do
       value(obj, player, cacheFlag)
     end
   end
 )
 
 -- onEntityUpdate Callback
-ITMR:AddCallback(ModCallbacks.MC_POST_UPDATE, 
+IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE, 
   function ()
     local entities = Isaac.GetRoomEntities()
     
     for entityKey, entity in pairs(entities) do
-      for key,value in pairs(ITMR.DynamicCallbacks.onEntityUpdate) do
+      for key,value in pairs(IOTR.DynamicCallbacks.onEntityUpdate) do
         value(entity)
       end
     end
@@ -590,60 +592,60 @@ ITMR:AddCallback(ModCallbacks.MC_POST_UPDATE,
 )
 
 -- onRoomChange Callback
-ITMR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, 
+IOTR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, 
   function ()
-    for key,value in pairs(ITMR.DynamicCallbacks.onRoomChange) do
+    for key,value in pairs(IOTR.DynamicCallbacks.onRoomChange) do
       value()
     end
   end
 )
 
 -- onTearUpdate Callback
-ITMR:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, 
+IOTR:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, 
   function (obj, e)
-    for key,value in pairs(ITMR.DynamicCallbacks.onTearUpdate) do
+    for key,value in pairs(IOTR.DynamicCallbacks.onTearUpdate) do
       value(obj, e)
     end
   end
 )
 
 -- onProjectileUpdate Callback
-ITMR:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE, 
+IOTR:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE, 
   function (obj, e)
-    for key,value in pairs(ITMR.DynamicCallbacks.onProjectileUpdate) do
+    for key,value in pairs(IOTR.DynamicCallbacks.onProjectileUpdate) do
       value(obj, e)
     end
   end
 )
 
 -- onDamage Callback
-ITMR:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, 
+IOTR:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, 
   function (obj, p, damageAmnt, damageFlag, damageSource, damageCountdown)
-    for key,value in pairs(ITMR.DynamicCallbacks.onDamage) do
+    for key,value in pairs(IOTR.DynamicCallbacks.onDamage) do
       value(obj, p, damageAmnt, damageFlag, damageSource, damageCountdown)
     end
   end, EntityType.ENTITY_PLAYER
 )
 
 -- onNPCDeath Callback
-ITMR:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, 
+IOTR:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, 
   function (obj, e)
-    for key,value in pairs(ITMR.DynamicCallbacks.onNPCDeath) do
+    for key,value in pairs(IOTR.DynamicCallbacks.onNPCDeath) do
       value(obj, e)
     end
   end
 )
 
 -- onStageChange Callback
-ITMR:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, 
+IOTR:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, 
   function ()
-    for key,value in pairs(ITMR.DynamicCallbacks.onStageChange) do
+    for key,value in pairs(IOTR.DynamicCallbacks.onStageChange) do
       value()
     end
   end
 )
 
 -- Initialize game launch
-ITMR._.checkRussianFont()
-ITMR.Sprites.load()
-ITMR.Text.add("siteMessage", ITMR.Locale[ITMR.Settings.lang].welcomeMessage)
+IOTR._.checkRussianFont()
+IOTR.Sprites.load()
+IOTR.Text.add("siteMessage", IOTR.Locale[IOTR.Settings.lang].welcomeMessage)

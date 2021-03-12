@@ -1,6 +1,6 @@
 <shaders>
   <!------------------------------------------ Blink shader ------------------------------------------>
-  <shader name="ITMR_Blink">
+  <shader name="IOTR_Blink">
     <parameters>
       <param name="Time" type="float"/>
     </parameters>
@@ -59,7 +59,7 @@
   </shader>
 
   <!------------------------------------------ Screen mirror shader ------------------------------------------>
-  <shader name="ITMR_ScreenMirror">
+  <shader name="IOTR_ScreenMirror">
     <parameters>
       <param name="Pos" type="float"/>
     </parameters>
@@ -119,7 +119,7 @@
   </shader>
 
   <!------------------------------------------ VHS shader ------------------------------------------>
-  <shader name="ITMR_VHS">
+  <shader name="IOTR_VHS">
     <parameters>
       <param name="Time" type="float"/>
     </parameters>
@@ -169,13 +169,13 @@
         if (TimeOut > 0.0) {
           vec4 Color = Color0 * texture2D(Texture0, TexCoord0);
           
-          float VHSPosWidth = rand(TexCoord0)/18;
+          float VHSPosWidth = rand(TexCoord0)/26;
 					if (TexCoord0.y > TimeOut && TexCoord0.y < TimeOut + VHSPosWidth) {
 						
-						float c = rand(vec2(TexCoord0.y, TexCoord0.y))+0.7;
-						Color.r *= c;
-						Color.g *= c;
-						Color.b *= c;
+						float c = rand(vec2(TexCoord0.y, TexCoord0.y))+1;
+						Color.r *= rand(vec2(TexCoord0.y+TimeOut/2, TexCoord0.y-100))*2*c;
+						Color.g *= rand(vec2(TexCoord0.y+20, TexCoord0.y-TimeOut*3))*2*c;
+						Color.b *= rand(vec2(TexCoord0.y-TimeOut/4, TexCoord0.y-543))*2*c;
 					}
           gl_FragColor = Color;
         }
@@ -188,7 +188,7 @@
   </shader>
 
   <!------------------------------------------ ColorSides shader ------------------------------------------>
-  <shader name="ITMR_ColorSides">
+  <shader name="IOTR_ColorSides">
     <parameters>
       <param name="Intensity" type="float"/>
       <param name="VColor" type="vec3"/>
@@ -255,7 +255,7 @@
   </shader>
 
   <!------------------------------------------ Glitch shader ------------------------------------------>
-  <shader name="ITMR_Glitch">
+  <shader name="IOTR_Glitch">
     <parameters>
       <param name="Time" type="float"/>
     </parameters>
@@ -332,7 +332,7 @@
   </shader>
 
   <!------------------------------------------ Deep Dark shader ------------------------------------------>
-  <shader name="ITMR_DeepDark">
+  <shader name="IOTR_DeepDark">
     <parameters>
       <param name="Intensity" type="float"/>
       <param name="PlayerPos" type="vec2"/>
@@ -401,7 +401,7 @@
   </shader>
 
   <!------------------------------------------ Broken Lens shader ------------------------------------------>
-  <shader name="ITMR_BrokenLens">
+  <shader name="IOTR_BrokenLens">
     <parameters>
       <param name="CameraPos" type="vec2"/>
 			<param name="Intensity" type="float"/>
@@ -460,9 +460,10 @@
   </shader>
 
   <!------------------------------------------ Swirl shader ------------------------------------------>
-  <shader name="ITMR_Swirl">
+  <shader name="IOTR_Swirl">
     <parameters>
       <param name="Angle" type="float"/>
+      <param name="Radius" type="float"/>
       <param name="SwirlPos" type="vec2"/>
     </parameters>
     <vertex>
@@ -484,6 +485,9 @@
       attribute float Angle;
       varying float AngleOut;
       
+      attribute float Radius;
+      varying float RadiusOut;
+      
       attribute vec2 SwirlPos;
       varying vec2 SwirlPosOut;
       
@@ -493,6 +497,7 @@
         Color0 = Color; 
         TexCoord0 = TexCoord;
         AngleOut = Angle;
+        RadiusOut = Radius;
         PositionOut = Position;
         SwirlPosOut = SwirlPos;
         
@@ -507,6 +512,7 @@
       varying lowp vec4 RenderDataOut;
       varying lowp float ScaleOut;
       varying lowp float AngleOut;
+      varying lowp float RadiusOut;
       varying lowp vec2 SwirlPosOut;
       varying lowp vec3 PositionOut;
       uniform sampler2D Texture0;
@@ -520,13 +526,12 @@
           lowp vec2 textureCoordinateToUse = TexCoord0;
           lowp vec2 center = SwirlPosOut*2.0/RenderDataOut.zw;
           lowp float dist = distance(center, TexCoord0);
-          lowp float radius = 0.15;
           textureCoordinateToUse -= center;
             
             
-          if (dist < radius)
+          if (dist < RadiusOut)
           {
-            lowp float percent = (radius - dist) / radius;
+            lowp float percent = (RadiusOut - dist) / RadiusOut;
             lowp float theta = percent * percent * AngleOut * 8.0;
             lowp float s = sin(theta);
             lowp float c = cos(theta);
@@ -545,7 +550,7 @@
   </shader>
 
   <!------------------------------------------ Bloody shader ------------------------------------------>
-  <shader name="ITMR_Bloody">
+  <shader name="IOTR_Bloody">
     <parameters>
       <param name="Intensity" type="float"/>
     </parameters>

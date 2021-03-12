@@ -5,7 +5,7 @@ local json = require('json')
 function cmd.main (obj, mcmd, params) 
   mcmd = mcmd:lower()
   
-  if (mcmd ~= "itmr" and mcmd ~= "twitchmod" and mcmd ~= "twitch") then
+  if (mcmd ~= "iotr" and mcmd ~= "twitchmod" and mcmd ~= "twitch") then
     return
   end
   
@@ -22,8 +22,8 @@ function cmd.main (obj, mcmd, params)
 end
 
 function cmd.send(text)
-  Isaac.DebugString("ITMR: " ..text.. "\n")
-  Isaac.ConsoleOutput("ITMR: " ..text.. "\n")
+  Isaac.DebugString("IOTR: " ..text.. "\n")
+  Isaac.ConsoleOutput("IOTR: " ..text.. "\n")
 end
   
 
@@ -35,7 +35,7 @@ end
 function cmd.showcallbacks () 
   
   local text = "Dynamic callbacks\n"
-  for key,value in pairs(ITMR.DynamicCallbacks) do
+  for key,value in pairs(IOTR.DynamicCallbacks) do
     
     if (type(value) ~= "function") then
       text = text .. key .. ": "
@@ -56,7 +56,7 @@ end
 -- Show current storage data in JSON
 function cmd.storage () 
   
-  local text = "Storage\n" .. json.encode(ITMR.Storage)
+  local text = "Storage\n" .. json.encode(IOTR.Storage)
   
   cmd.send(text)
 end
@@ -67,7 +67,7 @@ function cmd.allpassive ()
   local room = Game():GetRoom()
   local count = 0
   
-  for key,value in pairs(ITMR.Items.Passive) do
+  for key,value in pairs(IOTR.Items.Passive) do
     count = count + 1
     Isaac.Spawn(5, 100, value.id, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), p)
   end
@@ -81,7 +81,7 @@ function cmd.allactive ()
   local room = Game():GetRoom()
   local count = 0
   
-  for key,value in pairs(ITMR.Items.Active) do
+  for key,value in pairs(IOTR.Items.Active) do
     count = count + 1
     Isaac.Spawn(5, 100, value.id, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), p)
   end
@@ -92,14 +92,14 @@ end
 -- Enable shader
 function cmd.toggleshader (params) 
   
-  if (ITMR.Shaders[params[2]] == nil) then
+  if (IOTR.Shaders[params[2]] == nil) then
     cmd.send("Shader "..params[2].." not found")
     return
   end
   
-  ITMR.Shaders[params[2]].enabled = not ITMR.Shaders[params[2]].enabled
+  IOTR.Shaders[params[2]].enabled = not IOTR.Shaders[params[2]].enabled
   
-  if (ITMR.Shaders[params[2]].enabled) then
+  if (IOTR.Shaders[params[2]].enabled) then
     cmd.send("Shader "..params[2].." enabled")
   else
     cmd.send("Shader "..params[2].." disabled")
@@ -109,17 +109,17 @@ end
 -- Set shader param
 function cmd.setshader (params) 
   
-  if (ITMR.Shaders[params[2]] == nil) then
+  if (IOTR.Shaders[params[2]] == nil) then
     cmd.send("Shader "..params[2].." not found")
     return
   end
   
-  if (ITMR.Shaders[params[2]].params[params[3]] == nil) then
+  if (IOTR.Shaders[params[2]].params[params[3]] == nil) then
     cmd.send("Shader "..params[2].." do not have " .. params[3] .. " param")
     return
   end
   
-  ITMR.Shaders[params[2]].params[params[3]] = tonumber(params[4])
+  IOTR.Shaders[params[2]].params[params[3]] = tonumber(params[4])
 end
 
 -- Test following text render system
@@ -131,14 +131,14 @@ function cmd.debugtextfollow (params)
   local e = Isaac.GetRoomEntities()
   
   for k, v in pairs(e) do
-    ITMR.Text.add("debugtextfollow"..k, params[2])
-    ITMR.Text.follow("debugtextfollow"..k, v)
+    IOTR.Text.add("debugtextfollow"..k, params[2])
+    IOTR.Text.follow("debugtextfollow"..k, v)
   end
 end
 
 -- Launch event
 function cmd.launchevent (params)
-  ITMR._.launchEvent("EV_"..params[2])
+  IOTR._.launchEvent("EV_"..params[2])
 end
 
 return cmd
