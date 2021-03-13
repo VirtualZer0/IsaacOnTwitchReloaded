@@ -23,5 +23,6 @@ sounds.list.heavyrain = Isaac.GetSoundIdByName ("Rain")
 sounds.list.qte_yes = Isaac.GetSoundIdByName ("QTEYes")
 sounds.list.qte_no = Isaac.GetSoundIdByName ("QTENo")
 sounds.list.machineGunShot = Isaac.GetSoundIdByName ("MachgineGunShot")
+sounds.list.radioactive = Isaac.GetSoundIdByName ("Radioactive")
 
 return sounds

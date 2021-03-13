@@ -33,8 +33,8 @@ IOTR.GameState = {
 -- Settings
 IOTR.Settings = {
   textpos = {
-    l1 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .75}, -- First line text position
-    l2 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .75 + 15}  -- Second line text position
+    l1 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .70}, -- First line text position
+    l2 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .70 + 15}  -- Second line text position
   },
   subtime = 10*60*30,       -- Time to life for subscribers
   lang = "en"               -- Current language

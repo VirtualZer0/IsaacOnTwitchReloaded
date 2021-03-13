@@ -31,9 +31,9 @@ local ru = {
   evRainbowRainDesc = "Единорог не сдержался",
 
   evRUNName = "БЕГИ",
-  evRUNDesc = "Беги, Форест, беги!",
+  evRUNDesc = "RUN! TUDUDUDUDUDU TUDUDUDUDUDU",
 
-  evFlashJumpName = "Гипер-прыжок",
+  evFlashJumpName = "Гиперпрыжок",
   evFlashJumpDesc = "Быстрее скорости света",
 
   evEnemyRegenName = "Реген врагов",
@@ -55,7 +55,7 @@ local ru = {
   evMoreAwardsDesc = "Больше наград за твои старания",
 
   evStanleyParableName = "Stanley Parable",
-  evStanleyParableDesc = "Стэнли нажимал на кнопки",
+  evStanleyParableDesc = "...Стэнли нажал на серую кнопку",
 
   evSupernovaName = "Сверхновая",
   evSupernovaDesc = "УНИЧТОЖЬ ЭТОТ МИР!",

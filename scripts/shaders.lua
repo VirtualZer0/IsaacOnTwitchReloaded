@@ -10,7 +10,7 @@ local shaders = {
     },
     
     pass = function ()
-      if (IOTR.Shaders.IOTR_Blink.enabled and not Game():IsPaused()) then
+      if (IOTR.Shaders.IOTR_Blink.enabled) then
         return IOTR.Shaders.IOTR_Blink.params
       else
         return {Time = 0}

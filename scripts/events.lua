@@ -395,7 +395,7 @@ events.EV_AttackOnTitan = {
   
   onStart = function ()
     IOTR.Shaders.IOTR_Bloody.enabled = true
-    SFXManager():Play(IOTR.Sounds.attackOnTitan, 2, 0, false, 1)
+    SFXManager():Play(IOTR.Sounds.list.attackOnTitan, 2, 0, false, 1)
   end,
   
   onEntityUpdate = function (entity)
@@ -591,7 +591,7 @@ events.EV_DDoS  = {
     IOTR.Shaders.IOTR_Glitch.enabled = true
     IOTR.Shaders.IOTR_Glitch.params.time = 10000
     
-    SFXManager():Play(IOTR.Sounds.ddosDialup, 1, 0, false, 1)
+    SFXManager():Play(IOTR.Sounds.list.ddosDialup, 1, 0, false, 1)
   end,
   
   onUpdate = function ()
@@ -1154,38 +1154,340 @@ events.EV_Superhot = {
   
 }
 
--- Crazy Doors
-events.EV_CrazyDoors = {
+-- SCP-173
+events.EV_SCP173 = {
   
-  name = "CrazyDoors",
+  name = "SCP173",
   weights = {1,1,1},
-  good = true,
-  duration = 40*30,
+  good = false,
+  duration = 30*30,
+  
+  direction = 1,
+  
+  onStart = function ()
+    IOTR.Shaders.IOTR_Blink.params.Time = 0
+    IOTR.Shaders.IOTR_Blink.enabled = true
+  end,
+  
+  onEntityUpdate = function (entity)
+    if (entity:IsActiveEnemy()) then
+      if (IOTR.Shaders.IOTR_Blink.params.Time >= 1) then
+        for a = 0, 4 do
+          entity:Update()
+        end
+      else
+        entity:AddFreeze(EntityRef(Isaac.GetPlayer(0)), 1)
+        entity.Velocity = Vector(0,0)
+      end
+    end
+  end,
   
   onUpdate = function ()
-    local frame = Game():GetFrameCount()
-    if (frame % 15 ~= 0) then return end
+    
+    if (IOTR.Events.EV_SCP173.direction == 1 and IOTR.Shaders.IOTR_Blink.params.Time < 1.07) then
+      IOTR.Shaders.IOTR_Blink.params.Time = IOTR.Shaders.IOTR_Blink.params.Time + 0.015
+    elseif (IOTR.Events.EV_SCP173.direction == 1) then
+      IOTR.Events.EV_SCP173.direction = -1
+    elseif (IOTR.Events.EV_SCP173.direction == -1 and IOTR.Shaders.IOTR_Blink.params.Time > 0) then
+      IOTR.Shaders.IOTR_Blink.params.Time = IOTR.Shaders.IOTR_Blink.params.Time - 0.015
+    else
+      IOTR.Events.EV_SCP173.direction = 1
+    end
+    
+  end,
+  
+  onEnd = function ()
+    IOTR.Events.EV_SCP173.direction = 1
+    IOTR.Shaders.IOTR_Blink.params.Time = 0
+    IOTR.Shaders.IOTR_Blink.enabled = false
+  end
+  
+}
+
+-- Point of view
+events.EV_PointOfView = {
+  
+  name = "PointOfView",
+  weights = {1,1,1},
+  good = false,
+  byTime = false,
+  duration = 8,
+  
+  direction = 1,
+  
+  onStart = function ()
+    IOTR.Shaders.IOTR_ScreenMirror.enabled = true
+  end,
+  
+  onRoomChange = function ()
+    IOTR.Shaders.IOTR_ScreenMirror.params.Pos = math.random(1,3)
+  end,
+  
+  onEnd = function ()
+    IOTR.Shaders.IOTR_ScreenMirror.enabled = false
+    IOTR.Shaders.IOTR_ScreenMirror.params.Pos = 0
+  end
+  
+}
+
+-- Radioactive
+events.EV_Radioactive = {
+  
+  name = "Radioactive",
+  weights = {1,1,1},
+  good = false,
+  duration = 45*30,
+  
+  onStart = function ()
+    IOTR.Shaders.IOTR_ColorSides.enabled = true
+    IOTR.Shaders.IOTR_ColorSides.params = {
+      Intensity = 0,
+      VColor = {1,1,0}
+    }
+  end,
+  
+  onUpdate = function ()
+    if (IOTR.Shaders.IOTR_ColorSides.params.Intensity > 0) then
+      IOTR.Shaders.IOTR_ColorSides.params.Intensity = IOTR.Shaders.IOTR_ColorSides.params.Intensity - 0.005
+      if (Isaac.GetFrameCount() % 240 and math.random(1,2) == 2) then
+        SFXManager():Play(IOTR.Sounds.list.radioactive, IOTR.Shaders.IOTR_ColorSides.params.Intensity * 1.5, 0, false, 1)
+      end
+    end
+  end,
+  
+  onEntityUpdate = function (entity)
+    local p = Isaac.GetPlayer(0)
+    
+    if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy()) then
+      for n = 1, 2 do
+        local angle = math.random(0,360);
+        local x = entity.Position.X + 5 * math.cos(-angle*3.14/180) * 14;
+        local y = entity.Position.Y + 5 * math.sin(-angle*3.14/180) * 14;
+        Game():SpawnParticles(Vector(x,y), EffectVariant.BLOOD_DROP, 1, 0, Color(1,1,0,1,255,255,0), 0)
+      end
+      
+      if (entity.Position:Distance(p.Position) < 80) then
+        
+        if (IOTR.Shaders.IOTR_ColorSides.params.Intensity < 0.8) then
+          IOTR.Shaders.IOTR_ColorSides.params.Intensity = IOTR.Shaders.IOTR_ColorSides.params.Intensity + 0.04
+        else
+          p:TakeDamage (0.5, DamageFlag.DAMAGE_FIRE, EntityRef(p), 30)
+        end
+      end
+      
+    end
+  end,
+  
+  onEnd = function ()
+    IOTR.Shaders.IOTR_ColorSides.enabled = false
+  end
+  
+}
+
+-- Rerun
+events.EV_Rerun = {
+  
+  name = "Rerun",
+  weights = {.05,.4,1},
+  good = true,
+  duration = 10*30,
+  
+  onStart = function ()
+    SFXManager():Play(IOTR.Sounds.list.rerunCharging, 1, 0, false, 1)
+    Game():ShakeScreen(10*30)
+    Game():Darken(-1,10*30)
+  end,
+  
+  onUpdate = function ()
     
     local p = Isaac.GetPlayer(0)
     local room = Game():GetRoom()
     
-    local doors = {}
+    local pv = Vector(math.random(room:GetTopLeftPos().X, room:GetBottomRightPos().X), math.random(room:GetTopLeftPos().Y, room:GetBottomRightPos().Y))
+    local sv = Vector(p.Position.X - pv.X, p.Position.Y - pv.Y):Normalized()
+    local bl = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.IMPACT,  0, pv, Vector(sv.X*6, sv.Y*6), p)
+    bl:SetColor(IOTR.Enums.Rainbow[3], 0, 0, false, false)
     
-    for i = DoorSlot.LEFT0, DoorSlot.DOWN1 do
-      if (room:IsDoorSlotAllowed(i) and room:GetDoor(i) ~= nil) then
-        local door = room:GetDoor(i)
-        table.insert(doors, door)
-        door:SetRoomTypes(room:GetType(), IOTR.Enums.Doors[math.random(#IOTR.Enums.Doors)])
+  end,
+  
+  onEnd = function ()
+    Game():GetRoom():MamaMegaExplossion()
+    
+    local rng = RNG()
+    local seeds = Game():GetSeeds()
+    local seed = seeds:GetNextSeed()
+
+    seeds:SetStartSeed(seed)
+    
+    local stype = math.random(0,2);
+    
+    if (stype == 0) then Isaac.ExecuteCommand ("stage 1") end
+    if (stype == 1) then Isaac.ExecuteCommand ("stage 1a") end
+    if (stype == 2) then Isaac.ExecuteCommand ("stage 1b") end
+  end
+  
+}
+
+-- Switch the channel
+events.EV_SwitchTheChannel = {
+  
+  name = "SwitchTheChannel",
+  weights = {.05,.4,1},
+  good = false,
+  duration = 10*30,
+  
+  onUpdate = function ()
+    
+    if (Isaac.GetFrameCount() % 60 ~= 0) then return end
+    
+    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_CLICKER, true, true, true, false)
+    
+    local rng = RNG()
+    local seeds = Game():GetSeeds()
+    local seed = seeds:GetNextSeed()
+
+    seeds:SetStartSeed(seed)
+    local level = Game():GetLevel()
+    local stype = math.random(0,1)
+    local nl = nil
+    
+    if (Game():IsGreedMode()) then nl = math.random(1,7) else nl = math.random(1,12) end
+    
+    if (stype == 0) then Isaac.ExecuteCommand ("stage " .. nl) end
+    if (stype == 1) then Isaac.ExecuteCommand ("stage " .. nl .. "a") end
+    
+  end
+  
+}
+
+-- Flying Banana
+events.EV_FlyingBanana = {
+  
+  name = "FlyingBanana",
+  weights = {1,1,1},
+  good = true,
+  duration = 30*30,
+  
+  onUpdate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    local room = Game():GetRoom()
+    
+    local bananas = Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.BOOMERANG, 0, false, true)
+    for i = 1, #bananas do
+      local enems = Isaac.FindInRadius(bananas[i].Position, 16, EntityPartition.ENEMY)
+      for i = 1, #enems do
+        enems[i]:TakeDamage (0.2, 0, EntityRef(p), 10)
       end
     end
     
-    for i = 1, #doors do
-      local door = doors[i]
-      if (p.Position:Distance(door.Position) < 30) then
-        p.Position = doors[math.random(#doors)].Position
-        IOTR.Cmd.send("Door reached")
-      end
+    
+    if (Isaac.GetFrameCount() % 4 == 0) then
+      local pv = Vector(math.random(room:GetTopLeftPos().X, room:GetBottomRightPos().X), math.random(room:GetTopLeftPos().Y, room:GetBottomRightPos().Y))
+      local sv = Vector(p.Position.X - pv.X, p.Position.Y - pv.Y):Normalized()
+      local bl = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOOMERANG,  0, pv, Vector(sv.X*6, sv.Y*6), p)
+      bl:SetColor(IOTR.Enums.Rainbow[3], 0, 0, false, false)
     end
+    
+  end
+  
+}
+
+-- Pyrosis
+events.EV_Pyrosis = {
+  
+  name = "Pyrosis",
+  weights = {1,1,1},
+  good = true,
+  duration = 5,
+  byTime = false,
+  
+  onEntityUpdate = function (entity)
+    
+    if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy() and not entity:IsBoss()) then
+      Isaac.GridSpawn(GridEntityType.GRID_POOP, 1, entity.Position, true)
+      Game():SpawnParticles(entity.Position, EffectVariant.PLAYER_CREEP_RED, 1, 0, IOTR.Enums.Rainbow[1], 0)
+    end
+    
+  end
+  
+}
+
+-- Tears = Spiders
+events.EV_TearsEqualsSpiders = {
+  
+  name = "TearsEqualsSpiders",
+  weights = {1,1,1},
+  good = true,
+  duration = 50*30,
+  
+  onEntityUpdate = function (entity)
+    
+    local p = Isaac.GetPlayer(0)
+    
+    if (entity.Type == EntityType.ENTITY_TEAR) then
+        
+      local spider
+      
+      if (math.random(5) == 1) then
+        spider = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0, 0, entity.Position:__add(entity.Velocity:__mul(4)), Vector(0,0), p)
+        spider.HitPoints = entity:ToTear().BaseDamage*2
+      else
+        spider = p:AddBlueSpider (entity.Position)
+        spider.HitPoints = entity:ToTear().BaseDamage
+      end
+      
+      spider:AddVelocity(entity.Velocity)
+      entity:Remove()
+      
+    end
+    
+  end
+  
+}
+
+-- Ipecac for all
+events.EV_IpecacForAll = {
+  
+  name = "IpecacForAll",
+  weights = {.5,1,1},
+  good = false,
+  duration = 50*30,
+  
+  onEntityUpdate = function (entity)
+    
+    if (entity.Type == EntityType.ENTITY_PROJECTILE and entity:IsDead ()) then
+        
+      Isaac.Explode(entity.Position, entity, 30.0)
+      
+    end
+    
+  end
+  
+}
+
+-- Ghostbusters
+events.EV_Ghostbusters = {
+  
+  name = "Ghostbusters",
+  weights = {.5,1,1},
+  good = false,
+  duration = 50*30,
+  
+  onEntityUpdate = function (entity)
+    
+    local bossDelay = 0
+    if entity:IsBoss() then bossDelay = 7 end
+    
+    if (
+      entity.Type ~= EntityType.ENTITY_THE_HAUNT
+      and entity.Type > EntityType.ENTITY_PROJECTILE
+      and entity.Type < EntityType.ENTITY_EFFECT
+      and entity:IsDead() and math.random(1,1+bossDelay)
+    ) then
+      Game():Spawn(EntityType.ENTITY_THE_HAUNT, 10, entity.Position, Vector(0,0), entity, 0, 0)
+    end
+    
   end
   
 }
