@@ -24,5 +24,7 @@ sounds.list.qte_yes = Isaac.GetSoundIdByName ("QTEYes")
 sounds.list.qte_no = Isaac.GetSoundIdByName ("QTENo")
 sounds.list.machineGunShot = Isaac.GetSoundIdByName ("MachgineGunShot")
 sounds.list.radioactive = Isaac.GetSoundIdByName ("Radioactive")
+sounds.list.shadowClones = Isaac.GetSoundIdByName ("ShadowClonesSpawn")
+sounds.list.isaacOfIsaac = Isaac.GetSoundIdByName ("IsaacOfIsaac")
 
 return sounds

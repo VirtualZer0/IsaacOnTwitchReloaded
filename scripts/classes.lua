@@ -29,4 +29,80 @@ function classes.Subscriber:new (entity, name, time, color)
   return obj
 end
 
+
+-- Storage class
+classes.Storage = {}
+
+function classes.Storage:new ()
+  local obj= {
+    Subscribers = {},   -- Current subscribers
+    Familiars = {},     -- Current familiars
+    ActiveEvents = {},  -- Current events
+    
+    Stats = {
+      speed = 0,
+      range = 0,
+      tears = 0,
+      tearspeed = 0,
+      damage = 0,
+      luck = 0
+    },
+    
+    Hearts = {
+      twitch = 0,
+      rainbow = 0
+    }
+  }
+  
+  setmetatable(obj, self)
+  self.__index = self
+  return obj
+end
+
+-- Dynamic callbacks storage class
+classes.DynamicCallbacks = {}
+
+function classes.DynamicCallbacks:new ()
+  local obj= {
+    onUpdate = {},
+    onCacheUpdate = {},
+    onEntityUpdate = {},
+    onRoomChange = {},
+    onNewRoom = {},
+    onTearUpdate = {},
+    onProjectileUpdate = {},
+    onDamage = {},
+    onNPCDeath = {},
+    onStageChange = {},
+    
+    bind = function (from, key)
+      Isaac.ConsoleOutput("IOTR: Added new dynamic callbacks for "..key.."\n")
+      
+      for callbackName, callbackValue in pairs(IOTR.DynamicCallbacks) do
+        if (type(callbackValue) ~= "function") then
+          if (from[key][callbackName] ~= nil and callbackValue[key] == nil) then
+            callbackValue[key] = from[key][callbackName]
+          end
+        end
+      end
+    end,
+    
+    unbind = function (from, key)
+      Isaac.ConsoleOutput("IOTR: Remove dynamic callbacks for "..key.."\n")
+      
+      for callbackName, callbackValue in pairs(IOTR.DynamicCallbacks) do
+        if (type(callbackValue) ~= "function") then
+          if (callbackValue[key] ~= nil) then
+            callbackValue[key] = nil
+          end
+        end
+      end
+    end
+  }
+  
+  setmetatable(obj, self)
+  self.__index = self
+  return obj
+end
+
 return classes

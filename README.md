@@ -33,6 +33,10 @@ For debug, you can use next commands in Isaac command line (~):
 
 **<u>`iotr launchevent [eventname]`</u>** - launch event by name
 
+**<u>`iotr getgridentity`</u>** - get gridEntity type under the player
+
+**<u>`iotr getroomsize`</u>** - get size of current room
+
 
 
 ## File structure

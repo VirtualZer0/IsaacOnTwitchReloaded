@@ -73,19 +73,19 @@
     <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
   </entity>
 	
-	<entity anm2path="mod.twitch_ball_s.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="5" collisionRadius="16" friction="0.42" id="5" name="Marble Ball S" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="5750" subtype="0">
+	<entity anm2path="mod.twitch_ball_s.anm2" baseHP="0" friction="1.1" boss="0" champion="0" collisionDamage="0" collisionMass="5" collisionRadius="16" friction="0.42" id="5" name="Marble Ball S" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="5750" subtype="0">
     <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
   </entity>
 	
-	<entity anm2path="mod.twitch_ball_n.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="10" collisionRadius="16" friction="0.62" id="5" name="Marble Ball N" numGridCollisionPoints="24" shadowSize="18" stageHP="0" variant="5751" subtype="0">
+	<entity anm2path="mod.twitch_ball_n.anm2" baseHP="0" boss="0" friction="1.1" champion="0" collisionDamage="0" collisionMass="10" collisionRadius="16" friction="0.62" id="5" name="Marble Ball N" numGridCollisionPoints="24" shadowSize="18" stageHP="0" variant="5751" subtype="0">
     <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
   </entity>
 	
-	<entity anm2path="mod.twitch_ball_l.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="15" collisionRadius="16" friction="0.82" id="5" name="Marble Ball L" numGridCollisionPoints="24" shadowSize="24" stageHP="0" variant="5752" subtype="0">
+	<entity anm2path="mod.twitch_ball_l.anm2" baseHP="0" boss="0" friction="1.1" champion="0" collisionDamage="0" collisionMass="15" collisionRadius="16" friction="0.82" id="5" name="Marble Ball L" numGridCollisionPoints="24" shadowSize="24" stageHP="0" variant="5752" subtype="0">
     <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
   </entity>
 	
-	<entity anm2path="mod.twitch_ball_xl.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="20" collisionRadius="16" friction="1" id="5" name="Marble Ball XL" numGridCollisionPoints="24" shadowSize="28" stageHP="0" variant="5753" subtype="0">
+	<entity anm2path="mod.twitch_ball_xl.anm2" baseHP="0" boss="0" friction="1.1" champion="0" collisionDamage="0" collisionMass="20" collisionRadius="16" friction="1" id="5" name="Marble Ball XL" numGridCollisionPoints="24" shadowSize="28" stageHP="0" variant="5753" subtype="0">
     <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
   </entity>
 

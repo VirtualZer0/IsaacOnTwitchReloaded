@@ -66,7 +66,11 @@ function callbacks:postNewRoom ()
     if value.event.byTime == false then
       
       if (value.currentTime > 0) then
-        value.currentTime = value.currentTime - 1
+        if (value.event.onlyNewRoom ~= nil and value.event.onlyNewRoom) then
+          if (not Game():GetRoom():IsClear()) then value.currentTime = value.currentTime - 1 end
+        else
+          value.currentTime = value.currentTime - 1
+        end
       else
         -- Trigger onEnd callback, if it possible
         if value.event.onEnd ~= nil then value.event.onEnd() end

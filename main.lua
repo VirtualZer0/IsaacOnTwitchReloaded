@@ -1,7 +1,7 @@
 IOTR = RegisterMod("IsaacOnTwitchReloaded", 1)
 
 --require('mobdebug').start()
-StartDebug()
+--StartDebug()
 local json = require('json')
 
 -- Creating subobjects
@@ -41,40 +41,10 @@ IOTR.Settings = {
 }
 
 -- Current game session storage
-IOTR.Storage = {
- 
-  Subscribers = {},   -- Current subscribers
-  Familiars = {},     -- Current familiars
-  ActiveEvents = {},  -- Current events
-  
-  Stats = {
-    speed = 0,
-    range = 0,
-    tears = 0,
-    tearspeed = 0,
-    damage = 0,
-    luck = 0
-  },
-  
-  Hearts = {
-    twitch = 0,
-    rainbow = 0
-  },
-  
-}
+IOTR.Storage = IOTR.Classes.Storage:new()
 
 -- Dynamic callbacks storage
-IOTR.DynamicCallbacks = {
-  onUpdate = {},
-  onCacheUpdate = {},
-  onEntityUpdate = {},
-  onRoomChange = {},
-  onTearUpdate = {},
-  onProjectileUpdate = {},
-  onDamage = {},
-  onNPCDeath = {},
-  onStageChange = {},
-}
+IOTR.DynamicCallbacks = IOTR.Classes.DynamicCallbacks:new()
 
 ----------- Timers system ---------------
 IOTR.Timers = {
@@ -441,37 +411,6 @@ end
 if not __eidRusTrinketDescriptions then
   __eidRusTrinketDescriptions = {};
 end
- 
-
--- Adding function for bind/unbind items callbacks. This system using for less unusable conditions on postUpdate.
-
--- Bind callbacks
-function IOTR.DynamicCallbacks.bind (from, key)
-  
-  Isaac.ConsoleOutput("IOTR: Added new dynamic callbacks for "..key.."\n")
-  
-  for callbackName, callbackValue in pairs(IOTR.DynamicCallbacks) do
-    if (type(callbackValue) ~= "function") then
-      if (from[key][callbackName] ~= nil and callbackValue[key] == nil) then
-        callbackValue[key] = from[key][callbackName]
-      end
-    end
-  end
-end
-
--- Unbind callbacks
-function IOTR.DynamicCallbacks.unbind (from, key)
-  
-  Isaac.ConsoleOutput("IOTR: Remove dynamic callbacks for "..key.."\n")
-  
-  for callbackName, callbackValue in pairs(IOTR.DynamicCallbacks) do
-    if (type(callbackValue) ~= "function") then
-      if (callbackValue[key] ~= nil) then
-        callbackValue[key] = nil
-      end
-    end
-  end
-end
 
 ----------- Bind items and trinkets ---------------
 
@@ -591,11 +530,17 @@ IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE,
   end
 )
 
--- onRoomChange Callback
+-- onRoomChange and onNewRoom Callback
 IOTR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, 
   function ()
     for key,value in pairs(IOTR.DynamicCallbacks.onRoomChange) do
       value()
+    end
+    
+    if not Game():GetRoom():IsClear() then
+      for key,value in pairs(IOTR.DynamicCallbacks.onNewRoom) do
+        value()
+      end
     end
   end
 )
@@ -620,11 +565,11 @@ IOTR:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE,
 
 -- onDamage Callback
 IOTR:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, 
-  function (obj, p, damageAmnt, damageFlag, damageSource, damageCountdown)
+  function (obj, entity, damageAmnt, damageFlag, damageSource, damageCountdown)
     for key,value in pairs(IOTR.DynamicCallbacks.onDamage) do
-      value(obj, p, damageAmnt, damageFlag, damageSource, damageCountdown)
+      value(entity, damageAmnt, damageFlag, damageSource, damageCountdown)
     end
-  end, EntityType.ENTITY_PLAYER
+  end
 )
 
 -- onNPCDeath Callback

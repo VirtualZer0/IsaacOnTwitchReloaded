@@ -403,6 +403,7 @@
   <!------------------------------------------ Broken Lens shader ------------------------------------------>
   <shader name="IOTR_BrokenLens">
     <parameters>
+      
       <param name="CameraPos" type="vec2"/>
 			<param name="Intensity" type="float"/>
     </parameters>
@@ -421,27 +422,29 @@
       varying float ScaleOut;
       uniform mat4 Transform;
       
+      
       attribute float Intensity;
       attribute vec2 CameraPos;
       
       void main(void) {
-        RenderDataOut = RenderData; 
-        ScaleOut = Scale;
-        Color0 = Color; 
-        TexCoord0 = TexCoord;
-		float mIntensity = Intensity;
-		vec3 mPosition = Position;
-        
-        if (mIntensity >= 0.000001) {
-			mIntensity = abs(mIntensity-2.5);
-			mPosition.xy += (mPosition.xy - CameraPos.xy)*(mIntensity);
-			gl_Position = Transform * vec4(mPosition.xyz, 1.0);
-		}
-		else {
-			gl_Position = Transform * vec4(Position.xyz, 1.0);
-		}
+      RenderDataOut = RenderData; 
+      ScaleOut = Scale;
+      Color0 = Color; 
+      TexCoord0 = TexCoord;
+      float mIntensity = Intensity;
+      vec3 mPosition = Position;
+      
+      if (mIntensity >= 0.000001) {
+        mIntensity = abs(mIntensity-2.5);
+        mPosition.xy += (mPosition.xy - CameraPos.xy)*(mIntensity);
+        gl_Position = Transform * vec4(mPosition.xyz, 1.0);
         
       }
+      else {
+        gl_Position = Transform * vec4(Position.xyz, 1.0);
+      }
+        
+    }
     ]]>
     </vertex>
     <fragment>

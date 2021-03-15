@@ -176,6 +176,31 @@ helper.getPlayerItems = function ()
   end
 end
 
+-- Get last available tile on line
+helper.getLastAvailableCord = function (pos, direction, room)
+  
+  local stepX = 0
+  local stepY = 0
+  local curPos = Vector(pos.X, pos.Y)
+  
+  if      direction == Direction.LEFT   then stepX = -1
+  elseif  direction == Direction.RIGHT  then stepX = 1
+  elseif  direction == Direction.UP     then stepY = -1
+  else    stepY = 1
+  end
+    
+  while room:GetGridEntityFromPos(curPos) == nil and room:IsPositionInRoom(curPos, 1) do
+    curPos.X = curPos.X + stepX
+    curPos.Y = curPos.Y + stepY
+  end
+  
+  curPos.X = curPos.X - stepX
+  curPos.Y = curPos.Y - stepY
+  
+  return curPos
+  
+end
+
 -- Launch event function
 helper.launchEvent = function (eventName)
   
@@ -187,6 +212,7 @@ helper.launchEvent = function (eventName)
   -- Trigger onStart and onRoomChange callbacks, if it possible
   if ev.event.onStart ~= nil then ev.event.onStart() end
   if ev.event.onRoomChange ~= nil then ev.event.onRoomChange() end
+  if ev.event.onNewRoom ~= nil then ev.event.onNewRoom() end
   
   -- Bind dynamic callbacks
   IOTR.DynamicCallbacks.bind(IOTR.Events, eventName)
@@ -219,12 +245,11 @@ end
 -- Reset mod state
 helper.resetState = function ()
   
+  -- Reset stats
+  IOTR.Storage = IOTR.Classes.Storage:new()
+  
   -- Reset dynamic callbacks
-  for cname, cval in pairs(IOTR.DynamicCallbacks) do
-    if (type(cval) ~= "function") then
-      cval = nil
-    end
-  end
+  IOTR.DynamicCallbacks = IOTR.Classes.DynamicCallbacks:new()
   
   -- Disable shaders
   for shaderName, shader in pairs(IOTR.Shaders) do
@@ -236,27 +261,7 @@ helper.resetState = function ()
     IOTR.Items.Passive[key].count = 0
   end
     
-  -- Reset stats
-  IOTR.Storage.Stats = {
-    speed = 0,
-    range = 0,
-    tears = 0,
-    tearspeed = 0,
-    damage = 0,
-    luck = 0
-  }
   
-  -- Reset hearts
-  IOTR.Storage.Hearts = {
-    twitch = 0,
-    rainbow = 0
-  }
-  
-  -- Reset events
-  IOTR.Storage.ActiveEvents = {}
-  
-  -- Reset familiars
-  IOTR.Storage.Familiars = {}
   
 end
 

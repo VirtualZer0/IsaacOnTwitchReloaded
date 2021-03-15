@@ -61,9 +61,17 @@
 		<sample weight="1" path="events/machinegun/shot.wav" />
 	</sound>
   
+  <sound name="ShadowClonesSpawn">
+		<sample weight="1" path="events/shadowclones/spawn.wav" />
+	</sound>
+  
   <sound name="Radioactive">
 		<sample weight="1" path="events/radioactive/geiger.wav" />
     <sample weight="1" path="events/radioactive/geiger2.wav" />
     <sample weight="1" path="events/radioactive/geiger3.wav" />
+	</sound>
+  
+  <sound name="IsaacOfIsaac">
+		<sample weight="1" path="events/isaacofisaac/start.wav" />
 	</sound>
 </sounds>

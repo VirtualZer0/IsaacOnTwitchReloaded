@@ -141,4 +141,21 @@ function cmd.launchevent (params)
   IOTR._.launchEvent("EV_"..params[2])
 end
 
+-- Get current gridEntity variant
+function cmd.getgridentity (params)
+  local p = Isaac.GetPlayer(0)
+  local room = Game():GetRoom()
+  
+  local curPos = room:GetGridIndex(p.Position)
+  
+  cmd.send(json.encode(room:GetGridEntity(curPos):GetType()))
+end
+
+-- Get current room size
+function cmd.getroomsize (params)
+  local room = Game():GetRoom()
+  
+  cmd.send(room:GetGridWidth() .. "x" .. room:GetGridHeight() .. "(" .. room:GetGridSize() .. ")")
+end
+
 return cmd

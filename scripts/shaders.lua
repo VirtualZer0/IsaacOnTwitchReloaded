@@ -113,8 +113,6 @@ local shaders = {
   
   pass = function ()
     if (IOTR.Shaders.IOTR_DeepDark.enabled) then
-      local pos = Isaac.WorldToScreen(Isaac.GetPlayer(0).Position)
-      IOTR.Shaders.IOTR_DeepDark.params.PlayerPos = {pos.X, pos.Y}
       return IOTR.Shaders.IOTR_DeepDark.params
     else
       return {
@@ -138,29 +136,7 @@ local shaders = {
   selected = nil,
   
   pass = function ()
-    if (IOTR.Shaders.IOTR_BrokenLens.enabled and not Game():IsPaused()) then
-      
-      if (IOTR.Shaders.IOTR_BrokenLens.params.Intensity > 5) then
-        IOTR.Shaders.IOTR_BrokenLens.params.Intensity = 0.1
-      else
-        if (math.abs(IOTR.Shaders.IOTR_BrokenLens.params.Intensity-2.5) >= 0 and math.abs(IOTR.Shaders.IOTR_BrokenLens.params.Intensity-2.5) <= 0.1) then
-          local entities = Isaac.GetRoomEntities()
-          
-          for key, value in pairs(entities) do
-            if (value:IsActiveEnemy(false) or value.Type == EntityType.ENTITY_PLAYER) then
-              IOTR.Shaders.IOTR_BrokenLens.selected = value
-            end
-          end
-        end
-        
-        IOTR.Shaders.IOTR_BrokenLens.params.Intensity = IOTR.Shaders.IOTR_BrokenLens.params.Intensity + 0.05
-        
-        if (IOTR.Shaders.IOTR_BrokenLens.selected == nil) then IOTR.Shaders.IOTR_BrokenLens.selected = Isaac.GetPlayer(0) end
-        
-        local pos = Isaac.WorldToScreen(IOTR.Shaders.IOTR_BrokenLens.selected.Position)
-        IOTR.Shaders.IOTR_BrokenLens.params.CameraPos = {pos.X, pos.Y}
-      end
-      
+    if (IOTR.Shaders.IOTR_BrokenLens.enabled and not Game():IsPaused()) then      
       return IOTR.Shaders.IOTR_BrokenLens.params
     else
       return {
