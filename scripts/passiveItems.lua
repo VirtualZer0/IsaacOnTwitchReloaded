@@ -311,11 +311,11 @@ passiveItems.PI_BrainSlug = {
   count = 0,
   
   onEntityUpdate = function (entity)
-    if (entity:IsActiveEnemy (false)) then
+    if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy()) then
       entity = entity:ToNPC()
       local p = Isaac.GetPlayer(0)
       if (p:GetFireDirection() ~= Direction.NO_DIRECTION and not entity:IsBoss()) then
-        entity:AddVelocity(Vector(p:GetShootingJoystick().X*0.6, p:GetShootingJoystick().Y*0.6))
+        entity:AddVelocity(Vector(p:GetShootingJoystick().X*0.9, p:GetShootingJoystick().Y*0.9))
       end
     end
   end

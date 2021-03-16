@@ -75,8 +75,8 @@ local ru = {
   evStrabismusName = "Косоглазие",
   evStrabismusDesc = "Прицеливаться с ним определенно сложнее",
   
-  evStrabismusName = "Инверсия",
-  evStrabismusDesc = "Просто переверните геймпад",
+  evInverseName = "Инверсия",
+  evInverseDesc = "Просто переверните геймпад",
   
   evSlipName = "Скользко!",
   evSlipDesc = "Осторожно, мокрый пол",

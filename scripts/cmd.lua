@@ -82,8 +82,10 @@ function cmd.allactive ()
   local count = 0
   
   for key,value in pairs(IOTR.Items.Active) do
-    count = count + 1
-    Isaac.Spawn(5, 100, value.id, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), p)
+    if (value.devOnly == nil or not value.devOnly) then
+      count = count + 1
+      Isaac.Spawn(5, 100, value.id, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), p)
+    end
   end
   
   cmd.send("Spawned "..count.." active items")

@@ -147,11 +147,16 @@ helper.getAllContent = function ()
   -- Get all IOTR events
   for key, rawEvent in pairs(IOTR.Events) do
     local event = {
+      id = rawEvent.name,
       name = IOTR.Locale[IOTR.Settings.lang]["ev" .. rawEvent.name .. "Name"],
       desc = IOTR.Locale[IOTR.Settings.lang]["ev" .. rawEvent.name .. "Desc"],
       weights = rawEvent.weights,
       good = rawEvent.good
     }
+    
+    if event.name == nil then
+      event.name = rawEvent.name
+    end
     
     table.insert(content.events, event)
   end
@@ -430,6 +435,23 @@ helper.translitrus = function (str)
   str = str:gsub('Я', 'YA')
   
   return str
+end
+
+-- Bitmask functions
+helper.bit = function (p)
+  return 2 ^ (p - 1)  -- 1-based indexing
+end
+
+helper.hasbit = function (x,p)
+  return x % (p + p) >= p
+end
+
+helper.setbit = function (x,p)
+  return IOTR._.hasbit(x, p) and x or x + p
+end
+
+helper.clearbit = function (x,p)
+  return IOTR._.hasbit(x, p) and x - p or x
 end
 
 return helper

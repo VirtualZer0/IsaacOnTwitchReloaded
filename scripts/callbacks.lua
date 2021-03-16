@@ -118,7 +118,7 @@ end
 function callbacks:postGameStarted (fromSave)
   
   -- Reset previous game state
-  _.resetState()
+  IOTR._.resetState()
   
   if (fromSave) then
     Save = json.decode(Isaac.LoadModData(IOTR))
@@ -164,26 +164,8 @@ function callbacks:preGameExit (shouldSave)
   
   if shouldSave == false then
     
-    -- Clear current collectible items count
-    for key,value in pairs(IOTR.Items.Passive) do
-      IOTR.Items.Passive[key].count = 0
-    end
+    IOTR._.resetState()
     
-    -- Reset stats
-    IOTR.Storage.Stats = {
-      speed = 0,
-      range = 0,
-      tears = 0,
-      tearspeed = 0,
-      damage = 0,
-      luck = 0
-    }
-    
-    -- Reset hearts
-    IOTR.Storage.Hearts = {
-      twitch = 0,
-      rainbow = 0
-    }
   else
     IOTR.Cmd.send("Saving mod data")
     

@@ -10,6 +10,7 @@ local sounds = {
 
 sounds.list.bitsAppear = Isaac.GetSoundIdByName ("BitsAppear")
 sounds.list.bitsCollect = Isaac.GetSoundIdByName ("BitsCollect")
+
 sounds.list.superhotBreak = Isaac.GetSoundIdByName ("SuperhotBreak")
 sounds.list.superhotVoice = Isaac.GetSoundIdByName ("SuperhotVoice")
 sounds.list.rewind = Isaac.GetSoundIdByName ("Rewind")
@@ -26,5 +27,7 @@ sounds.list.machineGunShot = Isaac.GetSoundIdByName ("MachgineGunShot")
 sounds.list.radioactive = Isaac.GetSoundIdByName ("Radioactive")
 sounds.list.shadowClones = Isaac.GetSoundIdByName ("ShadowClonesSpawn")
 sounds.list.isaacOfIsaac = Isaac.GetSoundIdByName ("IsaacOfIsaac")
+
+sounds.list.nomNomEating = Isaac.GetSoundIdByName ("NomNomEating")
 
 return sounds

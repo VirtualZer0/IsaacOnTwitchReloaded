@@ -406,7 +406,7 @@ events.EV_Flashmob = {
 -- Attack on titan
 events.EV_AttackOnTitan = {
   
-  name = "AttckOnTitan",
+  name = "AttackOnTitan",
   weights = {0.9,1,1},
   good = false,
   
@@ -1155,7 +1155,7 @@ events.EV_Superhot = {
         entity:Die()
         SFXManager():Play(IOTR.Sounds.list.superhotBreak, 1, 0, false, 1)
         
-        if (math.random(1,3) == 1) then
+        if (math.random(1,4) == 1) then
           SFXManager():Play(IOTR.Sounds.list.superhotVoice, 1, 0, false, 1)
         end
       end
@@ -2061,7 +2061,7 @@ events.EV_TornPockets = {
     if (Isaac.GetFrameCount() % 15 ~= 0) then return end
     local p = Isaac.GetPlayer(0)
     local room = Game():GetRoom()
-    pos = room:FindFreeTilePosition(p.Position:__add(math.random(-60,60), math.random(-60,60)), 10)
+    pos = room:FindFreeTilePosition(p.Position:__add(Vector(math.random(-60,60), math.random(-60,60))), 10)
     
     if (p:GetNumCoins() > 0 and math.random(1,10) == 1) then
       p:AddCoins(-1)

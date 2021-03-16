@@ -75,8 +75,8 @@ local en = {
   evStrabismusName = "Strabismus",
   evStrabismusDesc = "Hitting is definitely harder now",
   
-  evStrabismusName = "Inversion",
-  evStrabismusDesc = "Just flip the gamepad",
+  evInverseName = "Inverse",
+  evInverseDesc = "Just flip the gamepad",
   
   evSlipName = "Slip",
   evSlipDesc = "Caution, wet floor",

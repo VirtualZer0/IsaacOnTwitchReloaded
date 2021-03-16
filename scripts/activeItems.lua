@@ -10,6 +10,7 @@ local activeItems = {}
 --activeItems.ItemName= {
 --  id = Isaac.GetItemIdByName("Item Name"), <-- Item Id
 --  name = "Item Name"  <-- Item name, required for dynamic item loading on site
+--  devOnly = false <-- If TRUE, not appear in polls
 --  description = "Item description", <-- Item description for external item description mod
 --  current = false, <-- This item is current spacebar item
 --  onActivate = nil, <-- Function, called on activate item
@@ -79,11 +80,11 @@ activeItems.TTours = {
 }
 
 
--- Humble Life
-activeItems.HumbleLife = {
+-- Rip Pepperonis
+activeItems.RipPepperonis = {
   
-  id = Isaac.GetItemIdByName("Humble Life"),
-  name = "Humble Life",
+  id = Isaac.GetItemIdByName("Rip Pepperonis"),
+  name = "Rip Pepperonis",
   
   description = {
     en = "Spawn multiple brimstone swirls",
@@ -107,6 +108,207 @@ activeItems.HumbleLife = {
   
 }
 
+-- Nom nom
+activeItems.NomNom = {
+  
+  id = Isaac.GetItemIdByName("Nom Nom"),
+  name = "Nom Nom",
+  
+  description = {
+    en = "Give you half red and 1 soul heart#Disappears after 6 uses",
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 6 использований"
+  },
+  
+  onActivate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    if (p:HasFullHearts()) then
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+    else
+      p:AddHearts(1)
+    end
+    p:AddSoulHearts(2)
+    
+    IOTR.Sounds.play(IOTR.Sounds.list.nomNomEating)
+    
+    Isaac.GetPlayer(0):RemoveCollectible(Isaac.GetItemIdByName("Nom Nom"));
+    p:AddCollectible(Isaac.GetItemIdByName("Bitten nom nom 1"), 0, true);
+    
+  end
+  
+}
 
+-- Nom nom part 1
+activeItems.NomNomPart1 = {
+  
+  id = Isaac.GetItemIdByName("Bitten nom nom 1"),
+  name = "Bitten nom nom 1",
+  devOnly = true,
+  
+  description = {
+    en = "Give you half red and 1 soul heart#Disappears after 5 uses",
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 5 использований"
+  },
+  
+  onActivate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    if (p:HasFullHearts()) then
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+    else
+      p:AddHearts(1)
+    end
+    p:AddSoulHearts(2)
+    
+    IOTR.Sounds.play(IOTR.Sounds.list.nomNomEating)
+    p:RemoveCollectible(Isaac.GetItemIdByName("Bitten nom nom 1"));
+    p:AddCollectible(Isaac.GetItemIdByName("Bitten nom nom 2"), 0, true);
+    
+  end
+  
+}
+
+-- Nom nom part 2
+activeItems.NomNomPart2 = {
+  
+  id = Isaac.GetItemIdByName("Bitten nom nom 2"),
+  name = "Bitten nom nom 2",
+  devOnly = true,
+  
+  description = {
+    en = "Give you half red and 1 soul heart#Disappears after 4 uses",
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 4 использований"
+  },
+  
+  onActivate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    if (p:HasFullHearts()) then
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+    else
+      p:AddHearts(1)
+    end
+    p:AddSoulHearts(2)
+    
+    IOTR.Sounds.play(IOTR.Sounds.list.nomNomEating)
+    p:RemoveCollectible(Isaac.GetItemIdByName("Bitten nom nom 2"));
+    p:AddCollectible(Isaac.GetItemIdByName("Bitten nom nom 3"), 0, true);
+    
+  end
+  
+}
+
+-- Nom nom part 3
+activeItems.NomNomPart3 = {
+  
+  id = Isaac.GetItemIdByName("Bitten nom nom 3"),
+  name = "Bitten nom nom 3",
+  devOnly = true,
+  
+  description = {
+    en = "Give you half red and 1 soul heart#Disappears after 3 uses",
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 3 использований"
+  },
+  
+  onActivate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    if (p:HasFullHearts()) then
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+    else
+      p:AddHearts(1)
+    end
+    p:AddSoulHearts(2)
+    
+    IOTR.Sounds.play(IOTR.Sounds.list.nomNomEating)
+    p:RemoveCollectible(Isaac.GetItemIdByName("Bitten nom nom 3"));
+    p:AddCollectible(Isaac.GetItemIdByName("Bitten nom nom 4"), 0, true);
+    
+  end
+  
+}
+
+-- Nom nom part 4
+activeItems.NomNomPart4 = {
+  
+  id = Isaac.GetItemIdByName("Bitten nom nom 4"),
+  name = "Bitten nom nom 4",
+  devOnly = true,
+  
+  description = {
+    en = "Give you half red and 1 soul heart#Disappears after 2 uses",
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 2 использований"
+  },
+  
+  onActivate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    if (p:HasFullHearts()) then
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+    else
+      p:AddHearts(1)
+    end
+    p:AddSoulHearts(2)
+    
+    IOTR.Sounds.play(IOTR.Sounds.list.nomNomEating)
+    p:RemoveCollectible(Isaac.GetItemIdByName("Bitten nom nom 4"));
+    p:AddCollectible(Isaac.GetItemIdByName("Bitten nom nom 5"), 0, true);
+    
+  end
+  
+}
+
+-- Nom nom part 5
+activeItems.NomNomPart5 = {
+  
+  id = Isaac.GetItemIdByName("Bitten nom nom 5"),
+  name = "Bitten nom nom 5",
+  devOnly = true,
+  
+  description = {
+    en = "Give you half red and 1 soul heart#Disappears after 1 use",
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 1 использования"
+  },
+  
+  onActivate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    if (p:HasFullHearts()) then
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+    else
+      p:AddHearts(1)
+    end
+    p:AddSoulHearts(2)
+    
+    IOTR.Sounds.play(IOTR.Sounds.list.nomNomEating)
+    p:RemoveCollectible(Isaac.GetItemIdByName("Bitten nom nom 5"))
+    
+  end
+  
+}
+
+-- Panic basket
+activeItems.PanicBasket = {
+  
+  id = Isaac.GetItemIdByName("Panic Basket"),
+  name = "Panic Basket",
+  
+  description = {
+    en = "Throws fire",
+    ru = "Раскидывает огонь"
+  },
+  
+  onActivate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    
+    for i=1, math.random(5,14) do
+      local flame = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, p.Position, Vector(math.random(-10, 10), math.random(-10, 10)), p)
+      flame.CollisionDamage = 5
+    end
+    
+  end
+  
+}
 
 return activeItems

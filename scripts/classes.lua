@@ -51,6 +51,14 @@ function classes.Storage:new ()
     Hearts = {
       twitch = 0,
       rainbow = 0
+    },
+    
+    Bits = {
+      gray = 0,
+      purple = 0,
+      green = 0,
+      blue = 0,
+      red = 0
     }
   }
   
@@ -65,6 +73,7 @@ classes.DynamicCallbacks = {}
 function classes.DynamicCallbacks:new ()
   local obj= {
     onUpdate = {},
+    onRenderUpdate = {},
     onCacheUpdate = {},
     onEntityUpdate = {},
     onRoomChange = {},
@@ -74,6 +83,8 @@ function classes.DynamicCallbacks:new ()
     onDamage = {},
     onNPCDeath = {},
     onStageChange = {},
+    onPickupCollision = {},
+    onFamiliarCollision = {},
     
     bind = function (from, key)
       Isaac.ConsoleOutput("IOTR: Added new dynamic callbacks for "..key.."\n")

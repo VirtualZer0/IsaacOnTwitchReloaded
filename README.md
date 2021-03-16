@@ -56,7 +56,8 @@ For debug, you can use next commands in Isaac command line (~):
   - **`events.lua`** - Events list
   - **`passiveItems.lua`** - List of all passive items from mod
   - **`helper.lua`** - Additional functions for comfort developing
-  - **`locale.lua`** - Localization data (can be used in the future)
+  - **`mechanics.lua`** - Gameplay mechanics, like bits and twitch hearts
+  - **`locale.lua`** - Localization data
   - **`server.lua`** - Twitch mod server for receiveng/sending data
   - **`sprites.lua`** - Contains UI and etc sprites from mod
   - **`shaders.lua`** - Contains shaders params

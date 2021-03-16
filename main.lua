@@ -14,6 +14,7 @@ IOTR.Cmd = require('scripts.cmd')             -- Command line handler
 IOTR.Sprites = require('scripts.sprites')     -- Sprites
 IOTR.Shaders = require('scripts.shaders')     -- Shaders
 IOTR.Events = require('scripts.events')       -- Events
+IOTR.Mechanics = require('scripts.mechanics')       -- Events
 IOTR.Locale = require('locale.main')          -- Localization
 IOTR._ = require('scripts.helper')            -- Helper functions
 
@@ -178,6 +179,19 @@ IOTR.Text = {
     IOTR.Text.FollowStorage[name] = nil
   end,
   
+  -- Clear text
+  clear = function ()
+    IOTR.Text.Storage = {}
+    IOTR.Text.FollowStorage = {}
+  end,
+  
+  -- Contain text
+  contains = function (name)
+    if (IOTR.Text.Storage[name] ~= nil) then return true end
+    if (IOTR.Text.FollowStorage[name] ~= nil) then return true end
+    return false
+  end,
+  
   -- Render all current texts
   render = function ()
     
@@ -307,7 +321,6 @@ IOTR.Server:setHandler("addText", function (req)
     if (value.pos ~= nil and value.pos ~= "empty") then
       tpos = value.pos;
     end
-    
     IOTR.Text.add(value.name, value.value, tpos, value.color, value.size, value.isCenter, value.blink);
   end
   
@@ -315,7 +328,15 @@ end)
 
 -- Remove text from screen
 IOTR.Server:setHandler("removeText", function (req) 
+  if (not IOTR.Text.contains(req.name)) then
+    IOTR.Cmd.send("Text not found: " .. req.name)
+  end
   IOTR.Text.remove(req.name);
+end)
+
+-- Clear all text
+IOTR.Server:setHandler("clearText", function (req) 
+  IOTR.Text.clear()
 end)
 
 -- Change text position
@@ -359,6 +380,11 @@ IOTR.Server:setHandler("itemAction", function (req)
   
 end)
 
+-- Launch event
+IOTR.Server:setHandler("eventAction", function (req) 
+  IOTR._.launchEvent("EV_"..req.id)
+end)
+
 -- Give personal trinket
 IOTR.Server:setHandler("gift", function (req) 
   
@@ -397,19 +423,19 @@ end)
 
 -- Set tables for external item description mod
 if not __eidItemDescriptions then
-  __eidItemDescriptions = {};
+  __eidItemDescriptions = {}
 end
 
 if not __eidRusItemDescriptions then
-  __eidRusItemDescriptions = {};
+  __eidRusItemDescriptions = {}
 end
 
 if not __eidTrinketDescriptions then
-  __eidTrinketDescriptions = {};
+  __eidTrinketDescriptions = {}
 end
 
 if not __eidRusTrinketDescriptions then
-  __eidRusTrinketDescriptions = {};
+  __eidRusTrinketDescriptions = {}
 end
 
 ----------- Bind items and trinkets ---------------
@@ -421,7 +447,7 @@ for key,value in pairs(IOTR.Items.Active) do
   __eidItemDescriptions[IOTR.Items.Active[key].id] = IOTR.Items.Active[key].description["en"] .. 
   "#\3 From Twitch Mod"
   
-  __eidRusItemDescriptions[IOTR.Items.Active[key].id] = IOTR._.fixtext(IOTR.Items.Active[key].description["ru"] .. 
+  __eidRusItemDescriptions[IOTR.Items.Active[key].id] = IOTR._.fixrus(IOTR.Items.Active[key].description["ru"] .. 
   "#\3 Предмет из Твич-мода")
 end
 
@@ -471,7 +497,7 @@ for key,value in pairs(IOTR.Items.Passive) do
   __eidItemDescriptions[IOTR.Items.Passive[key].id] = IOTR.Items.Passive[key].description["en"] .. 
   "#\3 From Twitch Mod"
   
-  __eidRusItemDescriptions[IOTR.Items.Passive[key].id] = IOTR._.fixtext(IOTR.Items.Passive[key].description["ru"] .. 
+  __eidRusItemDescriptions[IOTR.Items.Passive[key].id] = IOTR._.fixrus(IOTR.Items.Passive[key].description["ru"] .. 
   "#\3 Предмет из Твич-мода")
 end
 
@@ -481,7 +507,7 @@ for key,value in pairs(IOTR.Items.Trinkets) do
   __eidTrinketDescriptions[IOTR.Items.Trinkets[key].id] = IOTR.Items.Trinkets[key].description["en"] .. 
   "#\3 From Twitch Mod"
   
-  __eidRusTrinketDescriptions[IOTR.Items.Trinkets[key].id] = IOTR._.fixtext(IOTR.Items.Trinkets[key].description["ru"] .. 
+  __eidRusTrinketDescriptions[IOTR.Items.Trinkets[key].id] = IOTR._.fixrus(IOTR.Items.Trinkets[key].description["ru"] .. 
   "#\3 Предмет из Твич-мода")
 end
 
@@ -497,13 +523,30 @@ IOTR:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, IOTR.Callbacks.preGameExit)
 IOTR:AddCallback(ModCallbacks.MC_POST_GAME_END, IOTR.Callbacks.postGameEnd)
 IOTR:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, IOTR.Callbacks.getShaderParams)
 
--- Set dynamic callbacks
+-- Set dynamic and mechanics callbacks
 
 -- onUpdate Callback
 IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE, 
   function ()
     for key,value in pairs(IOTR.DynamicCallbacks.onUpdate) do
       value()
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onUpdate ~= nil then value.onUpdate() end
+    end
+  end
+)
+
+-- onRenderUpdate Callback
+IOTR:AddCallback(ModCallbacks.MC_POST_RENDER, 
+  function ()
+    for key,value in pairs(IOTR.DynamicCallbacks.onRenderUpdate) do
+      value()
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onRenderUpdate ~= nil then value.onRenderUpdate() end
     end
   end
 )
@@ -513,6 +556,10 @@ IOTR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE,
   function (obj, player, cacheFlag)
     for key,value in pairs(IOTR.DynamicCallbacks.onCacheUpdate) do
       value(obj, player, cacheFlag)
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onCacheUpdate ~= nil then value.onCacheUpdate(obj, player, cacheFlag) end
     end
   end
 )
@@ -526,6 +573,10 @@ IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE,
       for key,value in pairs(IOTR.DynamicCallbacks.onEntityUpdate) do
         value(entity)
       end
+      
+      for key,value in pairs(IOTR.Mechanics) do
+        if value.onEntityUpdate ~= nil then value.onEntityUpdate(entity) end
+      end
     end
   end
 )
@@ -537,9 +588,17 @@ IOTR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,
       value()
     end
     
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onRoomChange ~= nil then value.onRoomChange() end
+    end
+    
     if not Game():GetRoom():IsClear() then
       for key,value in pairs(IOTR.DynamicCallbacks.onNewRoom) do
         value()
+      end
+      
+      for key,value in pairs(IOTR.Mechanics) do
+        if value.onNewRoom ~= nil then value.onNewRoom() end
       end
     end
   end
@@ -551,6 +610,10 @@ IOTR:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE,
     for key,value in pairs(IOTR.DynamicCallbacks.onTearUpdate) do
       value(obj, e)
     end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onTearUpdate ~= nil then value.onTearUpdate(obj, e) end
+    end
   end
 )
 
@@ -560,15 +623,34 @@ IOTR:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE,
     for key,value in pairs(IOTR.DynamicCallbacks.onProjectileUpdate) do
       value(obj, e)
     end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onProjectileUpdate ~= nil then value.onProjectileUpdate(obj, e) end
+    end
   end
 )
 
 -- onDamage Callback
 IOTR:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, 
   function (obj, entity, damageAmnt, damageFlag, damageSource, damageCountdown)
+    
+    local res = nil
+    
     for key,value in pairs(IOTR.DynamicCallbacks.onDamage) do
-      value(entity, damageAmnt, damageFlag, damageSource, damageCountdown)
+      if(value(entity, damageAmnt, damageFlag, damageSource, damageCountdown) == false) then
+        res = false
+      end
     end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onDamage ~= nil then
+        if(value(entity, damageAmnt, damageFlag, damageSource, damageCountdown) == false) then
+          res = false
+        end
+      end
+    end
+    
+    return res
   end
 )
 
@@ -577,6 +659,10 @@ IOTR:AddCallback(ModCallbacks.MC_POST_NPC_DEATH,
   function (obj, e)
     for key,value in pairs(IOTR.DynamicCallbacks.onNPCDeath) do
       value(obj, e)
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onNPCDeath ~= nil then value.onNPCDeath(obj, e) end
     end
   end
 )
@@ -587,6 +673,44 @@ IOTR:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,
     for key,value in pairs(IOTR.DynamicCallbacks.onStageChange) do
       value()
     end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onStageChange ~= nil then value.onStageChange() end
+    end
+  end
+)
+
+-- onPickupCollision Callback
+IOTR:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, 
+  function (obj, pickup, collider, low)
+    local result = nil
+    
+    for key,value in pairs(IOTR.DynamicCallbacks.onPickupCollision) do
+      result = value(pickup, collider, low)
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onPickupCollision ~= nil then result = value.onPickupCollision(pickup, collider, low) end
+    end
+    
+    return result
+  end
+)
+
+-- onFamiliarCollision Callback
+IOTR:AddCallback(ModCallbacks.MC_PRE_FAMILIAR_COLLISION, 
+  function (obj, familiar, collider, low)
+    local result = nil
+    
+    for key,value in pairs(IOTR.DynamicCallbacks.onFamiliarCollision) do
+      result = value(familiar, collider, low)
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onFamiliarCollision ~= nil then result = value.onFamiliarCollision(familiar, collider, low) end
+    end
+    
+    return result
   end
 )
 

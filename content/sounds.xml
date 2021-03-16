@@ -74,4 +74,8 @@
   <sound name="IsaacOfIsaac">
 		<sample weight="1" path="events/isaacofisaac/start.wav" />
 	</sound>
+  
+  <sound name="NomNomEating">
+		<sample weight="1" path="items/nomnom/eating.wav" />
+	</sound>
 </sounds>

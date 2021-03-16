@@ -11,7 +11,9 @@
 		<Item name="TTours" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Vote Nay" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Vote Yea" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
-		<Item name="Humble Life" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Rip Pepperonis" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+    <Item name="Panic Basket" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+    <Item name="Nom Nom" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Nightbot" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Stinky Cheese" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="SSSsss" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
@@ -28,7 +30,9 @@
 		<Item name="TTours" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Vote Nay" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Vote Yea" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
-		<Item name="Humble Life" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Rip Pepperonis" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+    <Item name="Panic Basket" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+    <Item name="Nom Nom" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Nightbot" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Stinky Cheese" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="SSSsss" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
@@ -45,7 +49,9 @@
 		<Item name="TTours" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Vote Nay" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Vote Yea" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
-		<Item name="Humble Life" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+		<Item name="Rip Pepperonis" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+    <Item name="Panic Basket" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
+    <Item name="Nom Nom" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Nightbot" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="Stinky Cheese" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
 		<Item name="SSSsss" Weight="1" DecreaseBy="0.5" RemoveOn="0.1"/>
