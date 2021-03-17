@@ -78,4 +78,8 @@
   <sound name="NomNomEating">
 		<sample weight="1" path="items/nomnom/eating.wav" />
 	</sound>
+  
+  <sound name="TwitchRoomAppear">
+		<sample weight="1" path="others/twitchRoomAppear.wav" />
+	</sound>
 </sounds>

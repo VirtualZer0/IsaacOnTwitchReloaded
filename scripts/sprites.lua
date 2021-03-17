@@ -54,8 +54,8 @@ function sprites.load ()
   
   sprites.UI.TwitchHeart:Play("TwitchHeartFull", false)
   sprites.UI.TwitchHeartHalf:Play("TwitchHeartHalf", false)
-  sprites.UI.RainbowHeart:Play("RainbowHeartFull", false)
-  sprites.UI.RainbowHeartHalf:Play("RainbowHeartHalf", false)
+  sprites.UI.RainbowHeart:Play("RainbowHeartFull", true)
+  sprites.UI.RainbowHeartHalf:Play("RainbowHeartHalf", true)
   
   sprites.UI.ProgressBarBg:PlayOverlay("BarBg", false)
   sprites.UI.ProgressBarLine:PlayOverlay("BarLine", false)

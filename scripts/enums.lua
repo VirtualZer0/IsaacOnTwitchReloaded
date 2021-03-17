@@ -29,13 +29,23 @@ enums.DevilRage = {
 
 
 enums.Rainbow = {
-  Color(1,0,0,1,0,0,0),
-  Color(1,0.5,0,1,0,0,0),
-  Color(1,1,0,1,0,0,0),
-  Color(0.5,1,0,1,0,0,0),
-  Color(0,1,1,1,0,0,0),
-  Color(0,0,1,1,0,0,0),
-  Color(0.5,0,1,1,0,0,0)
+  Color(.858,.219,.219,1,0,0,0),
+  Color(.964,.384,.121,1,0,0,0),
+  Color(.996,.8,.184,1,0,0,0),
+  Color(0.596,.858,.301,1,0,0,0),
+  Color(.196,.709,.913,1,0,0,0),
+  Color(.254,.321,.828,1,0,0,0),
+  Color(.549,.27,.968,1,0,0,0)
+}
+
+enums.TintedRainbow = {
+  Color(.858,.219,.219,1,219,56,56),
+  Color(.964,.384,.121,1,246,98,31),
+  Color(.996,.8,.184,1,254,204,47),
+  Color(0.596,.858,.301,1,152,219,77),
+  Color(.196,.709,.913,1,50,181,223),
+  Color(.254,.321,.828,1,65,82,212),
+  Color(.549,.27,.968,1,140,69,247)
 }
 
 
@@ -102,8 +112,13 @@ enums.Bosses = {
   EntityType.ENTITY_FORSAKEN
 }
 
-enums.SpecialEntityFlags = {
-  FLAG_EV_GIVEMEYOURMONEY = EntityFlag.FLAG_PERSISTENT + 100
+enums.TwitchRoomPickups = {
+  Isaac.GetEntityVariantByName ("Bits A"),
+  Isaac.GetEntityVariantByName ("Bits B"),
+  Isaac.GetEntityVariantByName ("Bits C"),
+  Isaac.GetEntityVariantByName ("Bits D"),
+  Isaac.GetEntityVariantByName ("Bits E"),
+  Isaac.GetEntityVariantByName ("Twitch Heart")
 }
 
 return enums

@@ -89,8 +89,8 @@ passiveItems.PI_KappaPride = {
   name = "Kappa Pride",
   
   description = {
-    en = "Every tear have a chance to spawn 6 another tears with different effects#This tears deal 1/6 of your damage",
-    ru = "Каждая слеза имеет шанс заспавнить 6 других слез с разными эффектами#Эти слезы наносят 1/6 от вашего урона"
+    en = "Every tear have a chance to spawn 6 another tears with different effects#This tears deal 1/6 of your damage#100% chance on 15 luck",
+    ru = "Каждая слеза имеет шанс заспавнить 6 других слез с разными эффектами#Эти слезы наносят 1/6 от вашего урона#100% шанс с удачей 15"
   },
   
   count = 0,
@@ -99,41 +99,48 @@ passiveItems.PI_KappaPride = {
     
     local p = Isaac.GetPlayer(0)
     
-    if (math.random(1,80) == 1 and e.SpawnerType == EntityType.ENTITY_PLAYER) then
+    if
+      (
+        p.Luck >= 15
+        or math.random(math.ceil(p.Luck*3),80) == 80
+      )
+      and e.SpawnerType == EntityType.ENTITY_PLAYER
+      and Isaac.GetFrameCount() % 3 == 0
+      then
       
       local rotate = math.random(0,360)
       local t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(0 + rotate):__mul(0.4), e)
-      t:SetColor(IOTR.Enums.Rainbow[1], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.TintedRainbow[1], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_STICKY + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(60 + rotate):__mul(0.4), e)
-      t:SetColor(IOTR.Enums.Rainbow[2], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.TintedRainbow[2], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_BURN + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(120 + rotate):__mul(0.4), e)
-      t:SetColor(IOTR.Enums.Rainbow[3], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.TintedRainbow[3], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_GREED_COIN + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(180 + rotate):__mul(0.4), e)
-      t:SetColor(IOTR.Enums.Rainbow[4], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.TintedRainbow[4], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(240 + rotate):__mul(0.4), e)
-      t:SetColor(IOTR.Enums.Rainbow[6], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.TintedRainbow[6], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_FREEZE + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
       t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(300 + rotate):__mul(0.4), e)
-      t:SetColor(IOTR.Enums.Rainbow[7], 0, 0, false, false)
+      t:SetColor(IOTR.Enums.TintedRainbow[7], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_FEAR + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6

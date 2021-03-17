@@ -1,4 +1,5 @@
-IOTR = RegisterMod("IsaacOnTwitchReloaded", 1)
+IOTR = {}
+IOTR.Mod = RegisterMod("IsaacOnTwitchReloaded", 1)
 
 --require('mobdebug').start()
 --StartDebug()
@@ -14,7 +15,7 @@ IOTR.Cmd = require('scripts.cmd')             -- Command line handler
 IOTR.Sprites = require('scripts.sprites')     -- Sprites
 IOTR.Shaders = require('scripts.shaders')     -- Shaders
 IOTR.Events = require('scripts.events')       -- Events
-IOTR.Mechanics = require('scripts.mechanics')       -- Events
+IOTR.Mechanics = require('scripts.mechanics') -- Mod game mechanics
 IOTR.Locale = require('locale.main')          -- Localization
 IOTR._ = require('scripts.helper')            -- Helper functions
 
@@ -28,7 +29,8 @@ IOTR.Items = {
 -- Additional game state
 IOTR.GameState = {
   renderSpecial = true,
-  screenSize = (Isaac.WorldToScreen(Vector (320, 280)) - Game ():GetRoom ():GetRenderScrollOffset() - Game().ScreenShakeOffset) * 2
+  screenSize = (Isaac.WorldToScreen(Vector (320, 280)) - Game ():GetRoom ():GetRenderScrollOffset() - Game().ScreenShakeOffset) * 2,
+  postStartRaised = false
 }
 
 -- Settings
@@ -442,7 +444,7 @@ end
 
 -- Bind callbacks and descriptions for active items
 for key,value in pairs(IOTR.Items.Active) do
-  IOTR:AddCallback(ModCallbacks.MC_USE_ITEM, IOTR.Items.Active[key].onActivate, IOTR.Items.Active[key].id);
+  IOTR.Mod:AddCallback(ModCallbacks.MC_USE_ITEM, IOTR.Items.Active[key].onActivate, IOTR.Items.Active[key].id);
   
   __eidItemDescriptions[IOTR.Items.Active[key].id] = IOTR.Items.Active[key].description["en"] .. 
   "#\3 From Twitch Mod"
@@ -491,7 +493,7 @@ for key,value in pairs(IOTR.Items.Passive) do
     
   end
     
-  IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE, pickupRemoveCheck);
+  IOTR.Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, pickupRemoveCheck);
   
   -- Add External Item Description support
   __eidItemDescriptions[IOTR.Items.Passive[key].id] = IOTR.Items.Passive[key].description["en"] .. 
@@ -513,20 +515,20 @@ end
 
 
 -- Bind callbacks to Isaac
-IOTR:AddCallback(ModCallbacks.MC_EXECUTE_CMD, IOTR.Cmd.main)
-IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE, IOTR.Callbacks.postUpdate)
-IOTR:AddCallback(ModCallbacks.MC_POST_RENDER, IOTR.Callbacks.postRender)
-IOTR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, IOTR.Callbacks.postNewRoom)
-IOTR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, IOTR.Callbacks.evaluateCache)
-IOTR:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, IOTR.Callbacks.postGameStarted)
-IOTR:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, IOTR.Callbacks.preGameExit)
-IOTR:AddCallback(ModCallbacks.MC_POST_GAME_END, IOTR.Callbacks.postGameEnd)
-IOTR:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, IOTR.Callbacks.getShaderParams)
+IOTR.Mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, IOTR.Cmd.main)
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, IOTR.Callbacks.postUpdate)
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_RENDER, IOTR.Callbacks.postRender)
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, IOTR.Callbacks.postNewRoom)
+IOTR.Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, IOTR.Callbacks.evaluateCache)
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, IOTR.Callbacks.postGameStarted)
+IOTR.Mod:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, IOTR.Callbacks.preGameExit)
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_GAME_END, IOTR.Callbacks.postGameEnd)
+IOTR.Mod:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, IOTR.Callbacks.getShaderParams)
 
 -- Set dynamic and mechanics callbacks
 
 -- onUpdate Callback
-IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, 
   function ()
     for key,value in pairs(IOTR.DynamicCallbacks.onUpdate) do
       value()
@@ -539,7 +541,7 @@ IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE,
 )
 
 -- onRenderUpdate Callback
-IOTR:AddCallback(ModCallbacks.MC_POST_RENDER, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_RENDER, 
   function ()
     for key,value in pairs(IOTR.DynamicCallbacks.onRenderUpdate) do
       value()
@@ -552,7 +554,7 @@ IOTR:AddCallback(ModCallbacks.MC_POST_RENDER,
 )
 
 -- onCacheUpdate Callback
-IOTR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, 
   function (obj, player, cacheFlag)
     for key,value in pairs(IOTR.DynamicCallbacks.onCacheUpdate) do
       value(obj, player, cacheFlag)
@@ -565,7 +567,7 @@ IOTR:AddCallback(ModCallbacks.MC_EVALUATE_CACHE,
 )
 
 -- onEntityUpdate Callback
-IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, 
   function ()
     local entities = Isaac.GetRoomEntities()
     
@@ -582,7 +584,7 @@ IOTR:AddCallback(ModCallbacks.MC_POST_UPDATE,
 )
 
 -- onRoomChange and onNewRoom Callback
-IOTR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, 
   function ()
     for key,value in pairs(IOTR.DynamicCallbacks.onRoomChange) do
       value()
@@ -605,7 +607,7 @@ IOTR:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,
 )
 
 -- onTearUpdate Callback
-IOTR:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, 
   function (obj, e)
     for key,value in pairs(IOTR.DynamicCallbacks.onTearUpdate) do
       value(obj, e)
@@ -618,7 +620,7 @@ IOTR:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE,
 )
 
 -- onProjectileUpdate Callback
-IOTR:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE, 
   function (obj, e)
     for key,value in pairs(IOTR.DynamicCallbacks.onProjectileUpdate) do
       value(obj, e)
@@ -631,7 +633,7 @@ IOTR:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE,
 )
 
 -- onDamage Callback
-IOTR:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, 
   function (obj, entity, damageAmnt, damageFlag, damageSource, damageCountdown)
     
     local res = nil
@@ -644,7 +646,7 @@ IOTR:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG,
     
     for key,value in pairs(IOTR.Mechanics) do
       if value.onDamage ~= nil then
-        if(value(entity, damageAmnt, damageFlag, damageSource, damageCountdown) == false) then
+        if(value.onDamage(entity, damageAmnt, damageFlag, damageSource, damageCountdown) == false) then
           res = false
         end
       end
@@ -655,7 +657,7 @@ IOTR:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG,
 )
 
 -- onNPCDeath Callback
-IOTR:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, 
   function (obj, e)
     for key,value in pairs(IOTR.DynamicCallbacks.onNPCDeath) do
       value(obj, e)
@@ -668,7 +670,7 @@ IOTR:AddCallback(ModCallbacks.MC_POST_NPC_DEATH,
 )
 
 -- onStageChange Callback
-IOTR:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, 
   function ()
     for key,value in pairs(IOTR.DynamicCallbacks.onStageChange) do
       value()
@@ -681,7 +683,7 @@ IOTR:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL,
 )
 
 -- onPickupCollision Callback
-IOTR:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, 
   function (obj, pickup, collider, low)
     local result = nil
     
@@ -698,7 +700,7 @@ IOTR:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION,
 )
 
 -- onFamiliarCollision Callback
-IOTR:AddCallback(ModCallbacks.MC_PRE_FAMILIAR_COLLISION, 
+IOTR.Mod:AddCallback(ModCallbacks.MC_PRE_FAMILIAR_COLLISION, 
   function (obj, familiar, collider, low)
     local result = nil
     

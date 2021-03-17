@@ -60,7 +60,7 @@ events.EV_Poop = {
       local pos = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
       pos = room:FindFreeTilePosition(pos, 0.5)
       local poop = Isaac.Spawn(EntityType.ENTITY_POOP, 0, 1, pos, Vector(math.random(-20,20)*2, math.random(-20,20)*2), nil)
-      poop:ToNPC().Scale = math.random(2, 7)/10
+      poop:ToNPC().Scale = math.random(4, 7)/10
     end
     
     for i = 0, math.random(5, 8) do
@@ -68,7 +68,7 @@ events.EV_Poop = {
       local pos = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
       pos = room:FindFreeTilePosition(pos, 0.5)
       local poop = Isaac.Spawn(EntityType.ENTITY_DIP, 0, 1, pos, Vector(math.random(-20,20)*2, math.random(-20,20)*2), nil)
-      poop:ToNPC().Scale = math.random(2, 7)/10
+      poop:ToNPC().Scale = math.random(4, 7)/10
     end
     
     SFXManager():Play(SoundEffect.SOUND_FART, 1, 0, false, 1)
@@ -969,7 +969,7 @@ events.EV_Toxic = {
     
     IOTR.Shaders.IOTR_ColorSides.enabled = true
     IOTR.Shaders.IOTR_ColorSides.params = {
-      Intensity = 1,
+      Intensity = .6,
       VColor = {0,1,0}
     }
   end,
@@ -1074,7 +1074,7 @@ events.EV_Tenet = {
     end
     
     if (#IOTR.Events.EV_Tenet.storageVel ~= 0 and IOTR.Events.EV_Tenet.isBack) then
-      
+      Game().TimeCounter = Game().TimeCounter - 2
       
       p.Velocity = table.remove(IOTR.Events.EV_Tenet.storageVel, #IOTR.Events.EV_Tenet.storageVel)
       
@@ -1126,7 +1126,7 @@ events.EV_Superhot = {
     SFXManager():Play(IOTR.Sounds.list.superhotVoice, 1, 0, false, 1)
     IOTR.Shaders.IOTR_ColorSides.enabled = true
     IOTR.Shaders.IOTR_ColorSides.params = {
-      Intensity = 1,
+      Intensity = .6,
       VColor = {1,1,1}
     }
   end,
@@ -1343,7 +1343,6 @@ events.EV_Rerun = {
   onEnd = function ()
     Game():GetRoom():MamaMegaExplossion()
     
-    local rng = RNG()
     local seeds = Game():GetSeeds()
     local seed = seeds:GetNextSeed()
 
@@ -1372,7 +1371,6 @@ events.EV_SwitchTheChannel = {
     
     Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_CLICKER, true, true, true, false)
     
-    local rng = RNG()
     local seeds = Game():GetSeeds()
     local seed = seeds:GetNextSeed()
 
@@ -2019,7 +2017,7 @@ events.EV_Danger = {
   onStart = function ()
     IOTR.Shaders.IOTR_ColorSides.enabled = true
     IOTR.Shaders.IOTR_ColorSides.params = {
-      Intensity = .7,
+      Intensity = .6,
       VColor = {1,0,0}
     }
   end,

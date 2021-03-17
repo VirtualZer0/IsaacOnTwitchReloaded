@@ -90,26 +90,48 @@ function callbacks:evaluateCache (player, cacheFlag)
   
   
   if (cacheFlag == CacheFlag.CACHE_DAMAGE) then
-    player.Damage = player.Damage + IOTR.Storage.Stats.damage
+    player.Damage = player.Damage + IOTR.Storage.Stats.damage + IOTR.Storage.Hearts.rainbow/2
   
   elseif (cacheFlag == CacheFlag.CACHE_FIREDELAY) then
-    player.FireDelay = player.FireDelay + IOTR.Storage.Stats.tears
+    player.MaxFireDelay = player.MaxFireDelay - IOTR.Storage.Stats.tears
+    
+    if (IOTR.Storage.Hearts.rainbow > 1 and player.MaxFireDelay > 3) then
+      player.MaxFireDelay = player.MaxFireDelay - 1
+    end
+    
+    if (IOTR.Storage.Hearts.rainbow > 4 and player.MaxFireDelay > 3) then
+      player.MaxFireDelay = player.MaxFireDelay - 2
+    end
+    
+  elseif (cacheFlag == CacheFlag.CACHE_RANGE) then
+    player.TearHeight = player.TearHeight + IOTR.Storage.Stats.range - IOTR.Storage.Hearts.rainbow*2.5
       
   elseif (cacheFlag == CacheFlag.CACHE_SHOTSPEED) then
-    player.ShotSpeed = player.ShotSpeed + IOTR.Storage.Stats.tearspeed
+    player.ShotSpeed = player.ShotSpeed + IOTR.Storage.Stats.tearspeed + IOTR.Storage.Hearts.rainbow/12
       
   elseif (cacheFlag == CacheFlag.CACHE_SPEED) then
-    player.MoveSpeed = player.MoveSpeed + IOTR.Storage.Stats.speed
+    player.MoveSpeed = player.MoveSpeed + IOTR.Storage.Stats.speed + IOTR.Storage.Hearts.rainbow/12
   
   elseif (cacheFlag == CacheFlag.CACHE_LUCK) then
-    player.Luck = player.Luck + IOTR.Storage.Stats.luck
+    player.Luck = player.Luck + IOTR.Storage.Stats.luck + IOTR.Storage.Hearts.rainbow/1.5
       
   elseif (cacheFlag == CacheFlag.CACHE_ALL) then
-    player.Damage = player.Damage + IOTR.Storage.Stats.damage
-    player.FireDelay = player.FireDelay + IOTR.Storage.Stats.tears
-    player.ShotSpeed = player.ShotSpeed + IOTR.Storage.Stats.tearspeed
-    player.MoveSpeed = player.MoveSpeed + IOTR.Storage.Stats.speed
-    player.Luck = player.Luck + IOTR.Storage.Stats.luck
+    player.Damage = player.Damage + IOTR.Storage.Stats.damage + IOTR.Storage.Hearts.rainbow/2
+    
+    player.MaxFireDelay = player.MaxFireDelay - IOTR.Storage.Stats.tears
+    
+    if (IOTR.Storage.Hearts.rainbow > 1 and player.MaxFireDelay > 3) then
+      player.MaxFireDelay = player.MaxFireDelay - 1
+    end
+    
+    if (IOTR.Storage.Hearts.rainbow > 4 and player.MaxFireDelay > 3) then
+      player.MaxFireDelay = player.MaxFireDelay - 2
+    end
+    
+    player.TearHeight = player.TearHeight + IOTR.Storage.Stats.range - IOTR.Storage.Hearts.rainbow*2.5
+    player.ShotSpeed = player.ShotSpeed + IOTR.Storage.Stats.tearspeed + IOTR.Storage.Hearts.rainbow/12
+    player.MoveSpeed = player.MoveSpeed + IOTR.Storage.Stats.speed + IOTR.Storage.Hearts.rainbow/12
+    player.Luck = player.Luck + IOTR.Storage.Stats.luck + IOTR.Storage.Hearts.rainbow/1.5
   end
   
 end
@@ -117,11 +139,13 @@ end
 -- Start Game callback
 function callbacks:postGameStarted (fromSave)
   
+  IOTR.GameState.postStartRaised = true
+  
   -- Reset previous game state
   IOTR._.resetState()
   
   if (fromSave) then
-    Save = json.decode(Isaac.LoadModData(IOTR))
+    Save = json.decode(Isaac.LoadModData(IOTR.Mod))
     IOTR.Cmd.send("Checking save")
     
     if (Save ~= nil and Save.Storage ~= nil) then
@@ -138,17 +162,23 @@ function callbacks:postGameStarted (fromSave)
       player:AddCacheFlags(CacheFlag.CACHE_ALL)
       player:EvaluateItems()
     end
+  else
+    -- Generate Twtich room for first floor
+    IOTR.Mechanics.TwitchRoom._genTwitchRoom()
   end
   
   -- Running IOTR server
-  IOTR.Server:run()
+  IOTR.Server:run()  
   
 end
 
 -- Exit Game callback
 function callbacks:preGameExit (shouldSave)
+  
   -- Stop IOTR server
   IOTR.Server:close()
+  
+  IOTR.GameState.postStartRaised = false
   
   -- Reset dynamic callbacks
   for cname, cval in pairs(IOTR.DynamicCallbacks) do
@@ -178,7 +208,7 @@ function callbacks:preGameExit (shouldSave)
       Save.ItemsCount[key] = IOTR.Items.Passive[key].count
     end
     
-    Isaac.SaveModData(IOTR, json.encode(Save))
+    Isaac.SaveModData(IOTR.Mod, json.encode(Save))
   end
 end
 

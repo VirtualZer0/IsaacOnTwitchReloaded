@@ -30,4 +30,6 @@ sounds.list.isaacOfIsaac = Isaac.GetSoundIdByName ("IsaacOfIsaac")
 
 sounds.list.nomNomEating = Isaac.GetSoundIdByName ("NomNomEating")
 
+sounds.list.twitchRoomAppear = Isaac.GetSoundIdByName ("TwitchRoomAppear")
+
 return sounds

@@ -13,17 +13,20 @@
       attribute float Scale;
       
       varying vec4 Color0; 
-      varying vec2 TexCoord0; 
-      varying vec4 RenderDataOut; 
-      varying float ScaleOut;
+      varying vec2 TexCoord0;
       uniform mat4 Transform;
       
       attribute float Time;
       
       varying float TimeOut;
+      varying float ScaleOut;
+      varying vec3 PositionOut;
+      varying vec4 RenderDataOut;
       
       void main(void) {
-        RenderDataOut = RenderData; 
+        RenderDataOut = RenderData;
+        PositionOut = Position;  
+        ScaleOut = Scale;        
         ScaleOut = Scale;
         TimeOut = Time;
         Color0 = Color; 
@@ -36,18 +39,23 @@
     <![CDATA[
       varying lowp vec4 Color0; 
       varying mediump vec2 TexCoord0; 
-      varying lowp vec4 RenderDataOut;
-      varying lowp float ScaleOut;
       uniform sampler2D Texture0;
       
+      varying lowp vec4 RenderDataOut;
       varying lowp float TimeOut;
+      varying lowp float ScaleOut;
+      varying lowp vec3 PositionOut;
       
       void main(void) {
         if (TimeOut > 0.0) {
           vec4 Color = Color0 * texture2D(Texture0, TexCoord0);
-          Color.r *= 1.0 - TimeOut;
-          Color.g *= 1.0 - TimeOut;
-          Color.b *= 1.0 - TimeOut;
+          
+          float screenPosX = PositionOut.x/RenderDataOut.x * ScaleOut;
+          float screenPosY = PositionOut.y/RenderDataOut.y * ScaleOut;
+          
+          Color.rgb = Color.rgb - (smoothstep(0.1,0.9, screenPosY - (1-TimeOut*1.1)));
+          Color.rgb = Color.rgb - (smoothstep(0.1,0.9, TimeOut*1.1 - screenPosY));
+          
           gl_FragColor = Color;
         }
         else {
@@ -243,7 +251,16 @@
       void main(void) {
         if (IntensityOut > 0.0) {
           vec4 color = Color0 * texture2D(Texture0, TexCoord0);
-          color.rgb = color.rgb + VColorOut.rgb * abs(PositionOut.x/RenderDataOut.z-0.2 + PositionOut.y/RenderDataOut.y-0.2)*IntensityOut;
+          
+          float screenPosX = PositionOut.x/RenderDataOut.x * ScaleOut;
+          float screenPosY = PositionOut.y/RenderDataOut.y * ScaleOut;
+          
+          IntensityOut /= 1.7;
+          
+          color.rgb = color.rgb + (smoothstep(0.1,0.9, screenPosX - (1-IntensityOut)) * VColorOut.rgb);
+          color.rgb = color.rgb + (smoothstep(0.1,0.9, IntensityOut - screenPosX) * VColorOut.rgb);
+          color.rgb = color.rgb + (smoothstep(0.1,0.9, screenPosY - (1-IntensityOut)) * VColorOut.rgb);
+          color.rgb = color.rgb + (smoothstep(0.1,0.9, IntensityOut - screenPosY) * VColorOut.rgb);
           gl_FragColor = color;
         }
         else {
@@ -615,5 +632,73 @@
     ]]>
     </fragment>
   </shader>
+  
+  <!------------------------------------------ Rainbow shader ------------------------------------------>
+  <shader name="IOTR_Rainbow">
+        <parameters>
+            <param name="Time" type="float"/>
+        </parameters>
+        <vertex>
+        <![CDATA[
+            attribute vec3 Position;                                        
+            attribute vec4 Color;                                           
+            attribute vec2 TexCoord;                                        
+            attribute vec4 RenderData;                                                                  
+            attribute float Scale;
+            attribute float Time;
+            varying vec4 Color0;                                            
+            varying vec2 TexCoord0;
+            uniform mat4 Transform;
+            
+            varying vec3 PositionOut;
+            varying vec4 RenderDataOut;
+            varying float ScaleOut;
+            varying float TimeOut;
+            
+            void main(void)                                             
+            {                                                               
+                RenderDataOut = RenderData;
+                PositionOut = Position;
+                ScaleOut = Scale;
+                TimeOut = Time;
+                Color0 = Color;                                             
+                TexCoord0 = TexCoord;
+                gl_Position = Transform * vec4(Position.xyz, 1.0);          
+            }
+        ]]>
+        </vertex>
+        <fragment>
+        <![CDATA[
+            varying lowp vec4 Color0;
+            varying mediump vec2 TexCoord0;
+            uniform sampler2D Texture0;
+            varying lowp vec4 RenderDataOut;
+            varying lowp float ScaleOut;
+            varying lowp float TimeOut;
+            varying lowp vec3 PositionOut;
+            void main(void)
+            {
+              vec4 tintColor = Color0 * texture2D(Texture0, TexCoord0);
+              vec4 color = Color0 * texture2D(Texture0, TexCoord0);
+              
+              float screenPosX = PositionOut.x/RenderDataOut.x * ScaleOut;
+              float screenPosY = PositionOut.y/RenderDataOut.y * ScaleOut;
+              
+              if (TimeOut > 0) {
+                tintColor.r *= sin(TimeOut * 0.0432f)*2;
+                tintColor.g *= sin(TimeOut * 0.0376f)*2;
+                tintColor.b *= sin(TimeOut * 0.0231f)*2;
+              }
+              
+              color.rgb = color.rgb + (smoothstep(0.1,0.9, screenPosX - .7) * tintColor.rgb);
+              color.rgb = color.rgb + (smoothstep(0.1,0.9, .3 - screenPosX) * tintColor.rgb);
+              color.rgb = color.rgb + (smoothstep(0.1,0.9, screenPosY - .7) * tintColor.rgb);
+              color.rgb = color.rgb + (smoothstep(0.1,0.9, .3 - screenPosY) * tintColor.rgb);
+              
+              gl_FragColor = color;
+            }
+        ]]>
+      </fragment>
+    </shader>
 
 </shaders>

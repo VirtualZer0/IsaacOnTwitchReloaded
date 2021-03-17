@@ -59,12 +59,44 @@ function classes.Storage:new ()
       green = 0,
       blue = 0,
       red = 0
+    },
+    
+    Special = {
+      twitchRoomId = nil
     }
   }
   
   setmetatable(obj, self)
   self.__index = self
   return obj
+end
+
+-- Twitch room itempool class
+classes.TwitchRoomPool = {}
+
+function classes.TwitchRoomPool:new ()
+  
+  local obj = {
+    items = {}
+  }
+  
+  -- Load items into pool
+  for key,value in pairs(IOTR.Items.Active) do
+    if (value.devOnly == nil or value.devOnly == false) then
+      table.insert(obj.items, value.id)
+    end
+  end
+  
+  for key,value in pairs(IOTR.Items.Passive) do
+    if (value.devOnly == nil or value.devOnly == false) then
+      table.insert(obj.items, value.id)
+    end
+  end
+  
+  setmetatable(obj, self)
+  self.__index = self
+  return obj
+  
 end
 
 -- Dynamic callbacks storage class
