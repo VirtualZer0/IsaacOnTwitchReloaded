@@ -53,6 +53,9 @@ function callbacks:postRender ()
   -- Render progress bar
   IOTR.ProgressBar.render()
   
+  -- Render poll frames
+  IOTR.Pollframes.render()
+  
   -- Render text
   IOTR.Text.render()
   

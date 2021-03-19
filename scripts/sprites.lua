@@ -18,8 +18,13 @@ local sprites = {
     RainbowHeartHalf = Sprite(),
     
     -- Progress Bar
-    ProgressBarBg = Sprite(),
-    ProgressBarLine = Sprite()
+    ProgressBarHearts = Sprite(),
+    ProgressBarLine = Sprite(),
+    
+    -- Poll frames
+    PollFrame1 = Sprite(),
+    PollFrame2 = Sprite(),
+    PollFrame3 = Sprite()
   }
   
 }
@@ -41,8 +46,12 @@ function sprites.load ()
   sprites.UI.RainbowHeart:Load("gfx/ui/ui_twitch_mod_hearts.anm2", true)
   sprites.UI.RainbowHeartHalf:Load("gfx/ui/ui_twitch_mod_hearts.anm2", true)
   
-  sprites.UI.ProgressBarBg:Load("gfx/ui/ui_twitch_mod_pollbar.anm2", true)
-  sprites.UI.ProgressBarLine:Load("gfx/ui/ui_twitch_mod_pollbar.anm2", true)
+  sprites.UI.ProgressBarHearts:Load("gfx/ui/pollbars/ui_twitch_mod_pollbar_hearts.anm2", true)
+  sprites.UI.ProgressBarLine:Load("gfx/ui/pollbars/ui_twitch_mod_pollbar_line.anm2", true)
+  
+  sprites.UI.PollFrame1:Load("gfx/ui/ui_twitch_mod_pollframe.anm2", true)
+  sprites.UI.PollFrame2:Load("gfx/ui/ui_twitch_mod_pollframe.anm2", true)
+  sprites.UI.PollFrame3:Load("gfx/ui/ui_twitch_mod_pollframe.anm2", true)
   
   -- Activate sprites
   sprites.UI.EventActive:Play("Event", true)
@@ -57,8 +66,12 @@ function sprites.load ()
   sprites.UI.RainbowHeart:Play("RainbowHeartFull", true)
   sprites.UI.RainbowHeartHalf:Play("RainbowHeartHalf", true)
   
-  sprites.UI.ProgressBarBg:PlayOverlay("BarBg", false)
+  sprites.UI.ProgressBarHearts:PlayOverlay("Hearts5", false)
   sprites.UI.ProgressBarLine:PlayOverlay("BarLine", false)
+  
+  sprites.UI.PollFrame1:PlayOverlay("Item", false)
+  sprites.UI.PollFrame2:PlayOverlay("Item", false)
+  sprites.UI.PollFrame3:PlayOverlay("Item", false)
 end
 
 return sprites;

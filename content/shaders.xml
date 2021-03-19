@@ -226,7 +226,7 @@
       
       void main(void) {
         RenderDataOut = RenderData;
-		PositionOut = Position;
+        PositionOut = Position;
         ScaleOut = Scale;
         IntensityOut = Intensity;
         VColorOut = VColor;
@@ -254,13 +254,12 @@
           
           float screenPosX = PositionOut.x/RenderDataOut.x * ScaleOut;
           float screenPosY = PositionOut.y/RenderDataOut.y * ScaleOut;
+          float mIntensity = IntensityOut / 1.7;
           
-          IntensityOut /= 1.7;
-          
-          color.rgb = color.rgb + (smoothstep(0.1,0.9, screenPosX - (1-IntensityOut)) * VColorOut.rgb);
-          color.rgb = color.rgb + (smoothstep(0.1,0.9, IntensityOut - screenPosX) * VColorOut.rgb);
-          color.rgb = color.rgb + (smoothstep(0.1,0.9, screenPosY - (1-IntensityOut)) * VColorOut.rgb);
-          color.rgb = color.rgb + (smoothstep(0.1,0.9, IntensityOut - screenPosY) * VColorOut.rgb);
+          color.rgb = color.rgb + (smoothstep(0.1,0.9, screenPosX - (1-mIntensity)) * VColorOut.rgb);
+          color.rgb = color.rgb + (smoothstep(0.1,0.9, mIntensity - screenPosX) * VColorOut.rgb);
+          color.rgb = color.rgb + (smoothstep(0.1,0.9, screenPosY - (1-mIntensity)) * VColorOut.rgb);
+          color.rgb = color.rgb + (smoothstep(0.1,0.9, mIntensity - screenPosY) * VColorOut.rgb);
           gl_FragColor = color;
         }
         else {

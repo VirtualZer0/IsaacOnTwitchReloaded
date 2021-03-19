@@ -4,6 +4,7 @@ local ru = {
   
   -- Basic messages
   welcomeMessage = "Зайди на сайт isaacontwitch.com и нажми Старт!",
+  luadebugMessage = "Isaac On Twitch: Перезапустите игру с параметром --luadebug",
   
   -- Events
   evRichyName = "Богатства",

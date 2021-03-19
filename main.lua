@@ -38,6 +38,8 @@ IOTR.Settings = {
   textpos = {
     l1 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .70}, -- First line text position
     l2 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .70 + 15}  -- Second line text position
+    --l1 = {X = 16, Y = 202},
+    --l2 = {X = 16, Y = 225}
   },
   subtime = 10*60*30,       -- Time to life for subscribers
   lang = "en"               -- Current language
@@ -238,6 +240,35 @@ IOTR.Text = {
   end
 }
 
+----------- Poll frames rendering ---------------
+IOTR.Pollframes = {
+  
+  enabled = false,
+  frame1 = "gfx/items/collectibles/Collectibles_033_TheBible.png",
+  frame2 = "gfx/items/collectibles/Collectibles_033_TheBible.png",
+  frame3 = "gfx/items/collectibles/Collectibles_033_TheBible.png",
+  
+  render = function ()
+    if not IOTR.Pollframes.enabled then return end
+    IOTR.Sprites.UI.PollFrame1:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(12, 18), Vector(0,0), Vector(0,0))
+    IOTR.Sprites.UI.PollFrame2:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(102, 18), Vector(0,0), Vector(0,0))
+    IOTR.Sprites.UI.PollFrame3:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(192, 18), Vector(0,0), Vector(0,0))
+  end,
+  
+  replaceGfx = function ()
+    IOTR.Sprites.UI.PollFrame1:ReplaceSpritesheet(0, IOTR.Pollframes.frame1)
+    IOTR.Sprites.UI.PollFrame2:ReplaceSpritesheet(0, IOTR.Pollframes.frame2)
+    IOTR.Sprites.UI.PollFrame3:ReplaceSpritesheet(0, IOTR.Pollframes.frame3)
+    
+    IOTR.Sprites.UI.PollFrame1:LoadGraphics()
+    IOTR.Sprites.UI.PollFrame2:LoadGraphics()
+    IOTR.Sprites.UI.PollFrame3:LoadGraphics()
+    
+    IOTR.Cmd.send(IOTR.Pollframes.frame3)
+  end
+  
+}
+
 ----------- Progress Bar Rendering ---------------
 
 IOTR.ProgressBar = {
@@ -330,10 +361,13 @@ end)
 
 -- Remove text from screen
 IOTR.Server:setHandler("removeText", function (req) 
-  if (not IOTR.Text.contains(req.name)) then
-    IOTR.Cmd.send("Text not found: " .. req.name)
+  for key, value in ipairs(req) do
+    if (not IOTR.Text.contains(value)) then
+      IOTR.Cmd.send("Text not found: " .. value)
+    end
+    IOTR.Text.remove(value);
   end
-  IOTR.Text.remove(req.name);
+  
 end)
 
 -- Clear all text
@@ -343,6 +377,25 @@ end)
 
 -- Change text position
 IOTR.Server:setHandler("textpos", function (req) 
+  
+end)
+
+-- Enable poll frames
+IOTR.Server:setHandler("addPollframes", function (req) 
+    
+  IOTR.Pollframes.frame1 = req.f1
+  IOTR.Pollframes.frame2 = req.f2
+  IOTR.Pollframes.frame3 = req.f3
+  IOTR.Pollframes.replaceGfx()
+  
+  IOTR.Pollframes.enabled = true
+  
+end)
+
+-- Disable poll frames
+IOTR.Server:setHandler("removePollframes", function (req)
+  
+  IOTR.Pollframes.enabled = false
   
 end)
 
@@ -719,4 +772,10 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_PRE_FAMILIAR_COLLISION,
 -- Initialize game launch
 IOTR._.checkRussianFont()
 IOTR.Sprites.load()
-IOTR.Text.add("siteMessage", IOTR.Locale[IOTR.Settings.lang].welcomeMessage)
+
+if IOTR.Server.isOk then
+  IOTR.Text.add("siteMessage", IOTR.Locale[IOTR.Settings.lang].welcomeMessage)
+else
+  IOTR.Text.add("ludebugErrorEng", IOTR.Locale["en"].luadebugMessage, IOTR.Settings.textpos.l1, nil, nil, nil, {r=1,g=0,b=0,a=1})
+  IOTR.Text.add("ludebugErrorRus", IOTR.Locale["ru"].luadebugMessage, IOTR.Settings.textpos.l2, nil, nil, nil, {r=1,g=0,b=0,a=1})
+end

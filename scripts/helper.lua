@@ -131,7 +131,8 @@ helper.getAllContent = function ()
     local item = {
       id = rawItem.ID,
       name = rawItem.Name,
-      special = rawItem.Special
+      special = rawItem.Special,
+      gfx = rawItem.GfxFileName
     }
     
     -- Check item type and push to storage

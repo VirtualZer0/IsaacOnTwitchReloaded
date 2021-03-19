@@ -4,6 +4,7 @@ local en = {
   
   -- Basic messages
   welcomeMessage = "Go to IsaacOnTwitch.com and select Start!",
+  luadebugMessage = "Isaac On Twitch: Relaunch game with --luadebug parameter",
   
   -- Events
   evRichyName = "Richy",

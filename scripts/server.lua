@@ -8,8 +8,13 @@ Access-Control-Allow-Origin: *
 ]]
 
 -- Connect libraries
-local socket = require('socket') -- This shit require --luadebug, THANKYOU EDMOND MTHORFKER, I LOVE --LUADEBUG, ALL USERS LOVE F U C K I N G --LUADEBUG
 local json = require('json')
+
+-- This shit require --luadebug, THANK YOU EDMOND MTHRFKR, I LOVE --LUADEBUG, ALL USERS LOVE F U C K I N G --LUADEBUG
+local ok, socket = pcall(require, 'socket')
+if not ok then
+  Isaac.DebugString("Isaac On Twitch Mod: Relaunch game with --luadebug parameter")
+end
 
 -- Root server object
 local Server =
@@ -19,7 +24,8 @@ local Server =
  _handlers = {},    -- Handlers for requests
  _running = false,  -- Server state
  
- output = {}        -- Output data object
+ output = {},       -- Output data object
+ isOk = ok
 }
 
 -- Bind handler for selected method
@@ -40,7 +46,7 @@ function Server:run()
   self._server:setoption("keepalive", true)
   self._server:setoption("reuseaddr", true)
   self._server:setoption("tcp-nodelay", true)
-  self._server:listen(10)
+  self._server:listen(20)
   self._server:settimeout(0)
   self._running = true
   Isaac.ConsoleOutput("\nIOTR Server: Running on 127.0.0.1:"..self._port.."\n")
