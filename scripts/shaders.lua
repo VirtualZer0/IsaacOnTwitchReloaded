@@ -82,16 +82,18 @@ local shaders = {
     enabled = false,
     
     params = {
-      Time = 90000,
+      Time = 1000,
     },
     
     pass = function ()
       if (IOTR.Shaders.IOTR_Glitch.enabled) then
-        if (IOTR.Shaders.IOTR_Glitch.params.Time < 100000) then
+        
+        if (IOTR.Shaders.IOTR_Glitch.params.Time < 10000) then
           IOTR.Shaders.IOTR_Glitch.params.Time = IOTR.Shaders.IOTR_Glitch.params.Time + 1
         else
-          IOTR.Shaders.IOTR_Glitch.params.Time = 90000
+          IOTR.Shaders.IOTR_Glitch.params.Time = 1000
         end
+        
         return IOTR.Shaders.IOTR_Glitch.params
       else
         return {

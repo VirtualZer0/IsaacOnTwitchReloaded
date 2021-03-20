@@ -36,10 +36,10 @@ IOTR.GameState = {
 -- Settings
 IOTR.Settings = {
   textpos = {
-    l1 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .70}, -- First line text position
-    l2 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .70 + 15}  -- Second line text position
-    --l1 = {X = 16, Y = 202},
-    --l2 = {X = 16, Y = 225}
+    --l1 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .70}, -- First line text position
+    --l2 = {X = IOTR.GameState.screenSize.X * .05, Y = IOTR.GameState.screenSize.Y * .70 + 15}  -- Second line text position
+    l1 = {X = 16, Y = 200},
+    l2 = {X = 16, Y = 225}
   },
   subtime = 10*60*30,       -- Time to life for subscribers
   lang = "en"               -- Current language
@@ -263,8 +263,6 @@ IOTR.Pollframes = {
     IOTR.Sprites.UI.PollFrame1:LoadGraphics()
     IOTR.Sprites.UI.PollFrame2:LoadGraphics()
     IOTR.Sprites.UI.PollFrame3:LoadGraphics()
-    
-    IOTR.Cmd.send(IOTR.Pollframes.frame3)
   end
   
 }
@@ -275,8 +273,11 @@ IOTR.ProgressBar = {
   
   -- Progress bar parameters
   Storage = {
+    barType = nil,
+    title = "",
     visible = false,
     updated = true,
+    sectors = 8,
     cropX = 0,
     min = 0,
     max = 100,
@@ -284,26 +285,63 @@ IOTR.ProgressBar = {
   },
   
   -- Create progress bar
-  create = function (title, min, max, value, signs)
+  create = function (barType, title, min, max, value, sectors)
     -- 1% = 2.6px
+    IOTR.ProgressBar.Storage.sectors = sectors
+    IOTR.ProgressBar.Storage.barType = barType
+    IOTR.ProgressBar.Storage.title = title
     IOTR.ProgressBar.Storage.visible = true
     IOTR.ProgressBar.Storage.min = min
     IOTR.ProgressBar.Storage.max = max
     IOTR.ProgressBar.Storage.value = value
     IOTR.ProgressBar.Storage.cropX = 260 - IOTR.ProgressBar.interpolate(value)
-    IOTR.Text.add("progressbartitle", title, Isaac.WorldToScreen(Vector(300, 380)), nil, 1, true)
+    IOTR.Text.add("progressbartitle", title, Vector(IOTR.GameState.screenSize.X/2, IOTR.Settings.textpos.l2.Y - 30), {r=1, g=1, b=0 ,a=1}, 1, true)
+    
+    local currentSector = math.ceil(IOTR.ProgressBar.Storage.value/IOTR.ProgressBar.Storage.max*IOTR.ProgressBar.Storage.sectors) - 1
+    IOTR.Sprites.UI["ProgressBar"..barType]:PlayOverlay("Anim"..currentSector, true)
+    
+  end,
+  
+  -- Remove progress bar
+  remove = function ()
+    IOTR.ProgressBar.Storage.visible = false
+    IOTR.Text.remove("progressbartitle")
   end,
   
   -- Set progress bar value
-  set = function (value)
+  set = function (value, min, max)
+    
+    if
+      IOTR.ProgressBar.Storage.value == value
+      and IOTR.ProgressBar.Storage.min == min
+      and IOTR.ProgressBar.Storage.max == max
+    then return end
+    
     IOTR.ProgressBar.Storage.value = value
+    IOTR.ProgressBar.Storage.min = min
+    IOTR.ProgressBar.Storage.max = max
     IOTR.ProgressBar.Storage.cropX = 260 - IOTR.ProgressBar.interpolate(value)
     IOTR.ProgressBar.Storage.updated = true
+    
+    local currentSector = math.ceil(IOTR.ProgressBar.Storage.value/IOTR.ProgressBar.Storage.max*IOTR.ProgressBar.Storage.sectors) - 1
+    IOTR.Sprites.UI["ProgressBar"..IOTR.ProgressBar.Storage.barType]:PlayOverlay("Anim"..currentSector, true)
+    
   end,
   
   -- Interpolation
   interpolate = function (val)
     return 260* (val - IOTR.ProgressBar.Storage.min)/(IOTR.ProgressBar.Storage.max-IOTR.ProgressBar.Storage.min)
+  end,
+  
+  updateText = function ()
+    -- If progress bar not visible, end function
+    if not IOTR.ProgressBar.Storage.visible then return end
+    IOTR.Text.add("progressbartitle", IOTR.ProgressBar.Storage.title, Vector(IOTR.GameState.screenSize.X/2, IOTR.Settings.textpos.l2.Y - 30), {r=1, g=1, b=0 ,a=1}, 1, true)
+  end,
+  
+  setTitle = function (title)
+    if not IOTR.ProgressBar.Storage.visible then return end
+    IOTR.ProgressBar.Storage.title = title
   end,
   
   -- Render progress bar
@@ -313,10 +351,19 @@ IOTR.ProgressBar = {
     if not IOTR.ProgressBar.Storage.visible then return end
     
     -- Render progress bar background
-    IOTR.Sprites.UI.ProgressBarBg:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(0,0))
+    IOTR.Sprites.UI["ProgressBar"..IOTR.ProgressBar.Storage.barType]:Render(
+      Vector(IOTR.GameState.screenSize.X/2 - 130, IOTR.Settings.textpos.l2.Y),
+      Vector(0,0),
+      Vector(0,0)
+    )
+    
     
     -- Render progress bar line based on value
-    IOTR.Sprites.UI.ProgressBarLine:Render(Isaac.WorldToScreen(Vector(100, 420)), Vector(0,0), Vector(IOTR.ProgressBar.Storage.cropX,0))
+    IOTR.Sprites.UI.ProgressBarLine:Render(
+      Vector(IOTR.GameState.screenSize.X/2 - 130, IOTR.Settings.textpos.l2.Y),
+      Vector(0,0),
+      Vector(IOTR.ProgressBar.Storage.cropX,0)
+    )
     
     -- If value will be updated, play animation
     if IOTR.ProgressBar.Storage.updated then
@@ -399,6 +446,28 @@ IOTR.Server:setHandler("removePollframes", function (req)
   
 end)
 
+-- Enable progress bar
+IOTR.Server:setHandler("addProgressBar", function (req) 
+    
+  IOTR.ProgressBar.create(req.barType, req.title, req.min, req.max, req.value, req.sectors)
+  
+end)
+
+-- Set progress bar value
+IOTR.Server:setHandler("setProgressBar", function (req)
+  
+  IOTR.ProgressBar.set(req.value, req.min, req.max)
+  IOTR.ProgressBar.setTitle(req.title)
+  
+end)
+
+-- Remove progress bar
+IOTR.Server:setHandler("removeProgressBar", function (req) 
+  
+  IOTR.ProgressBar.remove()
+  
+end)
+
 -- Set settings
 IOTR.Server:setHandler("settings", function (req) 
   
@@ -409,6 +478,15 @@ end)
 -- Return current player items
 IOTR.Server:setHandler("getPlayerItems", function (req) 
   return { out = IOTR._.getPlayerItems() }
+end)
+
+-- Return type of current player
+IOTR.Server:setHandler("getPlayerType", function (req)
+  
+  return {
+    out = Isaac.GetPlayer(0):GetPlayerType()
+  }
+  
 end)
 
 -- Return items from IOTR
@@ -435,9 +513,54 @@ IOTR.Server:setHandler("itemAction", function (req)
   
 end)
 
+-- Give trinket
+IOTR.Server:setHandler("trinketAction", function (req) 
+    
+  IOTR._.giveTrinket(req.trinket)
+  
+end)
+
 -- Launch event
 IOTR.Server:setHandler("eventAction", function (req) 
   IOTR._.launchEvent("EV_"..req.id)
+end)
+
+-- Give or remove pickups
+IOTR.Server:setHandler("pocketsAction", function (req) 
+  
+  local p = Isaac.GetPlayer(0)
+  
+  if (
+      type(req.value) == "string" and req.value == "none"
+    )
+    or (
+      type(req.value) == "number" and (
+        req.value == 0 or req.value < 0
+      )
+    ) then
+    p:AnimateSad()
+  else
+    p:AnimateHappy()
+  end
+  
+  if req.pickupType == "Hearts" then
+    IOTR._.giveHeart(req.value)
+    
+  elseif req.pickupType == "Pockets" then
+    IOTR._.givePocket(req.value)
+    
+  elseif req.pickupType == "Keys" then
+    if (type(req.value) == "string" and req.value == "gold") then p:AddGoldenKey()
+    else p:AddKeys(req.value) end
+  
+  elseif req.pickupType == "Bombs" then
+    if (type(req.value) == "string" and req.value == "gold") then p:AddGoldenBomb()
+    else p:AddBombs(req.value) end
+  
+  elseif req.pickupType == "Coins" then
+    p:AddCoins(req.value)
+  end
+  
 end)
 
 -- Give personal trinket
@@ -448,32 +571,6 @@ end)
 -- Set subscribers remove time
 IOTR.Server:setHandler("subtime", function (req) 
   
-end)
-
--- Give something
-IOTR.Server:setHandler("give", function (req) 
-  
-  if (req.give == "item") then
-    IOTR._.giveItem(req.name)
-  elseif (req.give == "trinket") then
-    IOTR._.giveTrinket(req.name)
-  elseif (req.give == "heart") then
-    IOTR._.giveHeart(req.name)
-  elseif (req.give == "pickup") then
-    IOTR._.givePickup(req.name, req.count)
-  elseif (req.give == "companion") then
-    IOTR._.giveCompanion(req.name)
-  elseif (req.give == "pocket") then
-    IOTR._.giveTrinket(req.name)
-  end
-  
-  local p = Isaac.GetPlayer(0)
-  
-  if (req.emote ~= nil) then
-    if (req.emote == "h") then p:AnimateHappy() else p:AnimateSad() end
-  end
-  
-  return {res = "ok"}
 end)
 
 -- Set tables for external item description mod

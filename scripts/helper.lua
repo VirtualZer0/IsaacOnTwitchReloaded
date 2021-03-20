@@ -15,13 +15,11 @@ helper.giveItem = function (name)
 end
 
 -- Give trinket function
-helper.giveTrinket = function (name)
-  local game = Game()
-  local room = game:GetRoom()
+helper.giveTrinket = function (id)
+  local room = Game():GetRoom()
   local p = Isaac.GetPlayer(0);
-  local item = Isaac.GetTrinketIdByName(name)
   p:DropTrinket(room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), true)
-  p:AddTrinket(item);
+  p:AddTrinket(id);
 end
 
 -- Give heart function
@@ -29,23 +27,16 @@ helper.giveHeart = function (name)
   
   local p = Isaac.GetPlayer(0);
   
-  if name == "Red" then p:AddHearts(2)
-  elseif name == "Container" then p:AddMaxHearts(2, true)
-  elseif name == "Soul" then p:AddSoulHearts(2)
-  elseif name == "Golden" then p:AddGoldenHearts(1)
-  elseif name == "Eternal" then p:AddEternalHearts(1)
-  elseif name == "Bone" then p:AddBoneHearts(1)
-  elseif name == "Twitch" then
-  
-    -- Copying black heart mechanic
-    if ( p:GetSoulHearts() % 2 == 1) then
-      p:AddSoulHearts(1)
-      IOTR.Storage.Hearts.twitch = IOTR.Storage.Hearts.twitch + 1;
-    else
-      IOTR.Storage.Hearts.twitch = IOTR.Storage.Hearts.twitch + 2;
-    end
-    
-  elseif name == "Black" then p:AddBlackHearts(2) end
+  if name == "halfred" then p:AddHearts(1)
+  elseif name == "halfsoul" then p:AddSoulHearts(1)
+  elseif name == "red" then p:AddHearts(2)
+  elseif name == "soul" then p:AddSoulHearts(2)
+  elseif name == "gold" then p:AddGoldenHearts(1)
+  elseif name == "black" then p:AddBlackHearts(2)
+  elseif name == "twitch" then IOTR.Storage.Hearts.twitch = IOTR.Storage.Hearts.twitch + 2
+  elseif name == "bone" then p:AddBoneHearts(1)
+  elseif name == "container" then p:AddMaxHearts(2, true)
+  elseif name == "rainbow" then IOTR.Storage.Hearts.rainbow = IOTR.Storage.Hearts.rainbow + 2 end
 end
 
 -- Give pickup function
@@ -96,15 +87,19 @@ helper.giveCompanion = function (name, count)
 end
 
 -- Give pocket or effect function
-helper.givePocket = function (name)
+helper.givePocket = function (name)  
   local p = Isaac.GetPlayer(0);
-  if name == "LuckUp" then p:DonateLuck(1)
-  elseif name == "LuckDown" then p:DonateLuck(-1)
-  elseif name == "Pill" then p:AddPill(math.random(1, PillColor.NUM_PILLS))
-  elseif name == "Card" then p:AddCard(math.random(1, Card.CARD_RANDOM))
-  elseif name == "Spacebar" and p:GetActiveItem() ~= CollectibleType.COLLECTIBLE_NULL then p:UseActiveItem (p:GetActiveItem(), true, true, true, true)
-  elseif name == "Charge" then p:FullCharge()
-  elseif name == "Discharge" then p:DischargeActiveItem() end
+  
+  if name == "pill" then p:AddPill(math.random(1, PillColor.NUM_PILLS-1))
+  elseif name == "card" then p:AddCard(IOTR.Enums.BasicCards[math.random(#IOTR.Enums.BasicCards)])
+  elseif name == "redcard" then p:AddCard(IOTR.Enums.RedCards[math.random(#IOTR.Enums.RedCards)])
+  elseif name == "momcard" then p:AddCard(Card.CARD_EMERGENCY_CONTACT)
+  elseif name == "humanitycard" then p:AddCard(Card.CARD_HUMANITY)
+  elseif name == "rune" then p:AddCard(IOTR.Enums.Runes[math.random(#IOTR.Enums.Runes)])
+  elseif name == "blackrune" then p:AddCard(Card.RUNE_BLACK)
+  elseif name == "holycard" then p:AddCard(Card.CARD_HOLY)
+  elseif name == "diceshard" then p:AddCard(Card.CARD_DICE_SHARD)
+  elseif name == "creditcard" then p:AddCard(Card.CARD_CREDIT) end
 end
 
 -- Get all game items, trinkets and events
@@ -123,27 +118,52 @@ helper.getAllContent = function ()
   }
   
   -- Get every collectible item in game
-  for i = 1, CollectibleType.NUM_COLLECTIBLES do
-    local rawItem = iconf:GetCollectible(i)
-    if rawItem == nil then goto skipIteration end
+  
+  -- This thing works like shit. But nothing new, whole API works like bugged undocumented shit
+  -- This is the worst thing I've ever worked with
+  local allItems = iconf:GetCollectibles()
+  
+  for i = 1, allItems.Size-1 do
+    local value = iconf:GetCollectible(i)
+    if value == nil then goto skipIteration end
     
     -- Save only basic fields
     local item = {
-      id = rawItem.ID,
-      name = rawItem.Name,
-      special = rawItem.Special,
-      gfx = rawItem.GfxFileName
+      id = value.ID,
+      name = value.Name,
+      special = value.Special,
+      gfx = value.GfxFileName,
     }
     
     -- Check item type and push to storage
-    if (rawItem.Type == ItemType.ITEM_PASSIVE) then table.insert(content.passive, item)
-    elseif (rawItem.Type == ItemType.ITEM_ACTIVE) then table.insert(content.active, item)
-    elseif (rawItem.Type == ItemType.ITEM_TRINKET) then table.insert(content.trinkets, item)
-    elseif (rawItem.Type == ItemType.ITEM_FAMILIAR) then table.insert(content.familiars, item)
+    if (value.Type == ItemType.ITEM_PASSIVE) then table.insert(content.passive, item)
+    elseif (value.Type == ItemType.ITEM_ACTIVE) then table.insert(content.active, item)
+    elseif (value.Type == ItemType.ITEM_FAMILIAR) then table.insert(content.familiars, item)
     end
   
-  ::skipIteration::
+    ::skipIteration::
   end
+
+
+  -- Get every trinket in game
+  local allTrinkets = iconf:GetTrinkets()
+  for i = 1, allTrinkets.Size-1 do
+    local value = iconf:GetTrinket(i)
+    if value == nil then goto skipIteration end
+    
+    -- Save only basic fields
+    local trinket = {
+      id = value.ID,
+      name = value.Name,
+      special = value.Special,
+      gfx = value.GfxFileName,
+    }
+    
+    table.insert(content.trinkets, trinket)
+  
+    ::skipIteration::
+  end
+
   
   -- Get all IOTR events
   for key, rawEvent in pairs(IOTR.Events) do
@@ -152,11 +172,21 @@ helper.getAllContent = function ()
       name = IOTR.Locale[IOTR.Settings.lang]["ev" .. rawEvent.name .. "Name"],
       desc = IOTR.Locale[IOTR.Settings.lang]["ev" .. rawEvent.name .. "Desc"],
       weights = rawEvent.weights,
-      good = rawEvent.good
+      good = rawEvent.good,
+      specialTrigger = false,
+      msgTrigger = false
     }
     
     if event.name == nil then
       event.name = rawEvent.name
+    end
+    
+    if rawEvent.specialTrigger ~= nil then
+      event.specialTrigger = rawEvent.specialTrigger
+    end
+    
+    if rawEvent.msgTrigger ~= nil then
+      event.msgTrigger = rawEvent.msgTrigger
     end
     
     table.insert(content.events, event)

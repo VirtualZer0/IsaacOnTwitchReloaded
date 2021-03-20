@@ -1,8 +1,8 @@
 <AnimatedActor>
-	<Info CreatedBy="Unknown" CreatedOn="20.03.2021 2:03:00" Version="10" Fps="30"/>
+	<Info CreatedBy="Unknown" CreatedOn="20.03.2021 2:02:46" Version="10" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="ui_twitch_mod_pollbar_hearts.png" Id="0"/>
+			<Spritesheet Path="ui_twitch_mod_pollbar_pockets.png" Id="0"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="PollBar" Id="0" SpritesheetId="0"/>

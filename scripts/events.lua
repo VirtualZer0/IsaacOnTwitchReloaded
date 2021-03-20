@@ -4,14 +4,16 @@ local events = {}
 
 --events.EventName = {
 --
---  name,       <-- Event name, using as key for locale, then sended to isaacontwitch.com when game connected
---  weights,    <-- Array with weights for gamemodes: [easy, normal, crazy]
---  good,       <-- If true, play happy animation, else - sad animation
---  duration,   <-- Event duration, by room or by seconds, it depends on the variable byTime. If not defined, equals 0
---  byTime,     <-- If TRUE, duration decrease every second, if FALSE - every room changing. If not defined, equals TRUE
---  onlyNewRoom <-- if TRUE, event duration decreased only in new rooms
---  onStart,    <-- This function call when event started
---  onEnd,      <-- This function call when event ended
+--  name,           <-- Event name, using as key for locale, then sended to isaacontwitch.com when game connected
+--  weights,        <-- Array with weights for gamemodes: [easy, normal, crazy]
+--  good,           <-- If true, play happy animation, else - sad animation
+--  specialTrigger, <-- Contains name of special modificator dor next poling, like "russianHackers" (optionally)
+--  msgTrigger,     <-- Contains name of special message handler for events with additional commands (optionally)
+--  duration,       <-- Event duration, by room or by seconds, it depends on the variable byTime. If not defined, equals 0
+--  byTime,         <-- If TRUE, duration decrease every second, if FALSE - every room changing. If not defined, equals TRUE
+--  onlyNewRoom     <-- if TRUE, event duration decreased only in new rooms
+--  onStart,        <-- This function call when event started
+--  onEnd,          <-- This function call when event ended
 --  
 --  Another callbacks equals DynamicCallbacks, you can see them in main.lua from line 497
 --
@@ -879,6 +881,7 @@ events.EV_RussianHackers = {
   name = "RussianHackers",
   weights = {1,1,1},
   good = false,
+  specialTrigger = "russianHackers",
   duration = 20*30,
   
   onUpdate = function ()
@@ -2316,7 +2319,7 @@ events.EV_WeHateYou = {
         entity.Velocity = direct:__mul(5)
       end
       
-      if entity.FrameCount % 25 == 0 and math.random(0,2) == 2 then
+      if entity.FrameCount % 25 == 0 and math.random(0,1) == 1 then
         Isaac.Spawn(EntityType.ENTITY_PROJECTILE, 0, 0, entity.Position, Isaac.GetPlayer(0).Position:__sub(entity.Position):Normalized():__mul(10), entity)
       end
       

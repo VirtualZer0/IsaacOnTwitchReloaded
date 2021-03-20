@@ -121,4 +121,53 @@ enums.TwitchRoomPickups = {
   Isaac.GetEntityVariantByName ("Twitch Heart")
 }
 
+enums.BasicCards = {
+  Card.CARD_FOOL,
+  Card.CARD_MAGICIAN,
+  Card.CARD_HIGH_PRIESTESS,
+  Card.CARD_EMPRESS,
+  Card.CARD_EMPEROR,
+  Card.CARD_HIEROPHANT,
+  Card.CARD_LOVERS,
+  Card.CARD_CHARIOT,
+  Card.CARD_JUSTICE,
+  Card.CARD_HERMIT,
+  Card.CARD_WHEEL_OF_FORTUNE,
+  Card.CARD_STRENGTH,
+  Card.CARD_HANGED_MAN,
+  Card.CARD_DEATH,
+  Card.CARD_TEMPERANCE,
+  Card.CARD_DEVIL,
+  Card.CARD_TOWER,
+  Card.CARD_STARS,
+  Card.CARD_MOON,
+  Card.CARD_SUN,
+  Card.CARD_JUDGEMENT,
+  Card.CARD_WORLD
+}
+
+enums.RedCards = {
+  Card.CARD_CLUBS_2,
+  Card.CARD_DIAMONDS_2,
+  Card.CARD_SPADES_2,
+  Card.CARD_HEARTS_2,
+  Card.CARD_ACE_OF_CLUBS,
+  Card.CARD_ACE_OF_DIAMONDS,
+  Card.CARD_ACE_OF_SPADES,
+  Card.CARD_ACE_OF_HEARTS,
+  Card.CARD_JOKER
+}
+
+enums.Runes = {
+  Card.RUNE_HAGALAZ,
+  Card.RUNE_JERA,
+  Card.RUNE_EHWAZ,
+  Card.RUNE_DAGAZ,
+  Card.RUNE_ANSUZ,
+  Card.RUNE_PERTHRO,
+  Card.RUNE_BERKANO,
+  Card.RUNE_ALGIZ,
+  Card.RUNE_BLANK
+}
+
 return enums

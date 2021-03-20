@@ -17,6 +17,9 @@ function callbacks:postUpdate ()
   -- Call timers
   IOTR.Timers.tick()
   
+  -- Update text position on progress bar
+  IOTR.ProgressBar.updateText()
+  
   -- Update events countdown with byTime == true
   for key,value in pairs(IOTR.Storage.ActiveEvents) do
     if value.event.byTime or value.event.byTime == nil then
