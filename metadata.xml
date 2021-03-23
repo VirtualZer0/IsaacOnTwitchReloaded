@@ -1,8 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-	<name>Isaac On Twitch Reloaded</name>
-	<directory>isaac_on_twitch_reloaded</directory>
-	<description/>
-	<version>1.0.0</version>
-	<visibility/>
+    <name>Isaac On Twitch Reloaded</name>
+    <directory>isaac_on_twitch_reloaded</directory>
+    <id>2433361645</id>
+    <description></description>
+    <version>1.0.1</version>
+    <visibility>Public</visibility>
+    <tag id="Lua"/>
+    <tag id="Items"/>
+    <tag id="Active Items"/>
+    <tag id="Familiars"/>
+    <tag id="Hazards"/>
+    <tag id="Tweaks"/>
+    <tag id="Shaders"/>
 </metadata>
-

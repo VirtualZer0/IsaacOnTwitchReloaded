@@ -66,9 +66,9 @@ trinkets.T_HairClap = {
 }
 
 -- Torn cat ear for Tijoe
-trinkets.T_TornCatEar = {
-  id = Isaac.GetTrinketIdByName("Torn cat ear"),
-  name = "Torn cat ear",
+trinkets.T_TornFoxEar = {
+  id = Isaac.GetTrinketIdByName("Torn fox ear"),
+  name = "Torn fox ear",
   
   description = {
     en = "\1 You can fire tear with x30 damage#After firing, you can get damage with 30% chance",
