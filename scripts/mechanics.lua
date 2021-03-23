@@ -430,7 +430,7 @@ mechanics.TwitchHearts = {
     for i=1,#IOTR.Enums.Rainbow do
       local laser = EntityLaser.ShootAngle(8, p.Position, i*51.42, 15*30, Vector(0,0), p)
       laser:SetActiveRotation(1, 999360, 5, false)
-      laser.CollisionDamage = 2.5;
+      laser.CollisionDamage = 1;
       laser:SetColor(IOTR.Enums.Rainbow[i], 0, 0, false, false)
       
       Game():SpawnParticles(
@@ -516,6 +516,11 @@ mechanics.TwitchRoom = {
         
       end
       
+      if #roomCandidates == 0 then
+        IOTR.Cmd.send("Twitch room gen is impossible")
+        return
+      end
+      
       local selectedRoom = roomCandidates[math.random(#roomCandidates)]
       IOTR.Storage.Special.twitchRoomId = selectedRoom.GridIndex
       IOTR.Cmd.send("Twitch room gen on " .. IOTR.Storage.Special.twitchRoomId)
@@ -545,8 +550,8 @@ mechanics.TwitchRoom = {
       end
     end
     
-    room:SetFloorColor(Color(0.392, 0.255, 0.643, 1, 9, -5, 34))
-    room:SetWallColor(Color(0.392, 0.255, 0.643, 1, -21, -35, 4))
+    room:SetFloorColor(Color(0, 0, 0, 1, -40, -40, 40))
+    room:SetWallColor(Color(0, 0, 0, 1, -40, -40, 40))
     
     -- Flames
     g:SpawnParticles(room:GetGridPosition(16), EffectVariant.BLUE_FLAME, 1, 0, Color(0.392, 0.255, 0.643, 1, 392, 255, 643), 0)
@@ -581,6 +586,104 @@ mechanics.TwitchRoom = {
     g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(42), Vector(0,0), nil, 0, 0)
     g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(92), Vector(0,0), nil, 0, 0)
     g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(102), Vector(0,0), nil, 0, 0)
+  end
+}
+
+-- Subscribers control
+mechanics.Subscribers = {
+  subscriber = Isaac.GetEntityVariantByName("Twitch Subscriber"),
+  
+  onUpdate = function ()
+    local lastFamPos = Isaac.GetPlayer(0).Position
+    for key, value in pairs(IOTR.Storage.Subscribers) do
+      -- Update subscribers position
+      value.entity:FollowPosition(lastFamPos)
+      lastFamPos = value.entity.Position
+      
+      -- Remove old subscribers
+      if (value.time > 0) then
+        value.time = value.time - 1
+      else
+        local v = math.random(1,4)*10
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, v,  0, value.entity.Position, Vector(0, 0), Isaac.GetPlayer(0))
+        
+        for i = 1, 3 do
+          Game():SpawnParticles(value.entity.Position, EffectVariant.GOLD_PARTICLE, 10, 0, value.entity.Color, 0)
+        end
+        
+        value.entity:Die()
+        IOTR.Storage.Subscribers[key] = nil
+      end
+      
+    end
+  end,
+  
+  onFamiliarUpdate = function (entity)
+    if entity.Variant ~= IOTR.Mechanics.Subscribers.subscriber then return end
+    
+    local	player = Isaac.GetPlayer(0)
+    sprite = entity:GetSprite()
+    
+    if (player:GetFireDirection() ~= Direction.NO_DIRECTION) and (Game():GetFrameCount() % 35 == 0 or Game():GetFrameCount() % 35 < 12) then
+      if player:GetHeadDirection() == Direction.LEFT then
+        currentAnim = "ShootLeft"
+        if (Game():GetFrameCount() % 35 == 0) then IOTR.Mechanics.Subscribers._shotSubscriber(entity, player:GetHeadDirection()) end
+      elseif player:GetHeadDirection() == Direction.RIGHT then
+        currentAnim = "ShootRight"
+        if (Game():GetFrameCount() % 35 == 0) then IOTR.Mechanics.Subscribers._shotSubscriber(entity, player:GetHeadDirection()) end
+      elseif player:GetHeadDirection() == Direction.UP then
+        currentAnim = "ShootUp"
+        if (Game():GetFrameCount() % 35 == 0) then IOTR.Mechanics.Subscribers._shotSubscriber(entity, player:GetHeadDirection()) end
+      elseif player:GetHeadDirection() == Direction.DOWN then
+        currentAnim = "ShootDown"
+        if (Game():GetFrameCount() % 35 == 0) then IOTR.Mechanics.Subscribers._shotSubscriber(entity, player:GetHeadDirection()) end
+      end
+    else
+      if player:GetHeadDirection() == Direction.LEFT then
+        currentAnim = "FloatLeft"
+      elseif player:GetHeadDirection() == Direction.RIGHT then
+        currentAnim = "FloatRight"
+      elseif player:GetHeadDirection() == Direction.UP then
+        currentAnim = "FloatUp"
+      elseif player:GetHeadDirection() == Direction.DOWN then
+        currentAnim = "FloatDown"
+      end
+    end
+    sprite:Play(currentAnim, true)
+    
+  end,
+  
+  _addSubscriber = function (name, time)
+    local p = Isaac.GetPlayer(0)
+    local fam = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, IOTR.Mechanics.Subscribers.subscriber, 0, p.Position, Vector(0,0), p):ToFamiliar()
+    
+    -- Select random texture and color
+    local texture = math.random(1,7)
+    local color = math.random(#IOTR.Enums.ChatColors)
+    local colorObj = IOTR.Enums.ChatColors[color]
+    fam:GetSprite():ReplaceSpritesheet(0, "gfx/Familiar/subs/familiar_shooters_twitch_subscriber_"..texture..".png")
+    fam:GetSprite():LoadGraphics()
+    fam:SetColor(colorObj, 0, 0, false, false)
+    
+    -- Add subscriber in table
+    table.insert(IOTR.Storage.Subscribers, IOTR.Classes.Subscriber:new(fam, name, time, color, texture))
+    
+    -- Add follow text
+    local textId = "s"..math.random(1,999)..name
+    IOTR.Text.add(textId, name, nil, {r=colorObj.R, g=colorObj.G, b=colorObj.B, a=colorObj.A}, nil, true)
+    IOTR.Text.follow(textId, fam)
+  end,
+  
+  _shotSubscriber = function (familiar, dt)
+    direct = Vector(0,0)
+  
+    if (dt == Direction.LEFT) then direct = Vector(-10, 0)
+    elseif (dt == Direction.RIGHT) then direct = Vector(10, 0)
+    elseif (dt == Direction.UP) then direct = Vector(0, -10)
+    else direct = Vector(0, 10) end
+
+    local tear = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.BLUE, 0, familiar.Position, direct, familiar):ToTear()
+    tear:SetColor(familiar:GetColor(), 0, 0, false, false)
   end
 }
 

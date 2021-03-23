@@ -4,7 +4,7 @@ local ru = {
   
   -- Basic messages
   welcomeMessage = "Зайди на сайт isaacontwitch.com и нажми Старт!",
-  luadebugMessage = "Isaac On Twitch: Перезапустите игру с параметром --luadebug",
+  luadebugMessage = "Перезапустите игру с параметром --luadebug. Подробнее на isaacontwitch.com",
   
   -- Events
   evRichyName = "Богатства",
@@ -207,6 +207,27 @@ local ru = {
   
   evGiveMeYourMoneyName = "Гони деньги!",
   evGiveMeYourMoneyDesc = "Вас преследует странный игровой автомат",
+  
+  evWallOfTearsName = "Стена из слез",
+  evWallOfTearsDesc = "Смотри, мам, я как Хаш!",
+  
+  evFliesAndFliesName = "Мухи и мухи",
+  evFliesAndFliesDesc = "Потому что нам нужно больше мух",
+  
+  evKillPlayerName = "Убить игрока",
+  evKillPlayerDesc = "Упс! я хотел сказать, ВЫЛЕЧИТЬ игрока",
+  
+  evCursedName = "C U R S E D",
+  evCursedDesc = "Проклятый чат добавил тебе проклятий",
+  
+  evAutoAimName = "Авто-аим",
+  evAutoAimDesc = "Настолько продвинутый что сам решает, в кого стрелять",
+  
+  evFingerSnapName = "Щелчок",
+  evFingerSnapDesc = "Подземелья на 50% чище",
+  
+  evYouBelongToUsName = "Ты принадлежишь нам!",
+  evYouBelongToUsDesc = "Управляйте игроком из чата командами влево, вправо, вверх или вниз",
 }
 
 return ru

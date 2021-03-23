@@ -17,12 +17,13 @@ end
 
 -- Subscriber class
 classes.Subscriber = {}
-function classes.Subscriber:new (entity, name, time, color)
+function classes.Subscriber:new (entity, name, time, color, texture)
   local obj= {}
-  obj.entity = entity -- Linked entity
-  obj.name = name     -- Sub nickname
-  obj.time = time     -- Time to disappear
-  obj.color = color   -- Sub color
+  obj.entity = entity   -- Linked entity
+  obj.name = name       -- Sub nickname
+  obj.time = time       -- Time to disappear
+  obj.color = color     -- Sub color
+  obj.texture = texture -- Subscriber texture
   
   setmetatable(obj, self)
   self.__index = self
@@ -111,12 +112,15 @@ function classes.DynamicCallbacks:new ()
     onRoomChange = {},
     onNewRoom = {},
     onTearUpdate = {},
+    onTearInit = {},
     onProjectileUpdate = {},
     onDamage = {},
     onNPCDeath = {},
     onStageChange = {},
     onPickupCollision = {},
+    onFamiliarInit = {},
     onFamiliarCollision = {},
+    onFamiliarUpdate = {},
     
     bind = function (from, key)
       Isaac.ConsoleOutput("IOTR: Added new dynamic callbacks for "..key.."\n")

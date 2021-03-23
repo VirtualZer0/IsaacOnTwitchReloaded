@@ -1,11 +1,13 @@
 local passiveItems = {}
-
+local json = require('json')
 
 --local PI_bcouch = Isaac.GetItemIdByName("BCouch")
 
 -- Example
 --passiveItems.ItemName= {
 --  id = Isaac.GetItemIdByName("Item Name"),                    <-- Item Id
+--  famId = Isaac.GetEntityVariantByName("Entity Name")         <-  If this item is familiar, set familiar entity variant
+--  famFollowPlayer = true                                      <- If TRUE, add familiar to familiars train
 --  name = "Item Name"  <-- Item name, required for dynamic item loading on site
 --  description = {en = "Item description", ru = "Описание" },  <-- Item description for external item description mod
 --  count = 0,                                                  <-- Player items count
@@ -30,8 +32,8 @@ passiveItems.PI_Kappa = {
   count = 0,
   cacheFlag = CacheFlag.CACHE_DAMAGE,
   
-  onCacheUpdate = function (obj, player, cacheFlag)
-    if (cacheFlag == CacheFlag.CACHE_DAMAGE or cacheFlag == CacheFlag.CACHE_ALL) then
+  onCacheUpdate = function (player, cacheFlag)
+    if (IOTR._.hasbit(cacheFlag, CacheFlag.CACHE_DAMAGE)) then
       player.Damage = player.Damage + player:GetCollectibleNum(IOTR.Items.Passive.PI_Kappa.id) * 2.5
     end
   end
@@ -95,7 +97,7 @@ passiveItems.PI_KappaPride = {
   
   count = 0,
   
-  onTearUpdate = function (obj, e)
+  onTearUpdate = function (e)
     
     local p = Isaac.GetPlayer(0)
     
@@ -161,7 +163,7 @@ passiveItems.PI_SSSsss = {
   
   count = 0,
   
-  onNPCDeath = function (obj, entity)
+  onNPCDeath = function (entity)
     if entity:IsBoss() then
       Isaac.Explode(entity.Position, entity, 60.0)
       Isaac.Explode(entity.Position, entity, 60.0)
@@ -191,18 +193,18 @@ passiveItems.PI_CurseLit = {
     
     if Game():GetLevel():GetCurses() ~= LevelCurse.CURSE_NONE then
       local rnd = math.random(0,5)
-      if (rnd == 0) then IOTR.Storage.Stats.damage = IOTR.Storage.Stats.damage + 0.5
-      elseif (rnd == 1 and p.FireDelay > p.MaxFireDelay) then IOTR.Storage.Stats.tears = IOTR.Storage.Stats.tears - 1
-      elseif (rnd == 2) then IOTR.Storage.Stats.tearspeed = IOTR.Storage.Stats.tearspeed + 0.2
-      elseif (rnd == 3 and p.MoveSpeed < 2) then IOTR.Storage.Stats.speed = IOTR.Storage.Stats.speed + 0.2
-      else p.Luck = p.Luck + 1; IOTR.Storage.Stats.luck = IOTR.Storage.Stats.luck + 1 end
+      if (rnd == 0) then IOTR.Storage.Stats.damage = IOTR.Storage.Stats.damage + 0.5 * IOTR.Items.Passive.PI_CurseLit.count
+      elseif (rnd == 1 and p.FireDelay > p.MaxFireDelay) then IOTR.Storage.Stats.tears = IOTR.Storage.Stats.tears - 1 * IOTR.Items.Passive.PI_CurseLit.count
+      elseif (rnd == 2) then IOTR.Storage.Stats.tearspeed = IOTR.Storage.Stats.tearspeed + 0.2 * IOTR.Items.Passive.PI_CurseLit.count
+      elseif (rnd == 3 and p.MoveSpeed < 2) then IOTR.Storage.Stats.speed = IOTR.Storage.Stats.speed + 0.2 * IOTR.Items.Passive.PI_CurseLit.count
+      else p.Luck = p.Luck + 1; IOTR.Storage.Stats.luck = IOTR.Storage.Stats.luck + 1  * IOTR.Items.Passive.PI_CurseLit.count end
       p:AddCacheFlags(CacheFlag.CACHE_ALL)
       p:EvaluateItems()
     end
   end,
   
   onPickup = function ()
-    passiveItems.PI_CurseLit.onStageChange()
+    IOTR.Items.Passive.PI_CurseLit.onStageChange()
   end
 }
 
@@ -220,7 +222,7 @@ passiveItems.PI_DrinkPurple = {
   count = 0,
   cacheFlag = CacheFlag.CACHE_SPEED,
   
-  onCacheUpdate = function (obj, player, cacheFlag)
+  onCacheUpdate = function (player, cacheFlag)
     if (cacheFlag == CacheFlag.CACHE_SPEED or cacheFlag == CacheFlag.CACHE_ALL) then
       player.MoveSpeed = player.MoveSpeed + player:GetCollectibleNum(IOTR.Items.Passive.PI_DrinkPurple.id) * 0.35
     end
@@ -230,9 +232,9 @@ passiveItems.PI_DrinkPurple = {
     local p = Isaac.GetPlayer(0)
     local room = Game():GetRoom()
     
-    Isaac.Spawn(EntityType.ENTITY_PICKUP, 1000,  0, room:FindFreePickupSpawnPosition(p.Position, 0, true), Vector(0, 0), p)
-    if (math.random(0,2) == 1) then
-      Isaac.Spawn(EntityType.ENTITY_PICKUP, 1000,  0, room:FindFreePickupSpawnPosition(p.Position, 0, true), Vector(0, 0), p)
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Mechanics.TwitchHearts.twitchHeart,  0, room:FindFreePickupSpawnPosition(p.Position, 0, true), Vector(0, 0), p)
+    if (math.random(1,2) == 1) then
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Mechanics.TwitchHearts.twitchHeart,  0, room:FindFreePickupSpawnPosition(p.Position, 0, true), Vector(0, 0), p)
     end
   end
 }
@@ -254,7 +256,7 @@ passiveItems.PI_Kreygasm = {
     local p = Isaac.GetPlayer(0)
     local entities = Isaac.GetRoomEntities()
     for i = 1, #entities do
-      if (entities[i]:IsActiveEnemy(false) == true and math.random() > 0.5) then
+      if (entities[i]:IsActiveEnemy(false) == true and math.random(3) == 1) then
         local rnd = math.random(0,9)
         local ref = EntityRef(p)
         if (rnd == 0) then entities[i]:AddPoison(ref, math.random(30,300), math.random())
@@ -326,6 +328,103 @@ passiveItems.PI_BrainSlug = {
       end
     end
   end
+}
+
+-- Nightbot
+passiveItems.PI_Nightbot = {
+  
+  id = Isaac.GetItemIdByName("Nightbot"),
+  name = "Nightbot",
+  
+  description = {
+    en = "If projectile hit Ngihtbot, all projectiles will be removed",
+    ru = "При попадании по нему вражеской слезы убирает все вражеские слезы в комнате"
+  },
+  
+  count = 0,
+  
+  famId = Isaac.GetEntityVariantByName("Twitch Nightbot"),
+  famFollowPlayer = true,
+  
+  onFamiliarUpdate = function (entity)
+    if (entity.Variant ~= IOTR.Items.Passive.PI_Nightbot.famId) then return end
+    entity:FollowParent()
+    
+    local projectiles = Isaac.FindInRadius(entity.Position, 16, EntityPartition.BULLET)
+    
+    if #projectiles > 0 then
+      
+      for k, v in pairs(Isaac.GetRoomEntities()) do
+        if v.Type == EntityType.ENTITY_PROJECTILE then
+          v:Die()
+        end
+      end
+      
+      Game():Darken(-0.5, 7);
+    end
+    
+  end,
+}
+
+-- Stinky Cheese
+passiveItems.PI_StinkyCheese = {
+  
+  id = Isaac.GetItemIdByName("Stinky Cheese"),
+  name = "Stinky Cheese",
+  
+  description = {
+    en = "Can poison the enemy when touched",
+    ru = "Может отравить врага при прикосновении"
+  },
+  
+  count = 0,
+  
+  famId = Isaac.GetEntityVariantByName("Twitch Stinky Cheese"),
+  famFollowPlayer = true,
+  
+  onFamiliarUpdate = function (entity)
+    if entity.Variant ~= IOTR.Items.Passive.PI_StinkyCheese.famId then return end
+    entity:FollowParent()
+    
+    local sprite = entity:GetSprite()
+    if (sprite:IsFinished("Float")) then sprite:Play("Float", false) end
+  
+    for k, v in pairs(Isaac.GetRoomEntities()) do
+      if (v:IsActiveEnemy() and v:IsVulnerableEnemy() and not v:IsBoss() and not v:HasEntityFlags(EntityFlag.FLAG_POISON)) then
+        if (not v:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not v:IsDead() and entity.Position:Distance(v.Position) <= 64) then
+          
+          IOTR.Sounds.play(SoundEffect.SOUND_FART)
+          v:AddPoison(EntityRef(entity), 30, .2)
+          
+        end
+      end
+    end
+    
+  end,
+}
+
+passiveItems.PI_BleedPurple = {
+  
+  id = Isaac.GetItemIdByName("Bleed Purple"),
+  name = "Bleed Purple",
+  
+  description = {
+    en = "If you have Twitch hearts, all your familiars will shoot#Give 1 Twitch heart",
+    ru = "Все ваши спутники будут стрелять, пока у вас есть Твич-сердца#Дает 1 Твич-сердце"
+  },
+  
+  count = 0,
+  
+  onPickup = function ()
+    IOTR.Storage.Hearts.twitch = IOTR.Storage.Hearts.twitch + 2
+  end,
+  
+  onFamiliarUpdate = function (entity)
+    if IOTR.Storage.Hearts.twitch <= 0 or entity.FrameCount % 30 ~= 0 then return end
+    local tear = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.BLUE, 0, entity.Position, Vector(10, 0):Rotated(entity.FrameCount), entity):ToTear()
+    tear:SetColor(IOTR.Enums.Rainbow[7], 0, 0, false, false)
+    
+  end,
 }
 
 return passiveItems

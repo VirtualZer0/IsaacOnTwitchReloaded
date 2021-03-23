@@ -237,6 +237,16 @@ helper.getLastAvailableCord = function (pos, direction, room)
   
 end
 
+-- Check if entity visible and not hiding underground
+helper.checkEntityInvisible = function (entity)
+
+  local etype = entity.Type
+  local sprite = entity:GetSprite()
+  
+  return not entity:IsVisible()
+  or (entity:IsBoss() and entity.EntityCollisionClass == 0)
+
+end
 -- Launch event function
 helper.launchEvent = function (eventName)
   
@@ -258,9 +268,9 @@ helper.launchEvent = function (eventName)
   
   -- Launch happy or bad animation
   if ev.event.good then
-    Isaac.GetPlayer(0):AnimateHappy()
+    IOTR.Sounds.play(SoundEffect.SOUND_THUMBSUP)
   else
-    Isaac.GetPlayer(0):AnimateSad()
+    IOTR.Sounds.play(SoundEffect.SOUND_THUMBS_DOWN)
   end
   
 end

@@ -1,8 +1,8 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="09.02.2017 18:10:42" Version="109" Fps="30"/>
+	<Info CreatedBy="robot" CreatedOn="21.03.2021 2:08:53" Version="110" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="textures\familiar_shooters_twitch_subscriber_7.png" Id="0"/>
+			<Spritesheet Path="familiar_shooters_twitch_subscriber_1.png" Id="0"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="body" Id="0" SpritesheetId="0"/>

@@ -46,7 +46,7 @@ function Server:run()
   self._server:setoption("keepalive", true)
   self._server:setoption("reuseaddr", true)
   self._server:setoption("tcp-nodelay", true)
-  self._server:listen(20)
+  self._server:listen(100)
   self._server:settimeout(0)
   self._running = true
   Isaac.ConsoleOutput("\nIOTR Server: Running on 127.0.0.1:"..self._port.."\n")
@@ -78,8 +78,8 @@ function Server:getRequest()
       if req == nil or req.m == "empty" or req.m == nil then
         -- Do nothing
       elseif req.m == "out" then
-        client:send(self._header.."\n"..json.encode({out = Server.ouput}))
-        Server.ouput = {}
+        client:send(self._header.."\n"..json.encode({out = IOTR.Server.output}))
+        IOTR.Server.output = {}
       elseif self._handlers[req.m] ~= nil then -- Check handler for requested method     
         
         local response = self._handlers[req.m](req.d);
@@ -130,14 +130,14 @@ end
 -- Update function, for comfortable changes in future
 function Server:update()
   -- Check if server running
-  if (Server._running == false) then return end
-  Server:getRequest()
+  if (IOTR.Server._running == false) then return end
+  IOTR.Server:getRequest()
   --Server:debugOutput()
 end
 
 -- Close server socket
 function Server:close()
-  if (Server._running == false) then return end
+  if (IOTR.Server._running == false) then return end
   self._running = false
   self._server:close()
   Isaac.ConsoleOutput("IOTR Server: Stopped\n")
@@ -167,8 +167,8 @@ function Server.getJSON (str)
 end
 
 --Add new output param
-function Server:addOutput (obj)
-  table.insert(Server.output, obj)
+function Server.addOutput (obj)
+  table.insert(IOTR.Server.output, obj)
 end
 
 return Server;

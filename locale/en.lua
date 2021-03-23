@@ -4,7 +4,7 @@ local en = {
   
   -- Basic messages
   welcomeMessage = "Go to IsaacOnTwitch.com and select Start!",
-  luadebugMessage = "Isaac On Twitch: Relaunch game with --luadebug parameter",
+  luadebugMessage = "Relaunch game with --luadebug parameter. More on isaacontwitch.com",
   
   -- Events
   evRichyName = "Richy",
@@ -207,6 +207,27 @@ local en = {
   
   evGiveMeYourMoneyName = "Give me your money",
   evGiveMeYourMoneyDesc = "You are being chased by a strange slot machine",
+  
+  evWallOfTearsName = "Wall of Tears",
+  evWallOfTearsDesc = "Look mom! Like Hush!",
+  
+  evFliesAndFliesName = "Flies and flies",
+  evFliesAndFliesDesc = "Because we need more flies",
+  
+  evKillPlayerName = "Kill Player",
+  evKillPlayerDesc = "Oops... i mean HEAL player",
+  
+  evCursedName = "C U R S E D",
+  evCursedDesc = "Cursed chat added curses to you",
+  
+  evAutoAimName = "Auto Aim",
+  evAutoAimDesc = "So advanced that he decides who to shoot",
+  
+  evFingerSnapName = "Finger Snap",
+  evFingerSnapDesc = "Dungeons 50% cleaner",
+  
+  evYouBelongToUsName = "You belong to us!",
+  evYouBelongToUsDesc = "Control player from the chat with commands left, right, up or down",
 }
 
 return en

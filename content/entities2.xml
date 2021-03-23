@@ -28,15 +28,15 @@
     <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
   </entity>
 	
-	<entity anm2path="mod.twitch_subscriber.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0.25" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Subscriber" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="5730">
+	<entity anm2path="Familiar/subs/mod.twitch_subscriber.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0.25" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Twitch Subscriber" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="5730">
     <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
   </entity>
 	
-	<entity anm2path="mod.twitch_nightbot.anm2" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Nightbot" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="5731">
+	<entity anm2path="mod.twitch_nightbot.anm2" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Twitch Nightbot" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="5731">
     <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
   </entity>
 	
-	<entity anm2path="mod.twitch_stinkyCheese.anm2" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Stinky Cheese" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="5732">
+	<entity anm2path="mod.twitch_stinkyCheese.anm2" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Twitch Stinky Cheese" numGridCollisionPoints="12" shadowSize="11" stageHP="0" variant="5732">
     <gibs amount="0" blood="0" bone="0" eye="0" gut="0" large="0" />
   </entity>
 	

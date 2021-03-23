@@ -9,10 +9,11 @@
   <passive description="YEAH!" gfx="Collectibles_Kreygasm.png" name="Kreygasm" />
   <passive description="Control the enemy" gfx="Collectibles_BrainSlug.png" name="Brain Slug" />
   <passive description="Explosive!" gfx="Collectibles_SSSsss.png" name="SSSsss" />
+  <passive description="Purple blood in your venus" gfx="Collectibles_BleedPurple.png" name="Bleed Purple" />
   
-  <active maxcharges="6" description="Fire in the hole!" gfx="Collectibles_TwitchRaid.png" name="Twitch Raid" />
+  <active maxcharges="12" description="Fire in the hole!" gfx="Collectibles_TwitchRaid.png" name="Twitch Raid" />
   <active maxcharges="1" description="Take a pic" gfx="Collectibles_TTours.png" name="TTours" />
-  <active maxcharges="12" description="Decline it" gfx="Collectibles_VoteNay.png" name="Vote Nay" />
+  <active maxcharges="0" description="Decline it" gfx="Collectibles_VoteNay.png" name="Vote Nay" />
   <active maxcharges="6" description="Accept it" gfx="Collectibles_VoteYea.png" name="Vote Yea" />
   <active maxcharges="6" description="Bring the apocalypse!" gfx="Collectibles_RipPepperonis.png" name="Rip Pepperonis" />
   <active maxcharges="2" description="Picnic did not go according to plan" gfx="Collectibles_PanicBasket.png" name="Panic Basket" />
@@ -22,32 +23,31 @@
     I SPEND 3 HOURS TO FIX THIS PROBLEM
   -->
   <active id="5500" timeout="120" description="Yummi!" gfx="Collectibles_NomNom/1.png" name="Nom Nom" />
-  <active id="5501" timeout="120" description="Yummi?" gfx="Collectibles_NomNom/2.png" name="Bitten nom nom 1" />
-  <active id="5502" timeout="120" description="Yummi??" gfx="Collectibles_NomNom/3.png" name="Bitten nom nom 2" />
-  <active id="5503" timeout="120" description="Yummi???" gfx="Collectibles_NomNom/4.png" name="Bitten nom nom 3" />
-  <active id="5504" timeout="120" description="Yummi..." gfx="Collectibles_NomNom/5.png" name="Bitten nom nom 4" />
-  <active id="5505" timeout="120" description="Yummi...?" gfx="Collectibles_NomNom/6.png" name="Bitten nom nom 5" />
+  <active id="5501" timeout="120" description="Yummi?" gfx="Collectibles_NomNom/2.png" special="true" name="Bitten nom nom 1" />
+  <active id="5502" timeout="120" description="Yummi??" gfx="Collectibles_NomNom/3.png" special="true" name="Bitten nom nom 2" />
+  <active id="5503" timeout="120" description="Yummi???" gfx="Collectibles_NomNom/4.png" special="true" name="Bitten nom nom 3" />
+  <active id="5504" timeout="120" description="Yummi..." gfx="Collectibles_NomNom/5.png" special="true" name="Bitten nom nom 4" />
+  <active id="5505" timeout="120" description="Yummi...?" gfx="Collectibles_NomNom/6.png" special="true" name="Bitten nom nom 5" />
   
-  <familiar description="Your fan" gfx="Collectibles_Subscriber.png" name="Subscriber"/>
   <familiar description="Spam not allowed!" gfx="Collectibles_NightBot.png" name="Nightbot" />
   <familiar description="Yikes, it's stinky!" gfx="Collectibles_StinkyCheese.png" name="Stinky Cheese" />
   
   <trinket description="Like a pro" gfx="Trinket_twitch_Neonomi.png" name="Neo glasses" /> <!-- Neonomi -->
-  <trinket description="We need to free him" gfx="Trinket_twitch_Smite.png" name="Yoshi shell" /> <!-- Smite -->
+  <!--<trinket description="We need to free him" gfx="Trinket_twitch_Smite.png" name="Yoshi shell" /> <!-- Smite -->
   <trinket description="Your Polling of Isaac in another castle" gfx="Trinket_twitch_Hutts.png" name="Hair clap" /> <!-- Hutts -->
   <trinket description="Furry confirmed" gfx="Trinket_twitch_Tijoe.png" name="Torn cat ear" /> <!-- Tijoe -->
   <trinket description="Velichaishe!" gfx="Trinket_twitch_Rekvizit8Bit.png" name="Gribulya's piece" /> <!-- Rekvi -->
-  <trinket description="True Inglesh mun" gfx="Trinket_twitch_H4hen.png" name="Honey Lord Sting" /> <!-- H4hen -->
+  <!--<trinket description="True Inglesh mun" gfx="Trinket_twitch_H4hen.png" name="Honey Lord Sting" /> <!-- H4hen -->
   <trinket description="Who turned out the lights?" gfx="Trinket_twitch_Vertroxmt.png" name="Spacesuit charge indicator" /> <!-- iVertox -->
-  <trinket description="Hell's Heat" gfx="Trinket_twitch_VadPribalt.png" name="Ring of Eternal Flame" /> <!-- VadPribalt -->
-  <trinket description="So greedy" gfx="Trinket_twitch_MrOSTsergey.png" name="Mr. Ost coin eye" /> <!-- Mr. Ost Sergey -->
-  <trinket description="Wake up, people!" gfx="Trinket_twitch_RomaWake.png" name="Radio 'Wake'" /> <!-- Roma Wake -->
+  <!--<trinket description="Hell's Heat" gfx="Trinket_twitch_VadPribalt.png" name="Ring of Eternal Flame" /> <!-- VadPribalt -->
+  <trinket description="So greedy" gfx="Trinket_twitch_MrOSTsergey.png" name="Greed coin eye" /> <!-- Mr. Ost Sergey -->
+  <!--<trinket description="Wake up, people!" gfx="Trinket_twitch_RomaWake.png" name="Radio 'Wake'" /> <!-- Roma Wake -->
   <trinket description="It strangely shines" gfx="Trinket_twitch_Crystal.png" name="Crystal shard" /> <!-- Crystal Channel -->
-  <trinket description="Crying all the time" gfx="Trinket_twitch_Junkey.png" name="Rabbit paw" /> <!-- Junkey23 -->
+  <!--<trinket description="Crying all the time" gfx="Trinket_twitch_Junkey.png" name="Rabbit paw" /> <!-- Junkey23 -->
   <trinket description="What's up?" gfx="Trinket_twitch_Grizzly.png" name="Grizzly claw" /> <!-- GrizzlyGuy -->
   <trinket description="Chat's making me burn" gfx="Trinket_twitch_HellYeah.png" name="Inverted Cross" /> <!-- HellYeah -->
   <trinket description="His eyes are filled with madness" gfx="Trinket_twitch_Vitecp.png" name="UC's stem" /> <!-- VitecP -->
-  <trinket description="Minecraft - it's my life, bitch. MINECRAAAFT!!!!!" gfx="Trinket_twitch_Melharucos.png" name="Spider eye" /> <!-- Melharucos -->
+  <trinket description="Did you press Enter or Esc?" gfx="Trinket_twitch_Melharucos.png" name="Spider eye" /> <!-- Melharucos -->
   
-  <active maxcharges="0" description="EEEEEEDMUUUUND!!!" gfx="Collectibles_Debug.png" name="DEBUG ITEM"/>
+  <active maxcharges="0" description="EEEEEEDMUUUUND!!!" gfx="Collectibles_Debug.png" special="true" name="DEBUG ITEM"/>
 </items>

@@ -29,8 +29,11 @@ IOTR.Items = {
 -- Additional game state
 IOTR.GameState = {
   renderSpecial = true,
+  paused = false,
   screenSize = (Isaac.WorldToScreen(Vector (320, 280)) - Game ():GetRoom ():GetRenderScrollOffset() - Game().ScreenShakeOffset) * 2,
-  postStartRaised = false
+  postStartRaised = false,
+  firstRun = true,
+  randomNames = {}
 }
 
 -- Settings
@@ -136,6 +139,7 @@ IOTR.Text = {
     
     -- If text is not array, make array
     if (type(text) == "string") then text = {text} end
+    if text == nil then return end
     
     -- Split text on strings
     local strings = {}
@@ -200,7 +204,7 @@ IOTR.Text = {
   render = function ()
     
     -- Check if render not allowed
-    if (IOTR.GameState.renderSpecial == false) then return end
+    if not IOTR.GameState.renderSpecial then return end
     
     for name, text in pairs(IOTR.Text.Storage) do
       
@@ -208,18 +212,21 @@ IOTR.Text = {
       if (IOTR.Text.FollowStorage[name] ~= nil) then
         
         -- If entity not exists anymore
-        if (IOTR.Text.FollowStorage[name].entity:Exists() ~= true) then 
+        if (not IOTR.Text.FollowStorage[name].entity:Exists()) then 
           
           -- then remove text
           IOTR.Text.remove(name)
           
+        elseif IOTR._.checkEntityInvisible(IOTR.Text.FollowStorage[name].entity) then
+          IOTR.Text.Storage[name].hide = true
         else
-          
           -- else change text position to entity position
+          IOTR.Text.Storage[name].hide = false
           for snum, stext in pairs(text.text) do
-            local epos = Isaac.WorldToRenderPosition(IOTR.Text.FollowStorage[name].entity.Position, true) + Game():GetRoom():GetRenderScrollOffset()
-            stext.x = epos.X-3 * #stext.text
-            stext.y = epos.Y - 40 - (snum * text.size * 10)
+            local epos = IOTR.Text.FollowStorage[name].entity.Position - IOTR.Text.FollowStorage[name].entity.SpriteOffset
+            local resPos = Isaac.WorldToRenderPosition(epos, true) + Game():GetRoom():GetRenderScrollOffset()
+            stext.x = resPos.X-2 * #stext.text
+            stext.y = resPos.Y - 40 - (snum * text.size * 10)
           end
           
         end
@@ -233,7 +240,9 @@ IOTR.Text = {
           text.blink = swapColors;
         end
         
-        Isaac.RenderScaledText(stext.text, stext.x, stext.y, text.size, text.size, text.color.r, text.color.g, text.color.b, text.color.a)
+        if (text.hide == nil or text.hide == false) then
+          Isaac.RenderScaledText(stext.text, stext.x, stext.y, text.size, text.size, text.color.r, text.color.g, text.color.b, text.color.a)
+        end
         
       end
     end
@@ -249,7 +258,7 @@ IOTR.Pollframes = {
   frame3 = "gfx/items/collectibles/Collectibles_033_TheBible.png",
   
   render = function ()
-    if not IOTR.Pollframes.enabled then return end
+    if not IOTR.Pollframes.enabled or not IOTR.GameState.renderSpecial then return end
     IOTR.Sprites.UI.PollFrame1:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(12, 18), Vector(0,0), Vector(0,0))
     IOTR.Sprites.UI.PollFrame2:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(102, 18), Vector(0,0), Vector(0,0))
     IOTR.Sprites.UI.PollFrame3:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(192, 18), Vector(0,0), Vector(0,0))
@@ -347,8 +356,8 @@ IOTR.ProgressBar = {
   -- Render progress bar
   render = function ()
     
-    -- If progress bar not visible, end function
-    if not IOTR.ProgressBar.Storage.visible then return end
+    -- If progress bar not visible or need hide, end function
+    if not IOTR.ProgressBar.Storage.visible or not IOTR.GameState.renderSpecial then return end
     
     -- Render progress bar background
     IOTR.Sprites.UI["ProgressBar"..IOTR.ProgressBar.Storage.barType]:Render(
@@ -424,7 +433,7 @@ end)
 
 -- Change text position
 IOTR.Server:setHandler("textpos", function (req) 
-  
+  IOTR.Settings.textpos = req
 end)
 
 -- Enable poll frames
@@ -504,11 +513,11 @@ IOTR.Server:setHandler("itemAction", function (req)
   local player = Isaac.GetPlayer(0);  
   
   if (req.remove == true) then
-    player:RemoveCollectible(req.item);
-    player:AnimateSad();
+    player:RemoveCollectible(req.item)
+    IOTR.Sounds.play(SoundEffect.SOUND_THUMBS_DOWN)
   else
-    player:AddCollectible(req.item, 0, true);
-    player:AnimateHappy();
+    player:AddCollectible(req.item, 0, true)
+    IOTR.Sounds.play(SoundEffect.SOUND_THUMBSUP)
   end
   
 end)
@@ -538,9 +547,9 @@ IOTR.Server:setHandler("pocketsAction", function (req)
         req.value == 0 or req.value < 0
       )
     ) then
-    p:AnimateSad()
+    IOTR.Sounds.play(SoundEffect.SOUND_THUMBS_DOWN)
   else
-    p:AnimateHappy()
+    IOTR.Sounds.play(SoundEffect.SOUND_THUMBSUP)
   end
   
   if req.pickupType == "Hearts" then
@@ -563,27 +572,75 @@ IOTR.Server:setHandler("pocketsAction", function (req)
   
 end)
 
--- Give personal trinket
-IOTR.Server:setHandler("gift", function (req) 
+-- Add subscriber
+IOTR.Server:setHandler("subscriberAction", function (req) 
+  local subtime
+  if (req.time) then
+    subtime = req.time
+  else
+    subtime = IOTR.Settings.subtime
+  end
   
+  IOTR.Mechanics.Subscribers._addSubscriber(req.name, req.time)
+  IOTR.Sounds.play(SoundEffect.SOUND_THUMBSUP)
 end)
 
--- Set subscribers remove time
-IOTR.Server:setHandler("subtime", function (req) 
+-- Spawn bits
+IOTR.Server:setHandler("bitsAction", function (req) 
   
+  local player = Isaac.GetPlayer(0)
+  local room = Game():GetRoom()
+  local btype = IOTR.Mechanics.Bits.bitsA
+  
+  if req.type == 2 then
+    btype = IOTR.Mechanics.Bits.bitsB
+  elseif req.type == 3 then
+    btype = IOTR.Mechanics.Bits.bitsC
+  elseif req.type == 4 then
+    btype = IOTR.Mechanics.Bits.bitsD
+  elseif req.type == 5 then
+    btype = IOTR.Mechanics.Bits.bitsE
+  end
+  
+  for i = 1, req.amount do
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, btype, 0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0,0), p)
+  end
+  
+  IOTR.Sounds.play(SoundEffect.SOUND_THUMBSUP)
+end)
+
+-- Saave random names from chat
+IOTR.Server:setHandler("randomNames", function (req) 
+  IOTR.GameState.randomNames = req
+end)
+
+-- Give personal trinket
+IOTR.Server:setHandler("gift", function (req) 
+  local trinket = Isaac.GetTrinketIdByName(req.trinket)
+  IOTR._.giveTrinket(trinket)
+end)
+
+-- Move player 
+IOTR.Server:setHandler("movePlayer", function (req) 
+  local p = Isaac.GetPlayer(0)
+  
+  IOTR.Cmd.send(req)
+    
+  if req == "l" then
+    p:AddVelocity(Vector(-1,0))
+  elseif req == "r" then
+    p:AddVelocity(Vector(1,0))
+  elseif req == "u" then
+    p:AddVelocity(Vector(0,-1))
+  elseif req == "d" then
+    p:AddVelocity(Vector(0,1))
+  end
 end)
 
 -- Set tables for external item description mod
-if not __eidItemDescriptions then
-  __eidItemDescriptions = {}
-end
 
 if not __eidRusItemDescriptions then
   __eidRusItemDescriptions = {}
-end
-
-if not __eidTrinketDescriptions then
-  __eidTrinketDescriptions = {}
 end
 
 if not __eidRusTrinketDescriptions then
@@ -596,8 +653,10 @@ end
 for key,value in pairs(IOTR.Items.Active) do
   IOTR.Mod:AddCallback(ModCallbacks.MC_USE_ITEM, IOTR.Items.Active[key].onActivate, IOTR.Items.Active[key].id);
   
-  __eidItemDescriptions[IOTR.Items.Active[key].id] = IOTR.Items.Active[key].description["en"] .. 
-  "#\3 From Twitch Mod"
+  if EID then
+    EID:addCollectible(IOTR.Items.Active[key].id, IOTR.Items.Active[key].description["ru"] .. "#\3 Предмет из Твич-мода", "ru")
+    EID:addCollectible(IOTR.Items.Active[key].id, IOTR.Items.Active[key].description["en"] .. "#\3 From Twitch Mod")
+  end
   
   __eidRusItemDescriptions[IOTR.Items.Active[key].id] = IOTR._.fixrus(IOTR.Items.Active[key].description["ru"] .. 
   "#\3 Предмет из Твич-мода")
@@ -613,14 +672,14 @@ for key,value in pairs(IOTR.Items.Passive) do
     -- Check item pickup
     if (Isaac.GetPlayer(0):GetCollectibleNum(IOTR.Items.Passive[key].id) > IOTR.Items.Passive[key].count) then
       
-      -- Increase item counter
-      IOTR.Items.Passive[key].count = IOTR.Items.Passive[key].count + 1
-      
-      -- Adding dynamic callback
-      if (Isaac.GetPlayer(0):GetCollectibleNum(IOTR.Items.Passive[key].id) > 0) then IOTR.DynamicCallbacks.bind(IOTR.Items.Passive, key) end
-      
       -- Call onPickup callback
       if IOTR.Items.Passive[key].onPickup ~= nil then IOTR.Items.Passive[key].onPickup() end
+      
+      -- Adding dynamic callback only if is first item
+      if (IOTR.Items.Passive[key].count == 0) then IOTR.DynamicCallbacks.bind(IOTR.Items.Passive, key) end
+      
+      -- Change item counter
+      IOTR.Items.Passive[key].count = Isaac.GetPlayer(0):GetCollectibleNum(IOTR.Items.Passive[key].id)
       
       -- Update cache if need
       if IOTR.Items.Passive[key].cacheFlag ~= nil then
@@ -639,6 +698,13 @@ for key,value in pairs(IOTR.Items.Passive) do
       
       -- Call onRemove callback
       if IOTR.Items.Passive[key].onRemove ~= nil then IOTR.Items.Passive[key].onRemove() end
+      
+      -- Update cache if need
+      if IOTR.Items.Passive[key].cacheFlag ~= nil then
+        local player = Isaac.GetPlayer(0)
+        player:AddCacheFlags(IOTR.Items.Passive[key].cacheFlag)
+        player:EvaluateItems()
+      end
     end
     
   end
@@ -646,8 +712,10 @@ for key,value in pairs(IOTR.Items.Passive) do
   IOTR.Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, pickupRemoveCheck);
   
   -- Add External Item Description support
-  __eidItemDescriptions[IOTR.Items.Passive[key].id] = IOTR.Items.Passive[key].description["en"] .. 
-  "#\3 From Twitch Mod"
+  if EID then
+    EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["ru"] .. "#\3 Предмет из Твич-мода", "ru")
+    EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["en"] .. "#\3 From Twitch Mod")
+  end
   
   __eidRusItemDescriptions[IOTR.Items.Passive[key].id] = IOTR._.fixrus(IOTR.Items.Passive[key].description["ru"] .. 
   "#\3 Предмет из Твич-мода")
@@ -656,11 +724,13 @@ end
 -- Bind callbacks and descriptions for trinkets
 for key,value in pairs(IOTR.Items.Trinkets) do
   
-  __eidTrinketDescriptions[IOTR.Items.Trinkets[key].id] = IOTR.Items.Trinkets[key].description["en"] .. 
-  "#\3 From Twitch Mod"
+  if EID then
+    EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["ru"] .. "#\3 Тринкет из Твич-мода", "ru")
+    EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["en"] .. "#\3 From Twitch Mod")
+  end
   
-  __eidRusTrinketDescriptions[IOTR.Items.Trinkets[key].id] = IOTR._.fixrus(IOTR.Items.Trinkets[key].description["ru"] .. 
-  "#\3 Предмет из Твич-мода")
+  __eidRusTrinketDescriptions[IOTR.Items.Trinkets[key].id] = {IOTR.Items.Trinkets[key].name, IOTR._.fixrus(IOTR.Items.Trinkets[key].description["ru"] .. 
+  "#\3 Тринкет из Твич-мода")}
 end
 
 
@@ -669,6 +739,7 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, IOTR.Cmd.main)
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, IOTR.Callbacks.postUpdate)
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_RENDER, IOTR.Callbacks.postRender)
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, IOTR.Callbacks.postNewRoom)
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NPC_INIT, IOTR.Callbacks.postNPCInit)
 IOTR.Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, IOTR.Callbacks.evaluateCache)
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, IOTR.Callbacks.postGameStarted)
 IOTR.Mod:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, IOTR.Callbacks.preGameExit)
@@ -707,7 +778,7 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_POST_RENDER,
 IOTR.Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, 
   function (obj, player, cacheFlag)
     for key,value in pairs(IOTR.DynamicCallbacks.onCacheUpdate) do
-      value(obj, player, cacheFlag)
+      value(player, cacheFlag)
     end
     
     for key,value in pairs(IOTR.Mechanics) do
@@ -756,15 +827,28 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM,
   end
 )
 
+-- onTearInit Callback
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_TEAR_INIT, 
+  function (obj, e)
+    for key,value in pairs(IOTR.DynamicCallbacks.onTearInit) do
+      value(e)
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onTearInit ~= nil then value.onTearInit(e) end
+    end
+  end
+)
+
 -- onTearUpdate Callback
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, 
   function (obj, e)
     for key,value in pairs(IOTR.DynamicCallbacks.onTearUpdate) do
-      value(obj, e)
+      value(e)
     end
     
     for key,value in pairs(IOTR.Mechanics) do
-      if value.onTearUpdate ~= nil then value.onTearUpdate(obj, e) end
+      if value.onTearUpdate ~= nil then value.onTearUpdate(e) end
     end
   end
 )
@@ -773,11 +857,11 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE,
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE, 
   function (obj, e)
     for key,value in pairs(IOTR.DynamicCallbacks.onProjectileUpdate) do
-      value(obj, e)
+      value(e)
     end
     
     for key,value in pairs(IOTR.Mechanics) do
-      if value.onProjectileUpdate ~= nil then value.onProjectileUpdate(obj, e) end
+      if value.onProjectileUpdate ~= nil then value.onProjectileUpdate(e) end
     end
   end
 )
@@ -810,11 +894,11 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG,
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, 
   function (obj, e)
     for key,value in pairs(IOTR.DynamicCallbacks.onNPCDeath) do
-      value(obj, e)
+      value(e)
     end
     
     for key,value in pairs(IOTR.Mechanics) do
-      if value.onNPCDeath ~= nil then value.onNPCDeath(obj, e) end
+      if value.onNPCDeath ~= nil then value.onNPCDeath(e) end
     end
   end
 )
@@ -849,6 +933,26 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION,
   end
 )
 
+-- onFamiliarInit Callback
+IOTR.Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, 
+  function (obj, familiar)
+    
+    for key,value in pairs(IOTR.Items.Passive) do
+      if (value.famFollowPlayer ~= nil and value.famFollowPlayer == true) then
+        familiar:AddToFollowers()
+      end
+    end
+    
+    for key,value in pairs(IOTR.DynamicCallbacks.onFamiliarInit) do
+      value(familiar)
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onFamiliarInit ~= nil then value.onFamiliarInit(familiar) end
+    end
+  end
+)
+
 -- onFamiliarCollision Callback
 IOTR.Mod:AddCallback(ModCallbacks.MC_PRE_FAMILIAR_COLLISION, 
   function (obj, familiar, collider, low)
@@ -863,6 +967,20 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_PRE_FAMILIAR_COLLISION,
     end
     
     return result
+  end
+)
+
+-- onFamiliarUpdate Callback
+IOTR.Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, 
+  function (obj, familiar)
+    
+    for key,value in pairs(IOTR.DynamicCallbacks.onFamiliarUpdate) do
+      value(familiar)
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onFamiliarUpdate ~= nil then value.onFamiliarUpdate(familiar) end
+    end
   end
 )
 

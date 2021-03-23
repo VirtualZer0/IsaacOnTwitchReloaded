@@ -1,5 +1,5 @@
 local events = {}
-
+local json = require('json')
 -- Example
 
 --events.EventName = {
@@ -8,7 +8,6 @@ local events = {}
 --  weights,        <-- Array with weights for gamemodes: [easy, normal, crazy]
 --  good,           <-- If true, play happy animation, else - sad animation
 --  specialTrigger, <-- Contains name of special modificator dor next poling, like "russianHackers" (optionally)
---  msgTrigger,     <-- Contains name of special message handler for events with additional commands (optionally)
 --  duration,       <-- Event duration, by room or by seconds, it depends on the variable byTime. If not defined, equals 0
 --  byTime,         <-- If TRUE, duration decrease every second, if FALSE - every room changing. If not defined, equals TRUE
 --  onlyNewRoom     <-- if TRUE, event duration decreased only in new rooms
@@ -262,8 +261,10 @@ events.EV_DevilRage = {
     
     for i = 1, math.random(3,7) do
         local pos = room:GetRandomPosition(1)
-        Game():SpawnParticles(pos, EffectVariant.CRACK_THE_SKY, 3, math.random(), Color(1, 0, 0, 1, 50, 0, 0), math.random())
-        Game():SpawnParticles(pos, EffectVariant.LARGE_BLOOD_EXPLOSION, 1, math.random(), Color(1, 0, 0, 1, 50, 0, 0), math.random())
+        if (pos:Distance(player.Position) > 40) then
+          Game():SpawnParticles(pos, EffectVariant.CRACK_THE_SKY, 3, math.random(), Color(1, 0, 0, 1, 50, 0, 0), math.random())
+          Game():SpawnParticles(pos, EffectVariant.LARGE_BLOOD_EXPLOSION, 1, math.random(), Color(1, 0, 0, 1, 50, 0, 0), math.random())
+        end
     end
     
     for i = 1, math.random(1,3) do
@@ -297,8 +298,10 @@ events.EV_RainbowRain = {
       local max = room:GetBottomRightPos()
       local pos = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
       pos = room:FindFreeTilePosition(pos, 0.5)
-      Game():SpawnParticles(pos, EffectVariant.CRACK_THE_SKY, 1, math.random(), IOTR.Enums.Rainbow[math.random(#IOTR.Enums.Rainbow)], math.random())
-      Game():SpawnParticles(pos, EffectVariant.PLAYER_CREEP_HOLYWATER, 1, 0, IOTR.Enums.Rainbow[math.random(#IOTR.Enums.Rainbow)], 0)
+      if (pos:Distance(player.Position) > 40) then
+        Game():SpawnParticles(pos, EffectVariant.CRACK_THE_SKY, 1, math.random(), IOTR.Enums.Rainbow[math.random(#IOTR.Enums.Rainbow)], math.random())
+        Game():SpawnParticles(pos, EffectVariant.PLAYER_CREEP_HOLYWATER, 1, 0, IOTR.Enums.Rainbow[math.random(#IOTR.Enums.Rainbow)], 0)
+      end
     end
     
     SFXManager():Play(SoundEffect.SOUND_WATER_DROP, 1, 0, false, 1)
@@ -311,7 +314,7 @@ events.EV_RainbowRain = {
 events.EV_RUN = {
   
   name = "RUN",
-  weights = {0.9,1,1},
+  weights = {0.7,1,1},
   good = false,
   
   duration = 15*30,
@@ -360,7 +363,7 @@ events.EV_FlashJump = {
 events.EV_EnemyRegen = {
   
   name = "EnemyRegen",
-  weights = {1,1,1},
+  weights = {.9,1,1},
   good = false,
   
   duration = 50*30,
@@ -409,7 +412,7 @@ events.EV_Flashmob = {
 events.EV_AttackOnTitan = {
   
   name = "AttackOnTitan",
-  weights = {0.9,1,1},
+  weights = {0.8,1,1},
   good = false,
   
   byTime = false,
@@ -451,7 +454,7 @@ events.EV_Diarrhea = {
   
   name = "Diarrhea",
   weights = {1,1,1},
-  good = false,
+  good = true,
   
   duration = 45*30,
   
@@ -475,7 +478,7 @@ events.EV_Diarrhea = {
 events.EV_BladeStorm = {
   
   name = "BladeStorm",
-  weights = {0.8,1,1},
+  weights = {0.7,1,1},
   good = false,
   
   duration = 40*30,
@@ -563,7 +566,7 @@ events.EV_StanleyParable = {
 events.EV_Supernova  = {
   
   name = "Supernova",
-  weights = {.2,.8,1},
+  weights = {.2,.6,1},
   good = true,
   
   onlyNewRoom = true,
@@ -606,7 +609,7 @@ events.EV_Supernova  = {
 events.EV_DDoS  = {
   
   name = "DDoS",
-  weights = {0.4,0.8,1},
+  weights = {.3,.8,1},
   good = false,
   
   duration = 30*30,
@@ -838,7 +841,7 @@ events.EV_Slip = {
 events.EV_NoDMG = {
   
   name = "NoDMG",
-  weights = {.9,1,1},
+  weights = {.7,1,1},
   good = false,
   duration = 40*30,
   
@@ -887,9 +890,10 @@ events.EV_RussianHackers = {
   onUpdate = function ()
     if (Game():GetFrameCount() % 2 ~= 0) then return end
     local p = Isaac.GetPlayer(0)
-    p:AddCoins(math.random(-1,1))
-    p:AddKeys(math.random(-1,1))
-    p:AddBombs(math.random(-1,1))
+    p:AddCoins(math.random(-3,2))
+    p:AddKeys(math.random(-3,2))
+    p:AddBombs(math.random(-3,2))
+    Game().TimeCounter = Game().TimeCounter + math.random(-20, 20)
   end
   
 }
@@ -909,6 +913,7 @@ events.EV_MachineGun = {
     for i = 0, 3 do
       local t = p:FireTear(p.Position, Vector(p:GetShootingInput().X*15+math.random(-3,3), p:GetShootingInput().Y*15+math.random(-3,3)), false, false, false)
       t.Scale = 0.2
+      t.CollisionDamage = p.Damage/10
       t:ChangeVariant(TearVariant.METALLIC)
       t.KnockbackMultiplier = 10
     end
@@ -991,30 +996,61 @@ events.EV_CrazyDoors = {
   good = false,
   duration = 40*30,
   
+  rooms = {},
+  roomTypes = {},
+  
   onUpdate = function ()
-    local frame = Game():GetFrameCount()
-    if (frame % 15 ~= 0) then return end
     
     local p = Isaac.GetPlayer(0)
     local room = Game():GetRoom()
     
-    local doors = {}
-    
     for i = DoorSlot.LEFT0, DoorSlot.DOWN1 do
       if (room:IsDoorSlotAllowed(i) and room:GetDoor(i) ~= nil) then
         local door = room:GetDoor(i)
-        table.insert(doors, door)
-        door:SetRoomTypes(room:GetType(), IOTR.Enums.Doors[math.random(#IOTR.Enums.Doors)])
+        if (p.Position:Distance(door.Position) < 18) then
+          if (IOTR.Events.EV_CrazyDoors.rooms[door.TargetRoomType] ~= nil) then
+            Game():ChangeRoom(IOTR.Events.EV_CrazyDoors.rooms[door.TargetRoomType][math.random(#IOTR.Events.EV_CrazyDoors.rooms[door.TargetRoomType])])
+          end
+        end
       end
     end
     
-    for i = 1, #doors do
-      local door = doors[i]
-      if (p.Position:Distance(door.Position) < 30) then
-        p.Position = doors[math.random(#doors)].Position
-        IOTR.Cmd.send("Door reached")
+    if (Game():GetFrameCount() % 25 ~= 0) then return end
+    
+    for i = DoorSlot.LEFT0, DoorSlot.DOWN1 do
+      if (room:IsDoorSlotAllowed(i) and room:GetDoor(i) ~= nil) then
+        local doorType = IOTR.Events.EV_CrazyDoors.roomTypes[math.random(#IOTR.Events.EV_CrazyDoors.roomTypes)]
+        room:GetDoor(i):SetRoomTypes(doorType, doorType)
+        room:GetDoor(i):Open()
       end
     end
+    
+  end,
+  
+  -- Collect all rooms
+  onStart = function ()
+    local rooms = Game():GetLevel():GetRooms()
+    IOTR.Events.EV_CrazyDoors.rooms = {}
+    IOTR.Events.EV_CrazyDoors.roomTypes = {}
+      
+    for i = 0, rooms.Size - 1 do
+      
+      local room = rooms:Get(i).Data
+      if (IOTR.Events.EV_CrazyDoors.rooms[room.Type] == nil) then IOTR.Events.EV_CrazyDoors.rooms[room.Type] = {} end
+      table.insert(IOTR.Events.EV_CrazyDoors.rooms[room.Type], rooms:Get(i).GridIndex)
+      
+    end
+    
+    for key, value in pairs(IOTR.Events.EV_CrazyDoors.rooms) do
+      if (value ~= nil and #value > 0) then
+        table.insert(IOTR.Events.EV_CrazyDoors.roomTypes, key)
+      end
+    end
+  end,
+  
+  -- Recollect rooms if stage was change
+  onStageChange = function ()
+    IOTR.Events.EV_CrazyDoors.onStart()
   end
   
 }
@@ -1143,7 +1179,7 @@ events.EV_Superhot = {
   
   onEntityUpdate = function (entity)
     local p = Isaac.GetPlayer(0)
-    if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy()) then
+    if (entity:IsActiveEnemy(false) and entity:IsVulnerableEnemy()) then
       if (math.abs(p.Velocity.X) < 0.2 and math.abs(p.Velocity.Y) < 0.2 and p:GetFireDirection() == Direction.NO_DIRECTION) then
         entity:AddFreeze(EntityRef(p), 1)
         entity.Velocity = Vector(0,0)
@@ -2470,6 +2506,272 @@ events.EV_GiveMeYourMoney = {
       haveSlot[1]:Remove()
     end
   end
+  
+}
+
+-- Wall of tears
+events.EV_WallOfTears = {
+  
+  name = "WallOfTears",
+  weights = {1,1,1},
+  good = true,
+  
+  duration = 45*30,
+  
+  
+  onUpdate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    local tear = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.BLOOD, 0, Game():GetRoom():GetRandomPosition(1), Vector(-20, 0), p):ToTear()
+    tear.TearFlags = IOTR._.setbit(tear.TearFlags, TearFlags.TEAR_SPECTRAL)
+    tear.TearFlags = IOTR._.setbit(tear.TearFlags, TearFlags.TEAR_PIERCING)
+    tear.TearFlags = IOTR._.setbit(tear.TearFlags, TearFlags.TEAR_CONTINUUM)
+    tear.CollisionDamage = 1
+    
+  end,
+  
+  
+}
+
+-- Flies and flies
+events.EV_FliesAndFlies = {
+  
+  name = "FliesAndFlies",
+  weights = {.8,1,1},
+  good = false,
+  
+  duration = 40*30,
+  
+  
+  onProjectileUpdate = function (entity)
+    
+    if (entity.FrameCount > 15 and Isaac.CountEntities(EntityType.ENTITY_ATTACKFLY, 0, 0) < 35) then
+      local fly = Isaac.Spawn(EntityType.ENTITY_ATTACKFLY, 0, 0, entity.Position, entity.Velocity, entity):ToNPC()
+      fly:SetColor(entity:GetColor(), 0, 0, false, false)
+      fly.HitPoints = .2
+      entity:Remove()
+    end
+    
+  end,
+  
+  onNewRoom = function ()
+    
+    for i = 1, math.random(30,50) do
+      Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BEETLE, 0, Game():GetRoom():GetRandomPosition(1), Vector(0,0), nil)
+    end
+    
+    for i = 1, math.random(0,3) do
+      Isaac.Spawn(EntityType.ENTITY_ATTACKFLY, 0, 0, Game():GetRoom():GetRandomPosition(1), Vector(0,0), nil)
+    end
+    
+    for i = 1, math.random(0,2) do
+      Isaac.Spawn(EntityType.ENTITY_FLY_L2, 0, 0, Game():GetRoom():GetRandomPosition(1), Vector(0,0), nil)
+    end
+    
+    for i = 1, math.random(0,2) do
+      Isaac.Spawn(EntityType.ENTITY_FULL_FLY, 0, 0, Game():GetRoom():GetRandomPosition(1), Vector(0,0), nil)
+    end
+    
+    for i = 1, math.random(0,2) do
+      Isaac.Spawn(EntityType.ENTITY_HUSH_FLY, 0, 0, Game():GetRoom():GetRandomPosition(1), Vector(0,0), nil)
+    end
+    
+  end
+  
+  
+}
+
+-- Kill player
+events.EV_KillPlayer = {
+  
+  name = "KillPlayer",
+  weights = {1,1,1},
+  good = true,
+  
+  onStart = function ()
+    
+    local player = Isaac.GetPlayer(0)
+    player:AddHearts(24)
+    player:AddSoulHearts(2)
+    player:AddBlackHearts(2)
+    
+  end
+  
+}
+
+-- C U R S E D
+events.EV_Cursed = {
+  
+  name = "Cursed",
+  weights = {.6,.8,1},
+  good = false,
+  
+  onStart = function ()
+    
+    Game():GetLevel():AddCurse(
+      LevelCurse.CURSE_OF_DARKNESS + LevelCurse.CURSE_OF_THE_LOST + LevelCurse.CURSE_OF_THE_UNKNOWN
+      + LevelCurse.CURSE_OF_MAZE + LevelCurse.CURSE_OF_BLIND
+    )
+    
+  end
+  
+}
+
+-- Auto Aim
+events.EV_AutoAim = {
+  
+  name = "AutoAim",
+  weights = {.9,1,1},
+  good = false,
+  duration = 45*30,
+  
+  selectedEnemy = nil,
+  targetEffect = nil,
+  
+  onEntityUpdate = function (entity)
+    
+    if (IOTR.Events.EV_AutoAim.selectedEnemy == nil or not IOTR.Events.EV_AutoAim.selectedEnemy:Exists()) and entity:IsVulnerableEnemy() and entity:IsActiveEnemy(false) then
+      
+      IOTR.Events.EV_AutoAim.selectedEnemy = entity
+      
+    end
+    
+  end,
+  
+  onUpdate = function ()
+    
+    if 
+      (IOTR.Events.EV_AutoAim.targetEffect == nil or not IOTR.Events.EV_AutoAim.targetEffect:Exists())
+      and (IOTR.Events.EV_AutoAim.selectedEnemy ~= nil and IOTR.Events.EV_AutoAim.selectedEnemy:Exists())
+    then
+      
+      IOTR.Events.EV_AutoAim.targetEffect = Isaac.Spawn(
+        EntityType.ENTITY_EFFECT, EffectVariant.TARGET, 150, 
+        IOTR.Events.EV_AutoAim.selectedEnemy.Position, Vector(0,0),
+        IOTR.Events.EV_AutoAim.selectedEnemy
+      )
+      
+      IOTR.Events.EV_AutoAim.targetEffect:SetColor(IOTR.Enums.TintedRainbow[7], 0, 0, false, false)
+      
+    elseif IOTR.Events.EV_AutoAim.selectedEnemy ~= nil and IOTR.Events.EV_AutoAim.selectedEnemy:Exists() then
+      IOTR.Events.EV_AutoAim.targetEffect.Position = IOTR.Events.EV_AutoAim.selectedEnemy.Position
+    elseif IOTR.Events.EV_AutoAim.targetEffect ~= nil and IOTR.Events.EV_AutoAim.targetEffect:Exists() then
+      IOTR.Events.EV_AutoAim.targetEffect:Die()
+    end
+    
+  end,
+  
+  onTearUpdate = function (tear)
+    
+    if IOTR.Events.EV_AutoAim.selectedEnemy ~= nil and IOTR.Events.EV_AutoAim.selectedEnemy:Exists() then
+      tear.Velocity = (IOTR.Events.EV_AutoAim.selectedEnemy.Position - tear.Position):Normalized()*20
+    end
+    
+  end
+
+  
+}
+
+-- Finger snap
+events.EV_FingerSnap = {
+  
+  name = "FingerSnap",
+  weights = {1,1,1},
+  good = true,
+  
+  byTime = false,
+  onlyNewRoom = true,
+  duration = 5,
+  
+  gems = {},
+  
+  onUpdate = function ()
+    
+    for i = 1, #IOTR.Events.EV_FingerSnap.gems do
+      
+      local gem = IOTR.Events.EV_FingerSnap.gems[i]
+      gem.TearFlags = IOTR._.setbit(gem.TearFlags, TearFlags.TEAR_WAIT)
+      gem.Position = Isaac.GetPlayer(0).Position + Vector(80, 0):Rotated(360/6*i + gem.FrameCount)
+      
+    end
+    
+  end,
+  
+  onRoomChange = function ()
+    IOTR.Events.EV_FingerSnap._spawnGems()
+  end,
+  
+  onNewRoom = function ()
+    IOTR.Sounds.play(SoundEffect.SOUND_ULTRA_GREED_COIN_DESTROY)
+    
+    for _, entity in pairs(Isaac.GetRoomEntities()) do
+      
+      if entity:IsActiveEnemy(false) and entity:IsVulnerableEnemy() and not entity:IsBoss() and math.random(1,2) == 2 then
+        
+        for i = 1, 10 do
+          Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.TOOTH_PARTICLE, 0, entity.Position + RandomVector()*8, RandomVector()*10, entity)
+        end
+        
+        for i = 1, 3 do
+          Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_BLACKPOWDER, 0, entity.Position + RandomVector()*3, Vector(0,0), entity)
+        end
+        
+        entity:Die()
+        
+      end
+      
+    end
+  end,
+  
+  _spawnGems = function ()
+    local p = Isaac.GetPlayer(0)
+    IOTR.Events.EV_FingerSnap.gems = {}
+    
+    for i = 1, 6 do
+      local pos = p.Position + Vector(80, 0):Rotated(360/6*i)
+      local gem = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, pos, Vector(0,0), p):ToTear()
+      
+      if i < 5 then
+        gem:SetColor(IOTR.Enums.TintedRainbow[i], 0, 0, false, false)
+      else
+        gem:SetColor(IOTR.Enums.TintedRainbow[i+1], 0, 0, false, false)
+      end
+      
+      gem.TearFlags = IOTR._.setbit(gem.TearFlags, TearFlags.TEAR_SPECTRAL)
+      gem.TearFlags = IOTR._.setbit(gem.TearFlags, TearFlags.TEAR_PIERCING)
+      gem.TearFlags = IOTR._.setbit(gem.TearFlags, TearFlags.TEAR_WAIT)
+      
+      table.insert(IOTR.Events.EV_FingerSnap.gems, gem)
+    end
+  end
+  
+  
+}
+
+-- You belong to us
+events.EV_YouBelongToUs = {
+  
+  name = "YouBelongToUs",
+  weights = {.3,1,1},
+  good = false,
+  
+  duration = 40*30,
+  
+  onStart = function ()
+    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_BOOK_OF_SHADOWS, false, true, false, false)
+    IOTR.Server.addOutput({
+      c = "toggleMovePlayer",
+      d = {enable = true}
+    })
+  end,
+  
+  onEnd = function ()
+    IOTR.Server.addOutput({
+      c = "toggleMovePlayer",
+      d = {enable = false}
+    })
+  end
+  
   
 }
 

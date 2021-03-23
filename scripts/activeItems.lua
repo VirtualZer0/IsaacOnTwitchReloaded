@@ -311,4 +311,63 @@ activeItems.PanicBasket = {
   
 }
 
+-- Vote Yea
+activeItems.VoteYea = {
+  
+  id = Isaac.GetItemIdByName("Vote Yea"),
+  name = "Vote Yea",
+  
+  description = {
+    en = "Immediately accepts current poll",
+    ru = "Немедленно принимает текущее голосование"
+  },
+  
+  onActivate = function ()
+    
+    IOTR.Server.addOutput({c = "acceptPoll"})
+    
+  end
+  
+}
+
+-- Vote Nay
+activeItems.VoteNay = {
+  
+  id = Isaac.GetItemIdByName("Vote Nay"),
+  name = "Vote Nay",
+  
+  description = {
+    en = "Skips current poll#One-time use",
+    ru = "Пропускает текущее голосование#Исчезает после использования"
+  },
+  
+  onActivate = function ()
+    
+    IOTR.Server.addOutput({c = "skipPoll"})
+    Isaac.GetPlayer(0):RemoveCollectible(IOTR.Items.Active.VoteNay.id)
+    
+  end
+  
+}
+
+-- Debug item
+activeItems.Debug = {
+  
+  id = Isaac.GetItemIdByName("DEBUG ITEM"),
+  name = "DEBUG",
+  
+  description = {
+    en = "Only for mod debugging",
+    ru = "Только для разработки мода"
+  },
+  
+  onActivate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 0, p.Position, Vector(0,0), p)
+    
+  end
+  
+}--]]
+
 return activeItems

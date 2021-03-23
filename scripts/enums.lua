@@ -12,7 +12,6 @@ enums.Buddies = {
 -- For Angel Rage event
 enums.AngelRage = {
   EntityType.ENTITY_WIZOOB,
-  EntityType.ENTITY_THE_HAUNT,
   EntityType.ENTITY_BRAIN,
   EntityType.ENTITY_BONY,
   EntityType.ENTITY_BABY
@@ -75,9 +74,6 @@ enums.Doors = {
   RoomType.ROOM_SECRET,
   RoomType.ROOM_ARCADE,
   RoomType.ROOM_CURSE,
-  RoomType.ROOM_SACRIFICE,
-  RoomType.ROOM_DEVIL,
-  RoomType.ROOM_ANGEL
 }
 
 enums.Bosses = {
