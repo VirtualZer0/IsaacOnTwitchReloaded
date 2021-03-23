@@ -2,8 +2,8 @@
 	<Info CreatedBy="Unknown" CreatedOn="20.03.2021 22:03:27" Version="12" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="..\..\..\..\..\..\..\..\My Projects\Code\Git\IsaacOnTwitchReloaded\resources\gfx\UI\Main menu\titlemenu.png" Id="0"/>
-			<Spritesheet Path="..\..\..\..\..\..\..\..\My Projects\Code\Git\IsaacOnTwitchReloaded\resources\gfx\UI\Main menu\splashes.png" Id="1"/>
+			<Spritesheet Path="titlemenu.png" Id="0"/>
+			<Spritesheet Path="splashes.png" Id="1"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="Background" Id="0" SpritesheetId="0"/>
