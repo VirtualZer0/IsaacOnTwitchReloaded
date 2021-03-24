@@ -69,10 +69,8 @@ function callbacks:postUpdate ()
     and level:GetStartingRoomIndex() == level:GetCurrentRoomIndex()
   then
     local button = room:GetGridEntityFromPos(Vector(510, 370))
-    if not IOTR.Text.contains("openSiteButton") then
-      local textPos = Isaac.WorldToRenderPosition(button.Position, true) + Vector(0, 0)
-      IOTR.Text.add("openSiteButton", "Open site", textPos, {r=.549,g=.27,b=.968,a=1}, nil, true)
-    end
+    local textPos = Isaac.WorldToRenderPosition(button.Position, true) + Vector(0, 0)
+    IOTR.Text.add("openSiteButton", "Open site", textPos, {r=.549,g=.27,b=.968,a=1}, nil, true)
     
     if (button.State == 3) then
       IOTR.GameState.openSiteButtonState = 1
