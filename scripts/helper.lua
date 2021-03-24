@@ -288,6 +288,19 @@ helper.closeDoors = function ()
   end
 end
 
+-- Open doors function
+helper.openDoors = function ()
+  local room = Game():GetRoom()
+  
+  room:SetClear(true)
+  for i = 0,DoorSlot.NUM_DOOR_SLOTS-1 do
+    local door = room:GetDoor(i)
+    if door ~= nil then
+      door:Open() 
+    end
+  end
+end
+
 -- Reset mod state
 helper.resetState = function ()
   
@@ -308,6 +321,27 @@ helper.resetState = function ()
   end
     
   
+  
+end
+
+-- Spawn "Open site" button
+helper.spawnOpenSite = function ()
+  if not IOTR.GameState.firstRun then
+    
+    if (IOTR.Text.contains("openSiteButton")) then
+      IOTR.Text.remove("openSiteButton")
+    end
+    
+    IOTR.GameState.openSiteButtonState = 1
+    
+    return
+  end
+  
+  local ok, socket = pcall(require, 'os')
+  if ok then
+    IOTR.GameState.openSiteButtonState = 0
+    Isaac.GridSpawn(GridEntityType.GRID_PRESSURE_PLATE, 0, Vector(510, 370), true)
+  end
   
 end
 

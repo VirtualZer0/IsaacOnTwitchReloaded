@@ -389,4 +389,45 @@ trinkets.T_SpiderEye = {
   
 }
 
+-- Broken D4-R4 console for D4N9
+trinkets.T_BrokenD4R4Console = {
+  id = Isaac.GetTrinketIdByName("Broken D4-R4 console"),
+  name = "Broken D4-R4 console",
+  
+  description = {
+    en = "\1 Can spawn 1-3 GB Bugs on 15 seconds and use Dataminer on damage",
+    ru = "\1 Может заспавнить 1-3 GB Bug'a на 15 секунд и активировать Датамайнер при получении урона"
+  },
+  
+  hold = false,
+  
+  onDamage = function ()
+    if math.random(5) ~= 5 then return end
+    
+    local p = Isaac.GetPlayer(0)
+    
+    for i = 1, math.random(3) do
+      Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 500, p.Position, Vector(0,0), p)
+      p:UseActiveItem(CollectibleType.COLLECTIBLE_DATAMINER, false, true, false, false)
+    end
+  end,
+  
+  onUpdate = function ()
+    
+    for _, bug in pairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 500, false, false)) do
+      
+      if bug.FrameCount > 15*30 then bug:Die() end
+      
+    end
+    
+  end,
+  
+  onRemove = function ()
+    for _, bug in Isaac.FindByType(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 500, false, false) do
+      bug:Die()
+    end
+  end
+  
+}
+
 return trinkets

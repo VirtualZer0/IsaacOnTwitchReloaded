@@ -351,7 +351,7 @@ activeItems.VoteNay = {
 }
 
 -- Debug item
-activeItems.Debug = {
+--[[activeItems.Debug = {
   
   id = Isaac.GetItemIdByName("DEBUG ITEM"),
   name = "DEBUG",

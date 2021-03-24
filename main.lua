@@ -33,6 +33,7 @@ IOTR.GameState = {
   screenSize = (Isaac.WorldToScreen(Vector (320, 280)) - Game ():GetRoom ():GetRenderScrollOffset() - Game().ScreenShakeOffset) * 2,
   postStartRaised = false,
   firstRun = true,
+  openSiteButtonState = nil,
   randomNames = {}
 }
 
@@ -739,6 +740,7 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_EXECUTE_CMD, IOTR.Cmd.main)
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_UPDATE, IOTR.Callbacks.postUpdate)
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_RENDER, IOTR.Callbacks.postRender)
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, IOTR.Callbacks.postNewRoom)
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, IOTR.Callbacks.stageChanged)
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NPC_INIT, IOTR.Callbacks.postNPCInit)
 IOTR.Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, IOTR.Callbacks.evaluateCache)
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, IOTR.Callbacks.postGameStarted)

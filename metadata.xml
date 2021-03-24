@@ -3,8 +3,44 @@
     <name>Isaac On Twitch Reloaded</name>
     <directory>isaac_on_twitch_reloaded</directory>
     <id>2433361645</id>
-    <description></description>
-    <version>1.0.1</version>
+    <description>Allow your audience to participate in the game! This mod gives you the possibility to connect your Youtube and Twitch chats, giving your viewers the ability to vote for what's happening on the screen.
+
+ 
+
+[h1]Features[/h1]
+
+[b]- Events[/b]
+Viewers can choose special events that have different effects on your run
+
+[b]- Subscribers[/b]
+All Twitch subscribers and YouTube sponsors will come into play as your companions
+
+[b]- Interactivity[/b]
+Viewers get a gigantic amount of control over the game: from tossing out coins and items to controlling player movement with commands in the chat room
+
+[b]- New items and trinkets[/b]
+Find special Twitch rooms in the runs - there will be something completely new waiting for you in there
+
+[h1]How to play[/h1]
+[olist]
+[*]Before starting the game, make sure you have --luadebug flag in the game's startup parameters. IT IS IMPORTANT! [*]If you do not do this, the mod will not start ([url=https://isaacontwitch.com/#/luadebug] Instruction [/url])
+[*]Run the game and start the run
+[*]Go to https://isaacontwitch.com and click the &quot;Start&quot; button
+[*]Enter the name of the channel for Twitch and/or a link to the stream for YouTube, set the desired mod settings
+[*]Voting has started, now just try not to die!
+[/olist]
+
+[hr][/hr]
+
+Found a bug? Report it here:
+[url=https://github.com/VirtualZer0/IsaacOnTwitchReloaded/issues/new/choose]Report bug [/url]
+
+Any questions? Visit the mod's discord server:
+[url=https://discord.gg/Qv6BKJXWBA] Isaac On Twitch Discord [/url]
+
+The mod's website:
+https://isaacontwitch.com/</description>
+    <version>1.0.2</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Items"/>

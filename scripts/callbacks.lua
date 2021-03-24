@@ -7,8 +7,11 @@ local callbacks = {}
 -- Post Update callback
 function callbacks:postUpdate ()
   
+  local room = Game():GetRoom()
+  local level = Game():GetLevel()
+  
   -- Hide text if boss screen active
-  if (Game():GetRoom():GetType() == RoomType.ROOM_BOSS and Game():GetRoom():GetFrameCount() == 0 and not Game():GetRoom():IsClear()) then
+  if (room:GetType() == RoomType.ROOM_BOSS and room:GetFrameCount() == 0 and not room:IsClear()) then
     IOTR.GameState.renderSpecial = false
   else
     IOTR.GameState.renderSpecial = true
@@ -58,6 +61,36 @@ function callbacks:postUpdate ()
       
     end
     
+  end
+  
+  -- Check if "Open site" button spawned and pressed
+  if IOTR.GameState.openSiteButtonState == 0
+    and level:GetStage() == LevelStage.STAGE1_1
+    and level:GetStartingRoomIndex() == level:GetCurrentRoomIndex()
+  then
+    local button = room:GetGridEntityFromPos(Vector(510, 370))
+    if not IOTR.Text.contains("openSiteButton") then
+      local textPos = Isaac.WorldToRenderPosition(button.Position, true) + Vector(0, 0)
+      IOTR.Text.add("openSiteButton", "Open site", textPos, {r=.549,g=.27,b=.968,a=1}, nil, true)
+    end
+    
+    if (button.State == 3) then
+      IOTR.GameState.openSiteButtonState = 1
+      IOTR.Sounds.play(SoundEffect.SOUND_GOLD_HEART)
+      
+      for i = 1, 8 do
+        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.NAIL_PARTICLE,  0, button.Position, RandomVector()*2, nil)
+      end
+      
+      IOTR.Text.remove("openSiteButton")
+      room:RemoveGridEntity(button:GetGridIndex(), 0, false)
+      
+      IOTR.Timers.addTimeout(function ()
+        local os = require("os")
+        os.execute("start https://isaacontwitch.com")
+        os.execute("open https://isaacontwitch.com")
+      end, 25)
+    end
   end
 end
 
@@ -141,6 +174,8 @@ end
 
 -- Room change callback
 function callbacks:postNewRoom ()
+  local level = Game():GetLevel()
+  local room = Game():GetRoom()
   
   -- Update events countdown with byTime == false
   for key,value in pairs(IOTR.Storage.ActiveEvents) do
@@ -162,6 +197,19 @@ function callbacks:postNewRoom ()
       end
       
     end
+  end
+  
+  -- Set clear for starting room, if open site button spawned
+  if IOTR.GameState.openSiteButtonState == 0
+    and level:GetStage() == LevelStage.STAGE1_1
+    and level:GetStartingRoomIndex() == level:GetCurrentRoomIndex()
+  then
+    IOTR._.openDoors()
+  elseif IOTR.GameState.openSiteButtonState == 0
+    and level:GetStage() == LevelStage.STAGE1_1
+    and level:GetStartingRoomIndex() ~= level:GetCurrentRoomIndex()
+  then
+    IOTR.Text.remove("openSiteButton")
   end
   
 end
@@ -283,7 +331,10 @@ function callbacks:postGameStarted (fromSave)
     if (not IOTR.GameState.firstRun) then
       IOTR.Server.addOutput({c = "newRun"})
       IOTR.Cmd.send("Request new run on Web-client")
+      IOTR.Text.clear()
     end
+    
+    IOTR._.spawnOpenSite()
   end
   
   -- Running IOTR server
@@ -324,6 +375,13 @@ function callbacks:preGameExit (shouldSave)
     }
     
     Isaac.SaveModData(IOTR.Mod, json.encode(Save))
+  end
+end
+
+-- Shaders callback
+function callbacks:stageChanged ()
+  if IOTR.Text.contains("openSiteButton") then
+    IOTR.Text.remove("openSiteButton")
   end
 end
 

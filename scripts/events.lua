@@ -34,6 +34,7 @@ events.EV_Richy = {
     
    for i = 0, math.random(10, 25) do
       Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN,  CoinSubType.COIN_PENNY, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true), Vector(0, 0), player)
+      player:DonateLuck(1)
     end
     
   end
@@ -130,7 +131,7 @@ events.EV_Spiky = {
     
     for i = 0, room:GetGridSize()/7 do
       local max = room:GetBottomRightPos()
-      local posv = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
+      local posv = Vector(math.random(math.floor(max.X-10)), math.random(math.floor(max.Y-10)))
       pos = room:FindFreeTilePosition(posv, 0.5)
       if (player.Position:Distance(posv) >= 65) then
         Isaac.GridSpawn(GridEntityType.GRID_SPIKES_ONOFF, math.random(2), pos, false)
@@ -200,6 +201,10 @@ events.EV_AngelRage = {
   byTime = false,
   duration = 5,
   
+  onStart = function ()
+    Game():GetLevel():AddAngelRoomChance(.05)
+  end,
+  
   onNewRoom = function ()
     local g = Game()
     local p = Isaac.GetPlayer(0)
@@ -246,6 +251,10 @@ events.EV_DevilRage = {
   byTime = false,
   duration = 5,
   
+  onStart = function ()
+    Game():GetLevel():AddAngelRoomChance (-.05)
+  end,
+  
   onRoomChange = function ()
     
     local room = Game():GetRoom()
@@ -261,7 +270,7 @@ events.EV_DevilRage = {
     
     for i = 1, math.random(3,7) do
         local pos = room:GetRandomPosition(1)
-        if (pos:Distance(player.Position) > 40) then
+        if (pos:Distance(player.Position) > 60) then
           Game():SpawnParticles(pos, EffectVariant.CRACK_THE_SKY, 3, math.random(), Color(1, 0, 0, 1, 50, 0, 0), math.random())
           Game():SpawnParticles(pos, EffectVariant.LARGE_BLOOD_EXPLOSION, 1, math.random(), Color(1, 0, 0, 1, 50, 0, 0), math.random())
         end
@@ -299,8 +308,8 @@ events.EV_RainbowRain = {
       local pos = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
       pos = room:FindFreeTilePosition(pos, 0.5)
       if (pos:Distance(player.Position) > 40) then
-        Game():SpawnParticles(pos, EffectVariant.CRACK_THE_SKY, 1, math.random(), IOTR.Enums.Rainbow[math.random(#IOTR.Enums.Rainbow)], math.random())
-        Game():SpawnParticles(pos, EffectVariant.PLAYER_CREEP_HOLYWATER, 1, 0, IOTR.Enums.Rainbow[math.random(#IOTR.Enums.Rainbow)], 0)
+        Game():SpawnParticles(pos, EffectVariant.CRACK_THE_SKY, 1, math.random(), IOTR.Enums.TintedRainbow[math.random(#IOTR.Enums.Rainbow)], math.random())
+        Game():SpawnParticles(pos, EffectVariant.PLAYER_CREEP_HOLYWATER, 1, 0, IOTR.Enums.TintedRainbow[math.random(#IOTR.Enums.Rainbow)], 0)
       end
     end
     
@@ -742,6 +751,7 @@ events.EV_Invisible = {
   
   onUpdate = function ()
     Isaac.GetPlayer(0).Visible = false
+    
   end,
   
   onEnd = function ()
