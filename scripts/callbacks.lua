@@ -327,9 +327,12 @@ function callbacks:postGameStarted (fromSave)
     -- Generate Twtich room for first floor
     IOTR.Mechanics.TwitchRoom._genTwitchRoom()
     if (not IOTR.GameState.firstRun) then
+      IOTR.Text.clear()
+      IOTR.ProgressBar.remove()
+      IOTR.Pollframes.enabled = false
+      
       IOTR.Server.addOutput({c = "newRun"})
       IOTR.Cmd.send("Request new run on Web-client")
-      IOTR.Text.clear()
     end
     
     IOTR._.spawnOpenSite()

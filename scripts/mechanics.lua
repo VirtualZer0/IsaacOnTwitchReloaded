@@ -510,7 +510,8 @@ mechanics.TwitchRoom = {
         
         if (room.Type == RoomType.ROOM_DEFAULT)
         and (Game():GetLevel():GetStartingRoomIndex() ~= rooms:Get(i).GridIndex)
-        and (room.Shape == RoomShape.ROOMSHAPE_1x1) then
+        and (room.Shape == RoomShape.ROOMSHAPE_1x1)
+        then
           table.insert(roomCandidates, rooms:Get(i))
         end
         
@@ -531,6 +532,19 @@ mechanics.TwitchRoom = {
   
   _createTwitchRoom = function (firstVisit)
     
+    for _, entity in ipairs(Isaac.GetRoomEntities()) do
+      
+      -- Disable if this is boss room
+      if (entity.Type == EntityType.ENTITY_MOM or entity.Type == EntityType.ENTITY_MOMS_HEART) then
+        IOTR.Storage.Special.twitchRoomId = nil
+        return
+      end
+      
+      if (entity.Type > 8 and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
+        entity:Remove()
+      end
+    end
+    
     local room = Game():GetRoom()
     local g = Game()
     
@@ -541,12 +555,6 @@ mechanics.TwitchRoom = {
         if type ~= GridEntityType.GRID_DOOR and type ~= GridEntityType.GRID_WALL then
           room:RemoveGridEntity(index, 0, false)
         end
-      end
-    end
-    
-    for _, entity in ipairs(Isaac.GetRoomEntities()) do
-      if (entity.Type > 8 and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
-        entity:Remove()
       end
     end
     
