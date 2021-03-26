@@ -103,7 +103,7 @@ events.EV_Hell = {
       local max = room:GetBottomRightPos()
       local posv = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
       pos = room:FindFreeTilePosition(posv, 0.5)
-      if (player.Position:Distance(posv) >= 65) then
+      if (player.Position:Distance(posv) >= 100) then
         Isaac.GridSpawn(GridEntityType.GRID_FIREPLACE , math.random(2), pos, false)
       end
     end
@@ -133,7 +133,7 @@ events.EV_Spiky = {
       local max = room:GetBottomRightPos()
       local posv = Vector(math.random(math.floor(max.X-10)), math.random(math.floor(max.Y-10)))
       pos = room:FindFreeTilePosition(posv, 0.5)
-      if (player.Position:Distance(posv) >= 65) then
+      if (player.Position:Distance(posv) >= 100) then
         Isaac.GridSpawn(GridEntityType.GRID_SPIKES_ONOFF, math.random(2), pos, false)
       end
     end
@@ -270,7 +270,7 @@ events.EV_DevilRage = {
     
     for i = 1, math.random(3,7) do
         local pos = room:GetRandomPosition(1)
-        if (pos:Distance(player.Position) > 60) then
+        if (pos:Distance(player.Position) > 100) then
           Game():SpawnParticles(pos, EffectVariant.CRACK_THE_SKY, 3, math.random(), Color(1, 0, 0, 1, 50, 0, 0), math.random())
           Game():SpawnParticles(pos, EffectVariant.LARGE_BLOOD_EXPLOSION, 1, math.random(), Color(1, 0, 0, 1, 50, 0, 0), math.random())
         end
@@ -307,7 +307,7 @@ events.EV_RainbowRain = {
       local max = room:GetBottomRightPos()
       local pos = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
       pos = room:FindFreeTilePosition(pos, 0.5)
-      if (pos:Distance(player.Position) > 40) then
+      if (pos:Distance(player.Position) > 100) then
         Game():SpawnParticles(pos, EffectVariant.CRACK_THE_SKY, 1, math.random(), IOTR.Enums.TintedRainbow[math.random(#IOTR.Enums.Rainbow)], math.random())
         Game():SpawnParticles(pos, EffectVariant.PLAYER_CREEP_HOLYWATER, 1, 0, IOTR.Enums.TintedRainbow[math.random(#IOTR.Enums.Rainbow)], 0)
       end
@@ -607,7 +607,7 @@ events.EV_Supernova  = {
       player:AddHearts((-player:GetHearts())+1)
       player:AddSoulHearts(-player:GetSoulHearts())
     else
-      player:AddSoulHearts(-player:GetSoulHearts() + 1)
+      player:AddSoulHearts(-player:GetSoulHearts() + 4)
     end
     
   end
@@ -967,7 +967,7 @@ events.EV_Toxic = {
     
     for i = 0, math.random(2,4) do
       local pos = room:GetRandomPosition(2)
-      if (p.Position:Distance(pos) >= 65) then
+      if (p.Position:Distance(pos) >= 100) then
         Game():SpawnParticles(pos, EffectVariant.DARK_BALL_SMOKE_PARTICLE, 10, 0, IOTR.Enums.Rainbow[4], 0)
         Game():SpawnParticles(pos, EffectVariant.FART, 1, 0, IOTR.Enums.Rainbow[4], 0)
         Game():Spawn(IOTR.Enums.Buddies[4], 0, pos, Vector(0,0), p, 0, 0)
@@ -976,7 +976,7 @@ events.EV_Toxic = {
     
     for i = 0, math.random(5,10) do
       local pos = room:GetRandomPosition(2)
-      if (p.Position:Distance(pos) >= 65) then
+      if (p.Position:Distance(pos) >= 100) then
         Game():SpawnParticles(pos, EffectVariant.CREEP_GREEN, 1, 0, IOTR.Enums.Rainbow[4], 0)
       end
     end
@@ -1738,7 +1738,7 @@ events.EV_ShadowClones = {
   
   onEntityUpdate = function (entity)
     
-    if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy() and not entity:IsBoss() and entity.HitPoints > 1 and math.random(0,25) == 0 and Isaac.GetFrameCount() % 30 == 0) then
+    if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy() and not entity:IsBoss() and entity.HitPoints > 1 and math.random(0,20) == 0 and Isaac.GetFrameCount() % 15 == 0) then
       IOTR.Sounds.play(IOTR.Sounds.list.shadowClones)
       for i = 0, math.random(1,3) do
         local clone = Isaac.Spawn(entity.Type, entity.Variant, entity.SubType, entity.Position:__add(Vector(math.random(-30,30),math.random(-30,30))), Vector(0,0), entity)
@@ -1982,7 +1982,7 @@ events.EV_FloorIsLava = {
     local max = room:GetBottomRightPos()
     local posv = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
     pos = room:FindFreeTilePosition(posv, 0.5)
-    if (p.Position:Distance(posv) >= 65) then
+    if (p.Position:Distance(posv) >= 100) then
       Game():SpawnParticles(pos, EffectVariant.CREEP_RED, 1, 0, Color(1,1,1,1,255,128,0), 0)
       Game():SpawnParticles(pos, EffectVariant.PLAYER_CREEP_RED, 1, 0, Color(1,1,1,1,255,128,0), 0)
     end
