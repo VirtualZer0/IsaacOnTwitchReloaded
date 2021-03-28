@@ -27,6 +27,7 @@ sounds.list.machineGunShot = Isaac.GetSoundIdByName ("MachgineGunShot")
 sounds.list.radioactive = Isaac.GetSoundIdByName ("Radioactive")
 sounds.list.shadowClones = Isaac.GetSoundIdByName ("ShadowClonesSpawn")
 sounds.list.isaacOfIsaac = Isaac.GetSoundIdByName ("IsaacOfIsaac")
+sounds.list.blueScreen = Isaac.GetSoundIdByName ("BlueScreen")
 
 sounds.list.nomNomEating = Isaac.GetSoundIdByName ("NomNomEating")
 

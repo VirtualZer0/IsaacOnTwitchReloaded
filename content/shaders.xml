@@ -699,5 +699,87 @@
         ]]>
       </fragment>
     </shader>
+    
+    
+      <!------------------------------------------ One color shader ------------------------------------------>
+  <shader name="IOTR_OneColor">
+        <parameters>
+          <param name="Intensity" type="float"/>
+          <param name="EnabledColor" type="float"/>
+        </parameters>
+        <vertex>
+        <![CDATA[
+            attribute vec3 Position;                                        
+            attribute vec4 Color;                                           
+            attribute vec2 TexCoord;                                        
+            attribute vec4 RenderData;                                                                  
+            attribute float Scale;
+            varying float ScaleOut;
+            varying vec4 Color0;                                            
+            varying vec2 TexCoord0;
+            uniform mat4 Transform;
+            varying vec3 PositionOut;
+            varying vec4 RenderDataOut;
+            
+            attribute float EnabledColor;
+            attribute float Intensity;
+            varying float EnabledColorOut;
+            varying float IntensityOut;
+            
+            void main(void)                                             
+            {                                                               
+                RenderDataOut = RenderData;
+                PositionOut = Position;
+                ScaleOut = Scale;
+                Color0 = Color;                                             
+                TexCoord0 = TexCoord;
+                gl_Position = Transform * vec4(Position.xyz, 1.0);   
+                
+                EnabledColorOut = EnabledColor;
+                IntensityOut = Intensity;
+            }
+        ]]>
+        </vertex>
+        <fragment>
+        <![CDATA[
+            varying lowp vec4 Color0;
+            varying mediump vec2 TexCoord0;
+            uniform sampler2D Texture0;
+            varying lowp vec4 RenderDataOut;
+            varying lowp float ScaleOut;
+            varying lowp vec3 PositionOut;
+            
+            varying lowp float EnabledColorOut;
+            varying lowp float IntensityOut;
+            void main(void)
+            {
+              vec4 color = Color0 * texture2D(Texture0, TexCoord0);
+              
+              if (EnabledColorOut >= .1 && color.r > .8 && color.g > .8 && color.b > .8) {
+                
+                
+                
+              }
+              else if (EnabledColorOut >= 1 && EnabledColorOut < 2) {
+                color.g = color.r - IntensityOut;
+                color.b = color.g - IntensityOut;
+                color.r *= 4;
+              }
+              else if (EnabledColorOut >= 2 && EnabledColorOut < 3) {
+                color.r = color.r - IntensityOut;
+                color.b = color.g - IntensityOut;
+                color.g *= 4;
+              }
+              else if (EnabledColorOut >= 3 && EnabledColorOut < 4) {
+                color.r = color.r - IntensityOut;
+                color.g = color.g - IntensityOut;
+                color.b *= 4;
+              }
+              
+              gl_FragColor = color;
+            }
+        ]]>
+      </fragment>
+    </shader>
 
 </shaders>

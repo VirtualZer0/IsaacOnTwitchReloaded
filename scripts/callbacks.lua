@@ -251,7 +251,7 @@ function callbacks:evaluateCache (player, cacheFlag)
   
   if (IOTR._.hasbit(cacheFlag, CacheFlag.CACHE_FAMILIARS)) then
     for _, item in pairs(IOTR.Items.Passive) do
-      if (item.famId ~= nil) then
+      if (item ~= nil and item.famId ~= nil) then
         player:CheckFamiliar(item.famId, player:GetCollectibleNum(item.id), player:GetCollectibleRNG(item.id))        
       end
     end

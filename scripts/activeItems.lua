@@ -39,6 +39,15 @@ activeItems.TwitchRaid = {
       followers[i] = Isaac.Spawn(IOTR.Enums.Buddies[math.random(#IOTR.Enums.Buddies)], 0,  0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true), Vector(0, 0), Isaac.GetPlayer(0))
       followers[i]:AddCharmed(-1)
       followers[i]:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+      
+      local color = IOTR.Enums.ChatColors[math.random(#IOTR.Enums.ChatColors)]
+      followers[i]:SetColor(color, 0, 0, false, false)
+      
+      if #IOTR.GameState.randomNames > 0 then
+        local textId = 'buddy'..math.random(0,9999)
+        IOTR.Text.add(textId, table.remove(IOTR.GameState.randomNames, math.random(#IOTR.GameState.randomNames)), nil, {r=color.R, g=color.G,b=color.B,a=1})
+        IOTR.Text.follow(textId, followers[i])
+      end
     end
     
   end,

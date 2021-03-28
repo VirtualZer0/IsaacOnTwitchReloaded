@@ -435,7 +435,7 @@ events.EV_AttackOnTitan = {
   
   onEntityUpdate = function (entity)
     
-    if (entity:IsActiveEnemy() and entity:IsVulnerablyEnemy() and entity:ToNPC().Scale ~= 2.5) then
+    if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy() and entity:ToNPC().Scale ~= 2.5) then
       entity:ToNPC().Scale = 2.5
       entity:ToNPC().MaxHitPoints = entity:ToNPC().MaxHitPoints*5
       entity:ToNPC().HitPoints = entity:ToNPC().HitPoints*5
@@ -448,7 +448,7 @@ events.EV_AttackOnTitan = {
     local e = Isaac.GetRoomEntities()
     
     for k, v in pairs(e) do
-      if (v:IsActiveEnemy() and v:IsVulnerablyEnemy() and v:ToNPC().Scale >= 2.5) then
+      if (v:IsActiveEnemy() and v:IsVulnerableEnemy() and v:ToNPC().Scale >= 2.5) then
         v:ToNPC().Scale = 1
         v:ToNPC().MaxHitPoints = v:ToNPC().MaxHitPoints/5
         v:ToNPC().HitPoints = v:ToNPC().HitPoints/5
@@ -1367,7 +1367,7 @@ events.EV_Radioactive = {
 events.EV_Rerun = {
   
   name = "Rerun",
-  weights = {0,.3,1},
+  weights = {0,.2,1},
   good = true,
   duration = 10*30,
   
@@ -1751,7 +1751,7 @@ events.EV_ShadowClones = {
   
 }
 
--- IsaacOfIsaac
+-- Isaac Of Isaac
 events.EV_IsaacOfIsaac = {
   
   name = "IsaacOfIsaac",
@@ -1777,10 +1777,11 @@ events.EV_IsaacOfIsaac = {
           and entities[i].Type ~= EntityType.ULCER
           and entities[i].Type ~= EntityType.ENTITY_MOBILE_HOST
           and entities[i].Type ~= EntityType.ENTITY_MOMS_HAND
-          and entities[i].Type ~= EntityType.ENTITY_WIZOOB
+          and entities[i].Type ~= EntityType.ENTITY_ROUND_WORM
+          and entities[i].Type ~= EntityType.ENTITY_NIGHT_CRAWLER
         ) then
         local sprite = entities[i]:GetSprite()
-        sprite:Load("gfx/001.000_player.anm2", true)
+        sprite:Load("gfx/mod.twitch_isaac.anm2", true)
         sprite:Play("Appear", true)
       end
     end
@@ -1892,7 +1893,7 @@ events.EV_ParasiticInfection = {
 events.EV_IAmLost = {
   
   name = "IAmLost",
-  weights = {0,.6,1},
+  weights = {0,.5,1},
   good = false,
   
   duration = 30*30,
@@ -2056,7 +2057,7 @@ events.EV_Matrix = {
 events.EV_Danger = {
   
   name = "Danger",
-  weights = {1,1,1},
+  weights = {.8,1,1},
   good = true,
 
   byTime = false,
@@ -2439,7 +2440,7 @@ events.EV_FiveSpaces = {
 events.EV_Bossfight = {
   
   name = "Bossfight",
-  weights = {.9,1,1},
+  weights = {.8,1,1},
   good = false,
   
   onStart = function ()
@@ -2780,6 +2781,86 @@ events.EV_YouBelongToUs = {
       c = "toggleMovePlayer",
       d = {enable = false}
     })
+  end
+  
+  
+}
+
+-- Blue screen
+events.EV_BlueScreen = {
+  
+  name = "BlueScreen",
+  weights = {.9,1,1},
+  good = false,
+  
+  duration = 45*30,
+  
+  currentText = {},
+  
+  onRoomChange = function ()
+    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_D6, false, false, false, false)
+    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_D10, false, false, false, false)
+    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_D12, false, false, false, false)
+    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_D20, false, false, false, false)
+  end,
+  
+  onUpdate = function ()
+    
+    if (Game():GetFrameCount() % 15 ~= 0) then return end
+    
+    if (#IOTR.Events.EV_BlueScreen.currentText == 0) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "A problem has been detected and Isaac has been shut down")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 2) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "The problem seems to be caused by the following file: Isaac.exe")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 4) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "ISAAC_MOD_API_IS_A_BIG_SHIT")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 6) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "If this is the first time you've seen this stop error screen, kill yourself")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "If this screen appears again, follow these steps:")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 9) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "1. Delete your game")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 11) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "2. DelEte your gAme")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 13) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "3. DEl3t3 y0ur g4m3")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 15) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "4. Dd EElefle te 444 Gaam33")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 17) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "Technical Information:")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 19) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "*** STOP: 0x1000007e (0xffffffffc0000005, 0xfffff80002e55151, 0xfffff880009a99d8)")
+    elseif (#IOTR.Events.EV_BlueScreen.currentText == 20) then
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "*** Isaac.exe - Address 0xfffff80002e55151 base at Edmund0x4ce7951a")
+    else
+      IOTR.Events.EV_BlueScreen.currentText = {}
+    end
+    
+    IOTR.Text.add("blueScreen", IOTR.Events.EV_BlueScreen.currentText, Vector(45,10), nil, 1, nil, nil)
+    
+  end,
+  
+  onStart = function ()
+    IOTR.Events.EV_BlueScreen.currentText = {}
+    IOTR.Shaders.IOTR_OneColor.enabled = true
+    IOTR.Shaders.IOTR_OneColor.params = {
+      Intensity = 1,
+      EnabledColor = 3
+    }
+    IOTR.Sounds.play(IOTR.Sounds.list.blueScreen)
+  end,
+  
+  onEnd = function ()
+    IOTR.Shaders.IOTR_OneColor.enabled = false
+    IOTR.Text.remove("blueScreen")
   end
   
   

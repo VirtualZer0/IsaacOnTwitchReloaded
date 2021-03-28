@@ -220,6 +220,26 @@ local shaders = {
     end
   },
 
+  IOTR_OneColor = {
+    enabled = false,
+    
+    params = {
+      EnabledColor = 0,
+      Intensity = 0
+    },
+    
+    pass = function ()
+      if (IOTR.Shaders.IOTR_OneColor.enabled) then
+        return IOTR.Shaders.IOTR_OneColor.params
+      else
+        return {
+          EnabledColor = 0,
+          Intensity = 0
+        }
+      end
+    end
+  }
+
 }
 
 return shaders

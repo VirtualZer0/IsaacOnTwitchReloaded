@@ -541,7 +541,7 @@ IOTR.Server:setHandler("pocketsAction", function (req)
   local p = Isaac.GetPlayer(0)
   
   if (
-      type(req.value) == "string" and req.value == "none"
+      type(req.value) == "string" and (req.value == "none" or req.value == "half")
     )
     or (
       type(req.value) == "number" and (
@@ -561,14 +561,17 @@ IOTR.Server:setHandler("pocketsAction", function (req)
     
   elseif req.pickupType == "Keys" then
     if (type(req.value) == "string" and req.value == "gold") then p:AddGoldenKey()
+    elseif (type(req.value) == "string" and req.value == "half") then p:AddKeys(math.floor(p:GetNumKeys()/-2))
     else p:AddKeys(req.value) end
   
   elseif req.pickupType == "Bombs" then
     if (type(req.value) == "string" and req.value == "gold") then p:AddGoldenBomb()
+    elseif (type(req.value) == "string" and req.value == "half") then p:AddBombs(math.floor(p:GetNumBombs()/-2))
     else p:AddBombs(req.value) end
   
   elseif req.pickupType == "Coins" then
-    p:AddCoins(req.value)
+    if (type(req.value) == "string" and req.value == "half") then p:AddCoins(math.floor(p:GetNumCoins()/-2))
+    else p:AddCoins(req.value) end
   end
   
 end)
@@ -889,6 +892,19 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG,
     end
     
     return res
+  end
+)
+
+-- onNPCInit Callback
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NPC_INIT, 
+  function (obj, e)
+    for key,value in pairs(IOTR.DynamicCallbacks.onNPCInit) do
+      value(e)
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onNPCInit ~= nil then value.onNPCInit(e) end
+    end
   end
 )
 

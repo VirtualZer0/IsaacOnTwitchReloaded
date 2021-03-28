@@ -373,7 +373,7 @@ passiveItems.PI_StinkyCheese = {
   name = "Stinky Cheese",
   
   description = {
-    en = "Can poison the enemy when touched",
+    en = "Can poison enemy when touched",
     ru = "Может отравить врага при прикосновении"
   },
   
@@ -403,6 +403,7 @@ passiveItems.PI_StinkyCheese = {
   end,
 }
 
+-- Bleed purple
 passiveItems.PI_BleedPurple = {
   
   id = Isaac.GetItemIdByName("Bleed Purple"),
@@ -425,6 +426,97 @@ passiveItems.PI_BleedPurple = {
     tear:SetColor(IOTR.Enums.Rainbow[7], 0, 0, false, false)
     
   end,
+}
+
+-- Old Pog Champ
+passiveItems.PI_PogChamp = {
+  
+  id = Isaac.GetItemIdByName("P?gC???p"),
+  name = "P?gC???p",
+  
+  description = {
+    en = "Enemy can lose half of their HP with a 66% chance#Enemy can double their HP with a 33% chance",
+    ru = "Враг может потерять половину своего здоровья с шансом 66%#Враг может удвоить свое здоровье с шансом 33%"
+  },
+  
+  count = 0,
+  
+  onNPCInit = function (npc)
+    
+    if not npc:IsActiveEnemy(false) or not npc:IsVulnerableEnemy() then return end
+    
+    if math.random(1,3) == 1 then
+      
+      npc.MaxHitPoints = npc.MaxHitPoints * 2
+      npc.HitPoints = npc.HitPoints * 2
+      
+    else
+      npc.HitPoints = npc.HitPoints / 2
+    end
+    
+  end,
+}
+
+-- Glitch Lit
+passiveItems.PI_GlitchLit = {
+  
+  id = Isaac.GetItemIdByName("Glitch Lit"),
+  name = "Glitch Lit",
+  
+  description = {
+    en = "Being near a fireplace will increase your stats#You don't take damage from fireplaces",
+    ru = "Нахождение рядом с кострами увеличт ваши статы#Вы не получаете урон от костров"
+  },
+  
+  count = 0,
+  
+  _getFireplaceBonus = false,
+  
+  onUpdate = function ()
+    
+    local p = Isaac.GetPlayer(0)
+    local enemies = Isaac.FindInRadius(p.Position, 70, EntityPartition.ENEMY)
+    local fireFounded = false
+    
+    
+    for _, enemy in pairs(enemies) do
+      if enemy.Type == EntityType.ENTITY_FIREPLACE then
+        fireFounded = true
+        
+        if (enemy.Variant == 0) then
+          Game():SpawnParticles(enemy.Position + RandomVector()*30, EffectVariant.ULTRA_GREED_BLING, 1, 0, IOTR.Enums.Rainbow[2], 0)
+        elseif (enemy.Variant == 1) then
+          Game():SpawnParticles(enemy.Position + RandomVector()*30, EffectVariant.ULTRA_GREED_BLING, 1, 0, IOTR.Enums.Rainbow[1], 0)
+        elseif (enemy.Variant == 2) then
+          Game():SpawnParticles(enemy.Position + RandomVector()*30, EffectVariant.ULTRA_GREED_BLING, 1, 0, IOTR.Enums.Rainbow[5], 0)
+        elseif (enemy.Variant == 3) then
+          Game():SpawnParticles(enemy.Position + RandomVector()*30, EffectVariant.ULTRA_GREED_BLING, 1, 0, IOTR.Enums.Rainbow[7], 0)
+        end
+        
+      end
+    end
+    
+    if not IOTR.Items.Passive.PI_GlitchLit._getFireplaceBonus and fireFounded then
+      IOTR.Items.Passive.PI_GlitchLit._getFireplaceBonus = true
+      IOTR.Storage.Stats.speed = IOTR.Storage.Stats.speed + .2
+      IOTR.Storage.Stats.damage = IOTR.Storage.Stats.damage + 2
+      IOTR.Storage.Stats.tears = IOTR.Storage.Stats.tears + 1
+      p:AddCacheFlags(CacheFlag.CACHE_ALL)
+      p:EvaluateItems()
+    elseif IOTR.Items.Passive.PI_GlitchLit._getFireplaceBonus and not fireFounded then
+      IOTR.Items.Passive.PI_GlitchLit._getFireplaceBonus = false
+      IOTR.Storage.Stats.speed = IOTR.Storage.Stats.speed - .2
+      IOTR.Storage.Stats.damage = IOTR.Storage.Stats.damage - 2
+      IOTR.Storage.Stats.tears = IOTR.Storage.Stats.tears - 1
+      p:AddCacheFlags(CacheFlag.CACHE_ALL)
+      p:EvaluateItems()
+    end
+    
+  end,
+  
+  onDamage = function (entity, damageAmnt, damageFlag, damageSource, damageCountdown)
+    return not (damageSource ~= nil and damageSource.Type ~= nil and damageSource.Type == EntityType.ENTITY_FIREPLACE)
+  end
 }
 
 return passiveItems

@@ -228,6 +228,9 @@ local en = {
   
   evYouBelongToUsName = "You belong to us!",
   evYouBelongToUsDesc = "Control player from the chat with commands left, right, up or down",
+  
+  evBlueScreenName = "BSOD",
+  evBlueScreenDesc = "Micronicalis cares about the quality of its product",
 }
 
 return en

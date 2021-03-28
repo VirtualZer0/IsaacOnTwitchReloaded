@@ -23,7 +23,7 @@ Find special Twitch rooms in the runs - there will be something completely new w
 
 [h1]How to play[/h1]
 [olist]
-[*]Before starting the game, make sure you have --luadebug flag in the game's startup parameters. IT IS IMPORTANT! [*]If you do not do this, the mod will not start ([url=https://isaacontwitch.com/#/luadebug] Instruction [/url])
+[*]Before starting the game, make sure you have --luadebug flag in the game's startup parameters. IT IS IMPORTANT! If you do not do this, the mod will not start ([url=https://isaacontwitch.com/#/luadebug] Instruction [/url])
 [*]Run the game and start the run
 [*]Go to https://isaacontwitch.com and click the &quot;Start&quot; button
 [*]Enter the name of the channel for Twitch and/or a link to the stream for YouTube, set the desired mod settings
@@ -33,14 +33,14 @@ Find special Twitch rooms in the runs - there will be something completely new w
 [hr][/hr]
 
 Found a bug? Report it here:
-[url=https://github.com/VirtualZer0/IsaacOnTwitchReloaded/issues/new/choose]Report bug [/url]
+[url=https://github.com/VirtualZer0/IsaacOnTwitchReloaded/issues/new/choose] Report bug [/url]
 
 Any questions? Visit the mod's discord server:
 [url=https://discord.gg/Qv6BKJXWBA] Isaac On Twitch Discord [/url]
 
 The mod's website:
 https://isaacontwitch.com/</description>
-    <version>1.0.4</version>
+    <version>1.1.0</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
     <tag id="Items"/>

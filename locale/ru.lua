@@ -228,6 +228,9 @@ local ru = {
   
   evYouBelongToUsName = "Ты принадлежишь нам!",
   evYouBelongToUsDesc = "Управляйте игроком из чата командами влево, вправо, вверх или вниз",
+  
+  evBlueScreenName = "Синий экран",
+  evBlueScreenDesc = "Компания Micronicalis заботится о качестве своего продукта",
 }
 
 return ru

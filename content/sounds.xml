@@ -75,6 +75,10 @@
 		<sample weight="1" path="events/isaacofisaac/start.wav" />
 	</sound>
   
+  <sound name="BlueScreen">
+		<sample weight="1" path="events/bluescreen/glitches.wav" />
+	</sound>
+  
   <sound name="NomNomEating">
 		<sample weight="1" path="items/nomnom/eating.wav" />
 	</sound>

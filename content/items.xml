@@ -10,11 +10,13 @@
   <passive description="Control the enemy" gfx="Collectibles_BrainSlug.png" name="Brain Slug" />
   <passive description="Explosive!" gfx="Collectibles_SSSsss.png" name="SSSsss" />
   <passive description="Purple blood in your venus" gfx="Collectibles_BleedPurple.png" name="Bleed Purple" />
+  <passive description="Something long forgotten" gfx="Collectibles_PogChamp.png" name="P?gC???p" />
+  <passive description="Help you with fire" gfx="Collectibles_GlitchLit.png" name="Glitch Lit" />
   
-  <active maxcharges="12" description="Fire in the hole!" gfx="Collectibles_TwitchRaid.png" name="Twitch Raid" />
+  <active maxcharges="6" description="Fire in the hole!" gfx="Collectibles_TwitchRaid.png" name="Twitch Raid" />
   <active maxcharges="1" description="Take a pic" gfx="Collectibles_TTours.png" name="TTours" />
   <active maxcharges="0" description="Decline it" gfx="Collectibles_VoteNay.png" name="Vote Nay" />
-  <active maxcharges="6" description="Accept it" gfx="Collectibles_VoteYea.png" name="Vote Yea" />
+  <active maxcharges="12" description="Accept it" gfx="Collectibles_VoteYea.png" name="Vote Yea" />
   <active maxcharges="6" description="Bring the apocalypse!" gfx="Collectibles_RipPepperonis.png" name="Rip Pepperonis" />
   <active maxcharges="2" description="Picnic did not go according to plan" gfx="Collectibles_PanicBasket.png" name="Panic Basket" />
   

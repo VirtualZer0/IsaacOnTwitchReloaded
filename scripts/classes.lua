@@ -115,6 +115,7 @@ function classes.DynamicCallbacks:new ()
     onTearInit = {},
     onProjectileUpdate = {},
     onDamage = {},
+    onNPCInit = {},
     onNPCDeath = {},
     onStageChange = {},
     onPickupCollision = {},

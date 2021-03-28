@@ -345,6 +345,72 @@ helper.spawnOpenSite = function ()
   
 end
 
+-- Screen positioning
+helper.getScreenCenter = function ()
+  
+  local room = Game():GetRoom()
+  local centerOffset = (room:GetCenterPos()) - room:GetTopLeftPos()
+  local pos = room:GetCenterPos()
+  if centerOffset.X > 260 then
+    pos.X = pos.X - 260
+  end
+  if centerOffset.Y > 140 then
+    pos.Y = pos.Y - 140
+  end
+  return Isaac.WorldToRenderPosition(pos, false)
+  
+end
+
+helper.getScreenBottomRight = function (offset)
+  
+  local pos = helper.getScreenCenter * 2
+		
+  if offset then
+    local hudOffset = Vector(-offset * 1.6, -offset * 0.6)
+    pos = pos + hudOffset
+  end
+
+  return pos
+  
+end
+
+helper.getScreenBottomLeft = function (offset)
+  
+  local pos = Vector(0, helper.getScreenBottomRight().Y)
+		
+  if offset then
+    local hudOffset = Vector(offset * 2.2, -offset * 1.6)
+    pos = pos + hudOffset
+  end
+  
+  return pos
+  
+end
+
+helper.getScreenBottomRight = function (offset)
+  
+  local pos = Vector(piber20HelperMod:getScreenBottomRight().X, 0)
+		
+  if offset then
+    local hudOffset = Vector(-offset * 2.2, offset * 1.2)
+    pos = pos + hudOffset
+  end
+
+  return pos
+  
+end
+
+helper.getScreenTopLeft = function (offset)
+  local pos = Vector(0, 0)
+  
+  if offset then
+    local hudOffset = Vector(offset * 2, offset * 1.2)
+    pos = pos + hudOffset
+  end
+  
+  return pos
+end
+
 -- Check if Russian font available
 helper.checkRussianFont = function ()
   if (Isaac.GetTextWidth("¨") ~= 5) then
