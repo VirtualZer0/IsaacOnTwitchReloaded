@@ -124,7 +124,7 @@ function classes.DynamicCallbacks:new ()
     onFamiliarUpdate = {},
     
     bind = function (from, key)
-      Isaac.ConsoleOutput("IOTR: Added new dynamic callbacks for "..key.."\n")
+      IOTR.Cmd.send("IOTR: Added new dynamic callbacks for "..key.."\n")
       
       for callbackName, callbackValue in pairs(IOTR.DynamicCallbacks) do
         if (type(callbackValue) ~= "function") then
@@ -136,7 +136,7 @@ function classes.DynamicCallbacks:new ()
     end,
     
     unbind = function (from, key)
-      Isaac.ConsoleOutput("IOTR: Remove dynamic callbacks for "..key.."\n")
+      IOTR.Cmd.send("IOTR: Remove dynamic callbacks for "..key.."\n")
       
       for callbackName, callbackValue in pairs(IOTR.DynamicCallbacks) do
         if (type(callbackValue) ~= "function") then

@@ -2556,7 +2556,7 @@ events.EV_FliesAndFlies = {
   
   onProjectileUpdate = function (entity)
     
-    if (entity.FrameCount > 15 and Isaac.CountEntities(EntityType.ENTITY_ATTACKFLY, 0, 0) < 35) then
+    if (entity.FrameCount > 15 and Isaac.CountEntities(entity, EntityType.ENTITY_ATTACKFLY, 0, 0) < 35) then
       local fly = Isaac.Spawn(EntityType.ENTITY_ATTACKFLY, 0, 0, entity.Position, entity.Velocity, entity):ToNPC()
       fly:SetColor(entity:GetColor(), 0, 0, false, false)
       fly.HitPoints = .2

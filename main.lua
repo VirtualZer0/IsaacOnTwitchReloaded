@@ -124,7 +124,6 @@ IOTR.Timers = {
 ----------- Text Rendering ---------------
 
 IOTR.Text = {
-  
   Storage = {},       -- Current texts for render
   FollowStorage = {}, -- Entities for binding text position
   
@@ -952,11 +951,12 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION,
 )
 
 -- onFamiliarInit Callback
+
 IOTR.Mod:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, 
   function (obj, familiar)
     
     for key,value in pairs(IOTR.Items.Passive) do
-      if (value.famFollowPlayer ~= nil and value.famFollowPlayer == true) then
+      if (value.famFollowPlayer ~= nil and value.famFollowPlayer == true and value.famId == familiar.Variant) then
         familiar:AddToFollowers()
       end
     end
