@@ -288,7 +288,7 @@ trinkets.T_InvertedCross = {
   hold = false,
   
   onDamage = function (entity, damageAmnt, damageFlag, damageSource, damageCountdown)
-    if (entity.Type ~= EntityType.ENTITY_PLAYER) and math.random(5) ~= 5 then return end
+    if (entity.Type ~= EntityType.ENTITY_PLAYER) or math.random(5) ~= 5 then return end
     
     local p = entity:ToPlayer()
     local flames = {}

@@ -532,6 +532,10 @@ mechanics.TwitchRoom = {
   
   _createTwitchRoom = function (firstVisit)
     
+    local room = Game():GetRoom()
+    
+    if room:GetType() ~= RoomType.ROOM_DEFAULT then return end
+    
     for _, entity in ipairs(Isaac.GetRoomEntities()) do
       
       -- Disable if this is boss room
@@ -540,12 +544,11 @@ mechanics.TwitchRoom = {
         return
       end
       
-      if (entity.Type > 8 and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
+      if ((entity.Type > 8 or entity.Type == 3) and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
         entity:Remove()
       end
     end
     
-    local room = Game():GetRoom()
     local g = Game()
     
     for index = 1, room:GetGridSize() do

@@ -24,6 +24,13 @@
 	<sound name="Rain">
 		<sample weight="1" path="events/heavyrain/rain.wav" />
 	</sound>
+  
+  <sound name="Jason">
+		<sample weight="1" path="events/heavyrain/jason1.wav" />
+    <sample weight="1" path="events/heavyrain/jason2.wav" />
+    <sample weight="1" path="events/heavyrain/jason3.wav" />
+    <sample weight="1" path="events/heavyrain/jason4.wav" />
+	</sound>
 	
 	<sound name="Rewind">
 		<sample weight="1" path="events/rewind/rewind.wav" />

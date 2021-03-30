@@ -630,14 +630,19 @@ IOTR.Server:setHandler("movePlayer", function (req)
   IOTR.Cmd.send(req)
     
   if req == "l" then
-    p:AddVelocity(Vector(-1,0))
+    if math.abs(p.Velocity.X) < 10 then p:AddVelocity(Vector(-2,0)) end
   elseif req == "r" then
-    p:AddVelocity(Vector(1,0))
+    if math.abs(p.Velocity.X) < 10 then p:AddVelocity(Vector(2,0)) end
   elseif req == "u" then
-    p:AddVelocity(Vector(0,-1))
+    if math.abs(p.Velocity.Y) < 10 then p:AddVelocity(Vector(0,-2)) end
   elseif req == "d" then
-    p:AddVelocity(Vector(0,1))
+    if math.abs(p.Velocity.Y) < 10 then p:AddVelocity(Vector(0,2)) end
   end
+end)
+
+-- Say Jason
+IOTR.Server:setHandler("jason", function (req) 
+  IOTR.Sounds.play(IOTR.Sounds.list.jason)
 end)
 
 -- Set tables for external item description mod

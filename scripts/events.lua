@@ -297,8 +297,11 @@ events.EV_RainbowRain = {
   name = "RainbowRain",
   weights = {1,1,1},
   good = true,
+  duration = 6,
+  byTime = false,
   
-  onStart = function ()
+  
+  onRoomChange = function ()
     
     local player = Isaac.GetPlayer(0)
     local room = Game():GetRoom()
@@ -473,7 +476,13 @@ events.EV_Diarrhea = {
     local p = Isaac.GetPlayer(0)
   
     if (Game():GetFrameCount() % 20 == 0) then
-      local f = Isaac.Spawn(EntityType.ENTITY_DIP, 0,  0, p.Position, Vector(math.random(-20, 20), math.random(-20, 20)), p)
+      local poopVar = math.random(1,4)
+      local f = nil
+      if (poopVar >= 2) then
+        f = Isaac.Spawn(EntityType.ENTITY_DIP, math.random(0,2),  0, p.Position, Vector(math.random(-20, 20), math.random(-20, 20)), p)
+      else
+        f = Isaac.Spawn(EntityType.ENTITY_SQUIRT, 0,  0, p.Position, Vector(math.random(-20, 20), math.random(-20, 20)), p)
+      end
       f:AddCharmed(-1)
       f:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
       SFXManager():Play(SoundEffect.SOUND_FART, 1, 0, false, 1)
@@ -604,10 +613,10 @@ events.EV_Supernova  = {
     end
     
     if (player:GetHearts() >= 1) then
-      player:AddHearts((-player:GetHearts())+1)
+      player:AddHearts((-player:GetHearts())+3)
       player:AddSoulHearts(-player:GetSoulHearts())
     else
-      player:AddSoulHearts(-player:GetSoulHearts() + 4)
+      player:AddSoulHearts(-player:GetSoulHearts() + 3)
     end
     
   end
@@ -903,7 +912,7 @@ events.EV_RussianHackers = {
     p:AddCoins(math.random(-3,2))
     p:AddKeys(math.random(-3,2))
     p:AddBombs(math.random(-3,2))
-    Game().TimeCounter = Game().TimeCounter + math.random(-20, 20)
+    Game().TimeCounter = Game().TimeCounter + math.random(-40, 40)
   end
   
 }
@@ -970,7 +979,10 @@ events.EV_Toxic = {
       if (p.Position:Distance(pos) >= 100) then
         Game():SpawnParticles(pos, EffectVariant.DARK_BALL_SMOKE_PARTICLE, 10, 0, IOTR.Enums.Rainbow[4], 0)
         Game():SpawnParticles(pos, EffectVariant.FART, 1, 0, IOTR.Enums.Rainbow[4], 0)
-        Game():Spawn(IOTR.Enums.Buddies[4], 0, pos, Vector(0,0), p, 0, 0)
+        local enemy = Game():Spawn(IOTR.Enums.Buddies[4], 0, pos, Vector(0,0), p, 0, 0):ToNPC()
+        if not enemy.Pathfinder:HasPathToPos(p.Position, false) then
+          enemy:Die()
+        end
       end
     end
     
@@ -1399,9 +1411,11 @@ events.EV_Rerun = {
     
     local stype = math.random(0,2);
     
-    if (stype == 0) then Isaac.ExecuteCommand ("stage 1") end
-    if (stype == 1) then Isaac.ExecuteCommand ("stage 1a") end
-    if (stype == 2) then Isaac.ExecuteCommand ("stage 1b") end
+    if (stype == 0) then Isaac.ExecuteCommand ("stage 1")
+    elseif (stype == 1) then Isaac.ExecuteCommand ("stage 1a")
+    else Isaac.ExecuteCommand ("stage 1b") end
+    
+    Game().TimeCounter = 0
   end
   
 }
@@ -1418,7 +1432,9 @@ events.EV_SwitchTheChannel = {
     
     if (Isaac.GetFrameCount() % 60 ~= 0) then return end
     
-    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_CLICKER, true, true, true, false)
+    local p = Isaac.GetPlayer(0)
+    
+    p:UseActiveItem(CollectibleType.COLLECTIBLE_CLICKER, true, true, true, false)
     
     local seeds = Game():GetSeeds()
     local seed = seeds:GetNextSeed()
@@ -1430,8 +1446,19 @@ events.EV_SwitchTheChannel = {
     
     if (Game():IsGreedMode()) then nl = math.random(1,7) else nl = math.random(1,12) end
     
+    p:AddCollectible(math.random(CollectibleType.NUM_COLLECTIBLES), 0, true);
+    Game().TimeCounter = math.random(0,999999)
+    
+    
     if (stype == 0) then Isaac.ExecuteCommand ("stage " .. nl) end
     if (stype == 1) then Isaac.ExecuteCommand ("stage " .. nl .. "a") end
+    
+    p:AddCoins(math.random(-10,10))
+    p:AddKeys(math.random(-10,10))
+    p:AddBombs(math.random(-10,10))
+    p:AddMaxHearts(math.random(-4,4))
+    p:AddHearts(math.random(-2,4))
+    p:AddSoulHearts(math.random(-3,3))
     
   end
   
@@ -1802,14 +1829,23 @@ events.EV_StaticElectricity = {
     local entities = Isaac.GetRoomEntities()
     local p = Isaac.GetPlayer(0)
     
-    entity1 = entities[math.random(#entities)]
+    for key, entity in pairs(entities) do
+      if not (entity:IsVulnerableEnemy() and entity:IsActiveEnemy(false)) then
+        entities[key] = nil
+      end
+    end
+    
+    if #entities < 2 then return end
+    
+    entity1 = table.remove(entities, math.random(#entities))    
     entity2 = entities[math.random(#entities)]
     
-    if (math.random(1,20) ~= 5 or entity1.Type == EntityType.ENTITY_PLAYER or entity2.Type == EntityType.ENTITY_PLAYER) then return end
+    if (not (entity1:IsVulnerableEnemy() and entity1:IsActiveEnemy(false)) or not (entity1:IsVulnerableEnemy() and entity1:IsActiveEnemy(false))) then return end
     
     local laser = EntityLaser.ShootAngle(2, entity1.Position, entity2.Position:__sub(entity1.Position):GetAngleDegrees(), 5, Vector(0,0), nil)
     laser.MaxDistance = entity2.Position:Distance(entity1.Position)
     laser:SetColor(Color(0.4,0.4,1,1,30,30,200), 0, 0, false, false)
+    laser.CollisionDamage = .1
   end
   
 }
@@ -2246,8 +2282,19 @@ events.EV_HeavyRain = {
   good = true,
   duration = 40*30,
   
+  onEnd = function ()
+    IOTR.Server.addOutput({
+      c = "toggleSpecialHandler",
+      d = {name = "heavyRain", enable = false}
+    })
+  end,
+  
   onStart = function ()
     IOTR.Sounds.play(IOTR.Sounds.list.heavyrain)
+    IOTR.Server.addOutput({
+      c = "toggleSpecialHandler",
+      d = {name = "heavyRain", enable = true}
+    })
   end,
   
   onUpdate = function ()
@@ -2769,17 +2816,16 @@ events.EV_YouBelongToUs = {
   duration = 40*30,
   
   onStart = function ()
-    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_BOOK_OF_SHADOWS, false, true, false, false)
     IOTR.Server.addOutput({
-      c = "toggleMovePlayer",
-      d = {enable = true}
+      c = "toggleSpecialHandler",
+      d = {name = "movePlayer", enable = true}
     })
   end,
   
   onEnd = function ()
     IOTR.Server.addOutput({
-      c = "toggleMovePlayer",
-      d = {enable = false}
+      c = "toggleSpecialHandler",
+      d = {name = "movePlayer", enable = false}
     })
   end
   
