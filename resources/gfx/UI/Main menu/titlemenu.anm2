@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="Unknown" CreatedOn="20.03.2021 22:03:27" Version="12" Fps="30"/>
+	<Info CreatedBy="Unknown" CreatedOn="07.04.2021 0:01:34" Version="13" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="titlemenu.png" Id="0"/>
@@ -10,6 +10,11 @@
 			<Layer Name="Drawing" Id="1" SpritesheetId="0"/>
 			<Layer Name="Logo" Id="2" SpritesheetId="0"/>
 			<Layer Name="Splash" Id="3" SpritesheetId="1"/>
+			<Layer Name="MoneyI" Id="4" SpritesheetId="0"/>
+			<Layer Name="MoneyII" Id="5" SpritesheetId="0"/>
+			<Layer Name="MoneyIII" Id="6" SpritesheetId="0"/>
+			<Layer Name="MoneyIV" Id="7" SpritesheetId="0"/>
+			<Layer Name="Box" Id="8" SpritesheetId="0"/>
 		</Layers>
 		<Nulls>
 			<Null Name="ButtonIcon" Id="0" ShowRect="false"/>
@@ -51,6 +56,21 @@
 					<Frame XPosition="230" YPosition="4" XPivot="230" YPivot="0" XCrop="0" YCrop="272" Width="480" Height="111" XScale="100" YScale="100" Delay="3" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="true"/>
 					<Frame XPosition="230" YPosition="4" XPivot="230" YPivot="0" XCrop="0" YCrop="272" Width="480" Height="111" XScale="100" YScale="100" Delay="3" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
 				</LayerAnimation>
+				<LayerAnimation LayerId="7" Visible="true">
+					<Frame XPosition="440" YPosition="227" XPivot="16" YPivot="16" XCrop="431" YCrop="476" Width="10" Height="19" XScale="100" YScale="100" Delay="2" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
+				</LayerAnimation>
+				<LayerAnimation LayerId="5" Visible="true">
+					<Frame XPosition="421" YPosition="228" XPivot="16" YPivot="16" XCrop="463" YCrop="474" Width="17" Height="22" XScale="100" YScale="100" Delay="2" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
+				</LayerAnimation>
+				<LayerAnimation LayerId="8" Visible="true">
+					<Frame XPosition="424" YPosition="243" XPivot="16" YPivot="16" XCrop="450" YCrop="503" Width="27" Height="25" XScale="100" YScale="100" Delay="40" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
+				</LayerAnimation>
+				<LayerAnimation LayerId="4" Visible="true">
+					<Frame XPosition="441" YPosition="235" XPivot="16" YPivot="16" XCrop="431" YCrop="506" Width="17" Height="22" XScale="100" YScale="100" Delay="2" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
+				</LayerAnimation>
+				<LayerAnimation LayerId="6" Visible="true">
+					<Frame XPosition="423" YPosition="239" XPivot="16" YPivot="16" XCrop="447" YCrop="476" Width="10" Height="20" XScale="100" YScale="100" Delay="5" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="255" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="true"/>
+				</LayerAnimation>
 			</LayerAnimations>
 			<NullAnimations>
 				<NullAnimation NullId="0" Visible="true">
@@ -73,6 +93,11 @@
 					<Frame XPosition="2" YPosition="-90" XPivot="16" YPivot="16" XCrop="0" YCrop="0" Width="512" Height="352" XScale="100" YScale="100" Delay="2" Visible="true" RedTint="255" GreenTint="255" BlueTint="255" AlphaTint="200" RedOffset="0" GreenOffset="0" BlueOffset="0" Rotation="0" Interpolated="false"/>
 				</LayerAnimation>
 				<LayerAnimation LayerId="2" Visible="true"/>
+				<LayerAnimation LayerId="7" Visible="true"/>
+				<LayerAnimation LayerId="5" Visible="true"/>
+				<LayerAnimation LayerId="8" Visible="true"/>
+				<LayerAnimation LayerId="4" Visible="true"/>
+				<LayerAnimation LayerId="6" Visible="true"/>
 			</LayerAnimations>
 			<NullAnimations>
 				<NullAnimation NullId="0" Visible="true"/>
