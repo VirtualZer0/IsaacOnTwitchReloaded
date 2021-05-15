@@ -38,13 +38,13 @@ enums.Rainbow = {
 }
 
 enums.TintedRainbow = {
-  Color(.858,.219,.219,1,219,56,56),
-  Color(.964,.384,.121,1,246,98,31),
-  Color(.996,.8,.184,1,254,204,47),
-  Color(0.596,.858,.301,1,152,219,77),
-  Color(.196,.709,.913,1,50,181,223),
-  Color(.254,.321,.828,1,65,82,212),
-  Color(.549,.27,.968,1,140,69,247)
+  Color(.858,.219,.219,1,.858,.219,.219),
+  Color(.964,.384,.121,1,.964,.384,.121),
+  Color(.996,.8,.184,1,.996,.8,.184),
+  Color(0.596,.858,.301,1,0.596,.858,.301),
+  Color(.196,.709,.913,1,.196,.709,.913),
+  Color(.254,.321,.828,1,.254,.321,.828),
+  Color(.549,.27,.968,1,.549,.27,.968)
 }
 
 
@@ -64,6 +64,30 @@ enums.ChatColors = {
   Color(0.541, 0.169, 0.886,1,0,0,0),
   Color(0,0.502,0,1,0,0,0),
   Color(0, 1, 0.498,1,0,0,0)
+}
+
+enums.StageTypes = {
+  StageType.STAGETYPE_ORIGINAL,
+  StageType.STAGETYPE_WOTL,
+  StageType.STAGETYPE_AFTERBIRTH,
+  StageType.STAGETYPE_REPENTANCE,
+  StageType.STAGETYPE_REPENTANCE_B,
+}
+
+enums.StageLevels = {
+  LevelStage.STAGE1_1,
+	LevelStage.STAGE1_2,
+	LevelStage.STAGE2_1,
+	LevelStage.STAGE2_2,
+	LevelStage.STAGE3_1,
+	LevelStage.STAGE3_2,
+	LevelStage.STAGE4_1,
+	LevelStage.STAGE4_2,
+	LevelStage.STAGE4_3,
+	LevelStage.STAGE5,
+	LevelStage.STAGE6,
+	LevelStage.STAGE7,
+	LevelStage.STAGE8
 }
 
 enums.Doors = {

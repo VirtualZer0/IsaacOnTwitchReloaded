@@ -259,9 +259,9 @@ IOTR.Pollframes = {
   
   render = function ()
     if not IOTR.Pollframes.enabled or not IOTR.GameState.renderSpecial then return end
-    IOTR.Sprites.UI.PollFrame1:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(12, 18), Vector(0,0), Vector(0,0))
-    IOTR.Sprites.UI.PollFrame2:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(102, 18), Vector(0,0), Vector(0,0))
-    IOTR.Sprites.UI.PollFrame3:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(192, 18), Vector(0,0), Vector(0,0))
+    IOTR.Sprites.UI.PollFrame1:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(12, 18), Vector.Zero, Vector.Zero)
+    IOTR.Sprites.UI.PollFrame2:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(102, 18), Vector.Zero, Vector.Zero)
+    IOTR.Sprites.UI.PollFrame3:Render(Vector(IOTR.Settings.textpos.l2.X, IOTR.Settings.textpos.l2.Y) + Vector(192, 18), Vector.Zero, Vector.Zero)
   end,
   
   replaceGfx = function ()
@@ -362,15 +362,15 @@ IOTR.ProgressBar = {
     -- Render progress bar background
     IOTR.Sprites.UI["ProgressBar"..IOTR.ProgressBar.Storage.barType]:Render(
       Vector(IOTR.GameState.screenSize.X/2 - 130, IOTR.Settings.textpos.l2.Y),
-      Vector(0,0),
-      Vector(0,0)
+      Vector.Zero,
+      Vector.Zero
     )
     
     
     -- Render progress bar line based on value
     IOTR.Sprites.UI.ProgressBarLine:Render(
       Vector(IOTR.GameState.screenSize.X/2 - 130, IOTR.Settings.textpos.l2.Y),
-      Vector(0,0),
+      Vector.Zero,
       Vector(IOTR.ProgressBar.Storage.cropX,0)
     )
     
@@ -606,7 +606,7 @@ IOTR.Server:setHandler("bitsAction", function (req)
   end
   
   for i = 1, req.amount do
-    Isaac.Spawn(EntityType.ENTITY_PICKUP, btype, 0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0,0), p)
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, btype, 0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector.Zero, p)
   end
   
   IOTR.Sounds.play(SoundEffect.SOUND_THUMBSUP)

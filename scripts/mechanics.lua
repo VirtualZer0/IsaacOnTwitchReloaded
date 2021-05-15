@@ -52,37 +52,37 @@ mechanics.Bits = {
   
     if (#IOTR.Storage.ActiveEvents > 0 and IOTR.GameState.renderSpecial) then
       IOTR.Sprites.UI.EventActive:Update()
-      IOTR.Sprites.UI.EventActive:Render(Vector(136 + 16*bitsuishift, 13), Vector(0,0), Vector(0,0))
+      IOTR.Sprites.UI.EventActive:Render(Vector(136 + 16*bitsuishift, 13), Vector.Zero, Vector.Zero)
       bitsuishift = bitsuishift + 1
     end
     
     if (IOTR.Storage.Bits.gray > 0 and IOTR.GameState.renderSpecial) then
       IOTR.Sprites.UI.GrayBitsActive:Update()
-      IOTR.Sprites.UI.GrayBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector(0,0), Vector(0,0))
+      IOTR.Sprites.UI.GrayBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector.Zero, Vector.Zero)
       bitsuishift = bitsuishift + 1
     end
     
     if (IOTR.Storage.Bits.purple > 0 and IOTR.GameState.renderSpecial) then
       IOTR.Sprites.UI.PurpleBitsActive:Update()
-      IOTR.Sprites.UI.PurpleBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector(0,0), Vector(0,0))
+      IOTR.Sprites.UI.PurpleBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector.Zero, Vector.Zero)
       bitsuishift = bitsuishift + 1
     end
     
     if (IOTR.Storage.Bits.green > 0 and IOTR.GameState.renderSpecial) then
       IOTR.Sprites.UI.GreenBitsActive:Update()
-      IOTR.Sprites.UI.GreenBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector(0,0), Vector(0,0))
+      IOTR.Sprites.UI.GreenBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector.Zero, Vector.Zero)
       bitsuishift = bitsuishift + 1
     end
     
     if (IOTR.Storage.Bits.blue > 0 and IOTR.GameState.renderSpecial) then
       IOTR.Sprites.UI.BlueBitsActive:Update()
-      IOTR.Sprites.UI.BlueBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector(0,0), Vector(0,0))
+      IOTR.Sprites.UI.BlueBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector.Zero, Vector.Zero)
       bitsuishift = bitsuishift + 1
     end
     
     if (IOTR.Storage.Bits.red > 0 and IOTR.GameState.renderSpecial) then
       IOTR.Sprites.UI.RedBitsActive:Update()
-      IOTR.Sprites.UI.RedBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector(0,0), Vector(0,0))
+      IOTR.Sprites.UI.RedBitsActive:Render(Vector(136 + 16*bitsuishift, 13), Vector.Zero, Vector.Zero)
       bitsuishift = bitsuishift + 1
     end
   end,
@@ -106,7 +106,7 @@ mechanics.Bits = {
       if (math.random(1,30) == 1) and (p:GetFireDirection() ~= Direction.NO_DIRECTION) then
         local t = Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, p.Position, Vector(p:GetShootingInput().X*10, p:GetShootingInput().Y*10), p):ToTear()
         t:ChangeVariant(TearVariant.METALLIC)
-        t:SetColor(Color(0.741, 0.388, 1, 1, 37, 19, 50), 0, 0, false, false)
+        t:SetColor(Color(0.741, 0.388, 1, 1, .14509, .074509, .196078), 0, 0, false, false)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_HOMING)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_FEAR)
       end
@@ -117,7 +117,7 @@ mechanics.Bits = {
       if (math.random(1,25) == 1) and (p:GetFireDirection() ~= Direction.NO_DIRECTION) then
         local t = Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, p.Position, Vector(p:GetShootingInput().X*10, p:GetShootingInput().Y*10), p):ToTear()
         t:ChangeVariant(TearVariant.METALLIC)
-        t:SetColor(Color(0.004, 0.898, 0.659, 1, 0, 44, 32), 0, 0, false, false)
+        t:SetColor(Color(0.004, 0.898, 0.659, 1, 0, .172549, .125490), 0, 0, false, false)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_POISON)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_BLACK_HP_DROP)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP)
@@ -130,7 +130,7 @@ mechanics.Bits = {
       if (math.random(1,20) == 1) and (p:GetFireDirection() ~= Direction.NO_DIRECTION) then
         local t = Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, p.Position, Vector(p:GetShootingInput().X*10, p:GetShootingInput().Y*10), p):ToTear()
         t:ChangeVariant(TearVariant.METALLIC)
-        t:SetColor(Color(0.149, 0.416, 0.804, 1, 7, 20, 40), 0, 0, false, false)
+        t:SetColor(Color(0.149, 0.416, 0.804, 1, .02745, .07843, .156862), 0, 0, false, false)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_WAIT)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_GLOW)
       end
@@ -141,7 +141,7 @@ mechanics.Bits = {
       if (math.random(1,15) == 1) and (p:GetFireDirection() ~= Direction.NO_DIRECTION) then
         local t = Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, p.Position, Vector(p:GetShootingInput().X*10, p:GetShootingInput().Y*10), p):ToTear()
         t:ChangeVariant(TearVariant.METALLIC)
-        t:SetColor(Color(0.988, 0.345, 0.306, 1, 49, 17, 15), 0, 0, false, false)
+        t:SetColor(Color(0.988, 0.345, 0.306, 1, .192156, .066666, .05882), 0, 0, false, false)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_PERSISTENT)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_QUADSPLIT)
         t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_BURN)
@@ -212,7 +212,7 @@ mechanics.TwitchHearts = {
       local twfull = IOTR.Storage.Hearts.twitch/2
       local ishalf = (IOTR.Storage.Hearts.twitch % 2 == 1)
       local hearts = (p:GetMaxHearts() + p:GetSoulHearts()) /2 + p:GetBoneHearts()
-      local zv = Vector(0,0)
+      local zv = Vector.Zero
       local TopVector = zv
       
       if (hearts > 6) then line = 1 end
@@ -239,7 +239,7 @@ mechanics.TwitchHearts = {
       local twfull = IOTR.Storage.Hearts.rainbow/2
       local ishalf = (IOTR.Storage.Hearts.rainbow % 2 == 1)
       local hearts = (IOTR.Storage.Hearts.twitch + p:GetMaxHearts() + p:GetSoulHearts()) /2 + p:GetBoneHearts()
-      local zv = Vector(0,0)
+      local zv = Vector.Zero
       local TopVector = zv
       
       if (hearts > 6) then line = 1 end
@@ -428,7 +428,7 @@ mechanics.TwitchHearts = {
     local p = Isaac.GetPlayer(0)
     
     for i=1,#IOTR.Enums.Rainbow do
-      local laser = EntityLaser.ShootAngle(8, p.Position, i*51.42, 15*30, Vector(0,0), p)
+      local laser = EntityLaser.ShootAngle(8, p.Position, i*51.42, 15*30, Vector.Zero, p)
       laser:SetActiveRotation(1, 999360, 5, false)
       laser.CollisionDamage = 1;
       laser:SetColor(IOTR.Enums.Rainbow[i], 0, 0, false, false)
@@ -441,7 +441,7 @@ mechanics.TwitchHearts = {
       
       for j = 1, 10 do
         Game():SpawnParticles(
-          p.Position:__add(Vector(math.random(-60, 60), math.random(-60, 60))),
+          p.Position + Vector(math.random(-60, 60), math.random(-60, 60)),
           EffectVariant.BUTTERFLY,
           1, 0, IOTR.Enums.Rainbow[i], 0
         )
@@ -453,23 +453,23 @@ mechanics.TwitchHearts = {
     local p = Isaac.GetPlayer(0)
     
     for i=0,4 do
-      local spider = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0,  0, p.Position, Vector(0, 0), p)
+      local spider = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0,  0, p.Position, Vector.Zero, p)
       spider.CollisionDamage = p.Damage * 3
-      spider:AddCharmed(-1)
+      spider:AddEntityFlags(EntityFlag.FLAG_CHARM)
       spider:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
       spider:SetColor(Color(0.392, 0.255, 0.643, 1, 39, 25, 64), 0, 0, false, false)
       
-      local ball = Isaac.Spawn(EntityType.ENTITY_LITTLE_HORN, 1,  0, p.Position, Vector(0, 0), p)
+      local ball = Isaac.Spawn(EntityType.ENTITY_LITTLE_HORN, 1,  0, p.Position, Vector.Zero, p)
       ball:ToNPC().Scale = .8
       ball.MaxHitPoints = ball.MaxHitPoints * 3
       ball.HitPoints = ball.HitPoints * 3
       ball.CollisionDamage = p.Damage * 3
-      ball:AddCharmed(-1)
       ball:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+      ball:AddEntityFlags(EntityFlag.FLAG_CHARM)
       ball:SetColor(Color(0.392, 0.255, 0.643, 1, 39, 25, 64), 0, 0, false, false)
     end
     
-    Game():SpawnParticles(p.Position, EffectVariant.PLAYER_CREEP_HOLYWATER, 1, 0, Color(0.392, 0.255, 0.643, 1, 1, 1, 1), 0)
+    Game():SpawnParticles(p.Position, EffectVariant.PLAYER_CREEP_HOLYWATER, 1, 0, IOTR.Enums.TintedRainbow[7], 0)
     
     for i = 0, 15 do
       Game():SpawnParticles(p.Position, EffectVariant.WISP, 1, 0, Color(0.392, 0.255, 0.643, 1, 1, 1, 1), 0)
@@ -534,7 +534,10 @@ mechanics.TwitchRoom = {
     
     local room = Game():GetRoom()
     
-    if room:GetType() ~= RoomType.ROOM_DEFAULT then return end
+    if room:GetType() ~= RoomType.ROOM_DEFAULT then
+      IOTR.Cmd.send("Twitch room gen skipped")
+      return
+    end
     
     for _, entity in ipairs(Isaac.GetRoomEntities()) do
       
@@ -544,7 +547,7 @@ mechanics.TwitchRoom = {
         return
       end
       
-      if ((entity.Type > 8 or entity.Type == 3) and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
+      if ((entity.Type > 8 or entity.Type == 2) and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
         entity:Remove()
       end
     end
@@ -554,21 +557,22 @@ mechanics.TwitchRoom = {
     for index = 1, room:GetGridSize() do
       local grid = room:GetGridEntity(index)
       if grid then
-        local type = grid.Desc.Type
-        if type ~= GridEntityType.GRID_DOOR and type ~= GridEntityType.GRID_WALL then
+        local getype = grid.Desc.Type
+        
+        if getype ~= GridEntityType.GRID_DOOR and getype ~= GridEntityType.GRID_WALL then
           room:RemoveGridEntity(index, 0, false)
         end
       end
     end
     
-    room:SetFloorColor(Color(0, 0, 0, 1, -40, -40, 40))
-    room:SetWallColor(Color(0, 0, 0, 1, -40, -40, 40))
+    room:SetFloorColor(Color(0, 0, 0, 1, -.15686, -.15686, .15686))
+    room:SetWallColor(Color(0, 0, 0, 1, -.15686, -.15686, .15686))
     
     -- Flames
-    g:SpawnParticles(room:GetGridPosition(16), EffectVariant.BLUE_FLAME, 1, 0, Color(0.392, 0.255, 0.643, 1, 392, 255, 643), 0)
-    g:SpawnParticles(room:GetGridPosition(28), EffectVariant.BLUE_FLAME, 1, 0, Color(0.392, 0.255, 0.643, 1, 392, 255, 643), 0)
-    g:SpawnParticles(room:GetGridPosition(106), EffectVariant.BLUE_FLAME, 1, 0, Color(0.392, 0.255, 0.643, 1, 392, 255, 643), 0)
-    g:SpawnParticles(room:GetGridPosition(118), EffectVariant.BLUE_FLAME, 1, 0, Color(0.392, 0.255, 0.643, 1, 392, 255, 643), 0)
+    g:SpawnParticles(room:GetGridPosition(16), EffectVariant.BLUE_FLAME, 1, 0, Color(0.392, 0.255, 0.643, 1, 1.53725, 1, 2.52156), 0)
+    g:SpawnParticles(room:GetGridPosition(28), EffectVariant.BLUE_FLAME, 1, 0, Color(0.392, 0.255, 0.643, 1, 1.53725, 1, 2.52156), 0)
+    g:SpawnParticles(room:GetGridPosition(106), EffectVariant.BLUE_FLAME, 1, 0, Color(0.392, 0.255, 0.643, 1, 1.53725, 1, 2.52156), 0)
+    g:SpawnParticles(room:GetGridPosition(118), EffectVariant.BLUE_FLAME, 1, 0, Color(0.392, 0.255, 0.643, 1, 1.53725, 1, 2.52156), 0)
     
     --Beetles
     for i = 0, 2 do
@@ -591,12 +595,12 @@ mechanics.TwitchRoom = {
     local item = IOTR.Mechanics.TwitchRoom.twitchRoomPool.items[itemnum]
     IOTR.Mechanics.TwitchRoom.twitchRoomPool.items[itemnum] = nil
     
-    Isaac.Spawn(5, 100, item, room:GetGridPosition(67), Vector(0,0), nil, 0)
+    Isaac.Spawn(5, 100, item, room:GetGridPosition(67), Vector.Zero, nil, 0)
     
-    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(32), Vector(0,0), nil, 0, 0)
-    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(42), Vector(0,0), nil, 0, 0)
-    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(92), Vector(0,0), nil, 0, 0)
-    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(102), Vector(0,0), nil, 0, 0)
+    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(32), Vector.Zero, nil, 0, 0)
+    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(42), Vector.Zero, nil, 0, 0)
+    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(92), Vector.Zero, nil, 0, 0)
+    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(102), Vector.Zero, nil, 0, 0)
   end
 }
 
@@ -616,7 +620,7 @@ mechanics.Subscribers = {
         value.time = value.time - 1
       else
         local v = math.random(1,4)*10
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, v,  0, value.entity.Position, Vector(0, 0), Isaac.GetPlayer(0))
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, v,  0, value.entity.Position, Vector.Zero, Isaac.GetPlayer(0))
         
         for i = 1, 3 do
           Game():SpawnParticles(value.entity.Position, EffectVariant.GOLD_PARTICLE, 10, 0, value.entity.Color, 0)
@@ -666,7 +670,7 @@ mechanics.Subscribers = {
   
   _addSubscriber = function (name, time)
     local p = Isaac.GetPlayer(0)
-    local fam = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, IOTR.Mechanics.Subscribers.subscriber, 0, p.Position, Vector(0,0), p):ToFamiliar()
+    local fam = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, IOTR.Mechanics.Subscribers.subscriber, 0, p.Position, Vector.Zero, p):ToFamiliar()
     
     -- Select random texture and color
     local texture = math.random(1,7)
@@ -686,7 +690,7 @@ mechanics.Subscribers = {
   end,
   
   _shotSubscriber = function (familiar, dt)
-    direct = Vector(0,0)
+    direct = Vector.Zero
   
     if (dt == Direction.LEFT) then direct = Vector(-10, 0)
     elseif (dt == Direction.RIGHT) then direct = Vector(10, 0)

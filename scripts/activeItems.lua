@@ -36,7 +36,7 @@ activeItems.TwitchRaid = {
     local game = Game()
     local room = game:GetRoom()
     for i = 0, math.random(3,6) do
-      followers[i] = Isaac.Spawn(IOTR.Enums.Buddies[math.random(#IOTR.Enums.Buddies)], 0,  0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true), Vector(0, 0), Isaac.GetPlayer(0))
+      followers[i] = Isaac.Spawn(IOTR.Enums.Buddies[math.random(#IOTR.Enums.Buddies)], 0,  0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true), Vector.Zero, Isaac.GetPlayer(0))
       followers[i]:AddCharmed(-1)
       followers[i]:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
       
@@ -78,7 +78,7 @@ activeItems.TTours = {
       if entities[i]:IsActiveEnemy() then
         entities[i]:AddConfusion(EntityRef(player), 580, false)
         local ref = EntityRef(entities[i])
-        game:SpawnParticles(ref.Position, EffectVariant.IMPACT, 2, math.random(), Color(1, 1, 1, 1, 50, 50, 50), math.random())
+        game:SpawnParticles(ref.Position, EffectVariant.IMPACT, 2, math.random(), Color(1, 1, 1, 1, 0.196078, 0.196078, 0.196078), math.random())
       end
     end
     
@@ -108,6 +108,7 @@ activeItems.RipPepperonis = {
     for i = r:GetTopLeftPos().Y + 10, r:GetBottomRightPos().Y - 10 do
       if (i % 30 == 0) then
         Game():SpawnParticles(Vector(r:GetTopLeftPos().X, i), EffectVariant.BRIMSTONE_SWIRL, 1, 0, Color(1, 1, 1, 1, 0, 0, 0), 0)
+        EntityLaser.ShootAngle(1, Vector(r:GetTopLeftPos().X, i), 0, 5, Vector.Zero, p)
       end
     end
     
@@ -132,7 +133,7 @@ activeItems.NomNom = {
     
     local p = Isaac.GetPlayer(0)
     if (p:HasFullHearts()) then
-      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector.Zero, p)
     else
       p:AddHearts(1)
     end
@@ -163,7 +164,7 @@ activeItems.NomNomPart1 = {
     
     local p = Isaac.GetPlayer(0)
     if (p:HasFullHearts()) then
-      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector.Zero, p)
     else
       p:AddHearts(1)
     end
@@ -193,7 +194,7 @@ activeItems.NomNomPart2 = {
     
     local p = Isaac.GetPlayer(0)
     if (p:HasFullHearts()) then
-      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector.Zero, p)
     else
       p:AddHearts(1)
     end
@@ -223,7 +224,7 @@ activeItems.NomNomPart3 = {
     
     local p = Isaac.GetPlayer(0)
     if (p:HasFullHearts()) then
-      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector.Zero, p)
     else
       p:AddHearts(1)
     end
@@ -253,7 +254,7 @@ activeItems.NomNomPart4 = {
     
     local p = Isaac.GetPlayer(0)
     if (p:HasFullHearts()) then
-      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector.Zero, p)
     else
       p:AddHearts(1)
     end
@@ -283,7 +284,7 @@ activeItems.NomNomPart5 = {
     
     local p = Isaac.GetPlayer(0)
     if (p:HasFullHearts()) then
-      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector(0, 0), p)
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART,  HeartSubType.HEART_HALF, p.Position, Vector.Zero, p)
     else
       p:AddHearts(1)
     end
@@ -373,7 +374,7 @@ activeItems.VoteNay = {
   onActivate = function ()
     
     local p = Isaac.GetPlayer(0)
-    Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 0, p.Position, Vector(0,0), p)
+    Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 0, p.Position, Vector.Zero, p)
     
   end
   

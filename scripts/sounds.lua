@@ -3,7 +3,7 @@ local sounds = {
   
   play = function (sound)
   
-    SFXManager():Play(sound, 1, 0, false, 1);
+    SFXManager():Play(sound)
     
   end
 }

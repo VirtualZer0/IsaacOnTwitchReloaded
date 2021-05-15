@@ -111,37 +111,37 @@ passiveItems.PI_KappaPride = {
       then
       
       local rotate = math.random(0,360)
-      local t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(0 + rotate):__mul(0.4), e)
+      local t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(0 + rotate) * .4, e)
       t:SetColor(IOTR.Enums.TintedRainbow[1], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_STICKY + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(60 + rotate):__mul(0.4), e)
+      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(60 + rotate) * .4, e)
       t:SetColor(IOTR.Enums.TintedRainbow[2], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_BURN + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(120 + rotate):__mul(0.4), e)
+      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(120 + rotate) * .4, e)
       t:SetColor(IOTR.Enums.TintedRainbow[3], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_GREED_COIN + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(180 + rotate):__mul(0.4), e)
+      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(180 + rotate) * .4, e)
       t:SetColor(IOTR.Enums.TintedRainbow[4], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(240 + rotate):__mul(0.4), e)
+      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(240 + rotate) * .4, e)
       t:SetColor(IOTR.Enums.TintedRainbow[6], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_FREEZE + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
       t.CollisionDamage = p.Damage / 6
       
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(300 + rotate):__mul(0.4), e)
+      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(300 + rotate) * .4, e)
       t:SetColor(IOTR.Enums.TintedRainbow[7], 0, 0, false, false)
       t:ToTear().TearFlags = TearFlags.TEAR_FEAR + TearFlags.TEAR_SPECTRAL
       t:ToTear().Scale = 0.6
@@ -232,9 +232,9 @@ passiveItems.PI_DrinkPurple = {
     local p = Isaac.GetPlayer(0)
     local room = Game():GetRoom()
     
-    Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Mechanics.TwitchHearts.twitchHeart,  0, room:FindFreePickupSpawnPosition(p.Position, 0, true), Vector(0, 0), p)
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Mechanics.TwitchHearts.twitchHeart,  0, room:FindFreePickupSpawnPosition(p.Position, 0, true), Vector.Zero, p)
     if (math.random(1,2) == 1) then
-      Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Mechanics.TwitchHearts.twitchHeart,  0, room:FindFreePickupSpawnPosition(p.Position, 0, true), Vector(0, 0), p)
+      Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Mechanics.TwitchHearts.twitchHeart,  0, room:FindFreePickupSpawnPosition(p.Position, 0, true), Vector.Zero, p)
     end
   end
 }
@@ -289,13 +289,13 @@ passiveItems.PI_FutureMan = {
   onRoomChange = function ()
     local p = Isaac.GetPlayer(0)
     -- This laser give damage
-    local laser1 = EntityLaser.ShootAngle(5, p.Position, 0, 0, Vector(0,0), p)
+    local laser1 = EntityLaser.ShootAngle(5, p.Position, 0, 0, Vector.Zero, p)
     laser1:SetActiveRotation(1, 999360, p.ShotSpeed*8, true)
     laser1.CollisionDamage = p.Damage/20;
     laser1.CurveStrength = 0
     laser1.Visible = false
     -- This laser only for decoration
-    local laser2 = EntityLaser.ShootAngle(7, p.Position, 0, 0, Vector(0,0), p)
+    local laser2 = EntityLaser.ShootAngle(7, p.Position, 0, 0, Vector.Zero, p)
     laser2:SetActiveRotation(1, 999360, p.ShotSpeed*8, true)
     laser2.CurveStrength = 0
     laser2.CollisionDamage = 0

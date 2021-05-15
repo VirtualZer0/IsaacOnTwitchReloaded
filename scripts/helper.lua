@@ -65,7 +65,7 @@ helper.giveCompanion = function (name, count)
   elseif name == "BadFly" then
     
     for i = 0, 5 do
-      local c = Isaac.Spawn(EntityType.ENTITY_ATTACKFLY, 0,  0, room:GetCenterPos(), Vector(0, 0), p)
+      local c = Isaac.Spawn(EntityType.ENTITY_ATTACKFLY, 0,  0, room:GetCenterPos(), Vector.Zero, p)
       c:ToNPC().MaxHitPoints = p.Damage * 5
       c:ToNPC().HitPoints = p.Damage * 5
     end
@@ -75,7 +75,7 @@ helper.giveCompanion = function (name, count)
   elseif name == "BadSpider" then
     
     for i = 0, 5 do
-      local c = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0,  0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), p)
+      local c = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0,  0, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector.Zero, p)
       c:ToNPC().MaxHitPoints = p.Damage * 5
       c:ToNPC().HitPoints = p.Damage * 5
     end
@@ -401,7 +401,7 @@ helper.getScreenBottomRight = function (offset)
 end
 
 helper.getScreenTopLeft = function (offset)
-  local pos = Vector(0, 0)
+  local pos = Vector.Zero
   
   if offset then
     local hudOffset = Vector(offset * 2, offset * 1.2)
@@ -588,7 +588,7 @@ helper.hasbit = function (x,p)
 end
 
 helper.setbit = function (x,p)
-  return IOTR._.hasbit(x, p) and x or x + p
+  return x | p
 end
 
 helper.clearbit = function (x,p)

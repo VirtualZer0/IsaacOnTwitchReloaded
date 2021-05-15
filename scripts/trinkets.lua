@@ -57,7 +57,7 @@ trinkets.T_HairClap = {
     if (math.random(1,100) > 15) then return end
     local room = Game():GetRoom()
     for i = 1, math.random(1,3) do
-      local enemy = Isaac.Spawn(EntityType.ENTITY_CORN_MINE, 0,  0, room:GetRandomPosition(1), Vector(0,0), Isaac.GetPlayer(0))
+      local enemy = Isaac.Spawn(EntityType.ENTITY_CORN_MINE, 0,  0, room:GetRandomPosition(1), Vector.Zero, Isaac.GetPlayer(0))
       enemy:AddCharmed(-1)
       enemy:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
     end
@@ -122,7 +122,7 @@ trinkets.T_GribulyasPiece = {
     
     if (math.random(1,5) == 1) then
       for i = 1, math.random(1,3) do
-        local unit = Isaac.Spawn(EntityType.ENTITY_MUSHROOM, 0,  500, room:GetRandomPosition(4), Vector(0, 0), player)
+        local unit = Isaac.Spawn(EntityType.ENTITY_MUSHROOM, 0,  500, room:GetRandomPosition(4), Vector.Zero, player)
         unit:AddCharmed(-1)
         unit:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
         unit:SetColor(IOTR.Enums.Rainbow[math.random(#IOTR.Enums.Rainbow)], 0, 0, false, false)
@@ -151,7 +151,7 @@ trinkets.T_SpacesuitChargeIndicator = {
     local room = Game():GetRoom()
     local player = Isaac.GetPlayer(0)
     local pos = room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true)
-    local unit = Isaac.Spawn(EntityType.ENTITY_HUSH_GAPER, 0,  0, pos, Vector(0, 0), player)
+    local unit = Isaac.Spawn(EntityType.ENTITY_HUSH_GAPER, 0,  0, pos, Vector.Zero, player)
     unit:ToNPC().MaxHitPoints = player.Damage * 5
     unit:ToNPC().HitPoints = player.Damage * 5
     unit:SetColor(Color(0,0,0,0.4,1,1,1), 0, 0, false, false)
@@ -225,12 +225,12 @@ trinkets.T_CrystalShard = {
     local p = entity:ToPlayer()
     local tears = {}
     
-    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position:__add(Vector(50,-30)), Vector(5,-3), p))
-    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position:__add(Vector(0,-50)), Vector(0,-5), p))
-    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position:__add(Vector(-50,-30)), Vector(-5,-3), p))
-    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position:__add(Vector(-50,30)), Vector(-5,3), p))
-    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position:__add(Vector(0,50)), Vector(0,5), p))
-    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position:__add(Vector(50,30)), Vector(5,3), p))
+    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position + Vector(50,-30), Vector(5,-3), p))
+    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position + Vector(0,-50), Vector(0,-5), p))
+    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position + Vector(-50,-30), Vector(-5,-3), p))
+    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position + Vector(-50,30), Vector(-5,3), p))
+    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position + Vector(0,50), Vector(0,5), p))
+    table.insert(tears, Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.DIAMOND, 0, p.Position + Vector(50,30), Vector(5,3), p))
     
     
     for _, t in ipairs(tears) do
@@ -262,7 +262,7 @@ trinkets.T_GrizzlyClaw = {
     if (entity.Type ~= EntityType.ENTITY_PLAYER) and math.random(5) ~= 5 then return end
       
     local p = entity:ToPlayer()
-    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.SHOCKWAVE, 0, p.Position, Vector(0,0), p)
+    Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.SHOCKWAVE, 0, p.Position, Vector.Zero, p)
     
     for k, v in pairs(Isaac.GetRoomEntities()) do
       if (v:IsActiveEnemy(false) and v:IsVulnerableEnemy() and (p.Position:Distance(v.Position) <= 200)) then
@@ -293,19 +293,19 @@ trinkets.T_InvertedCross = {
     local p = entity:ToPlayer()
     local flames = {}
     
-    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, p.Position, Vector(0,0), p))
-    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X-50, p.Position.Y), Vector(0,0), p))
-    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X+50, p.Position.Y), Vector(0,0), p))
-    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X, p.Position.Y-50), Vector(0,0), p))
-    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X, p.Position.Y+50), Vector(0,0), p))
-    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X, p.Position.Y-100), Vector(0,0), p))
+    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, p.Position, Vector.Zero, p))
+    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X-50, p.Position.Y), Vector.Zero, p))
+    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X+50, p.Position.Y), Vector.Zero, p))
+    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X, p.Position.Y-50), Vector.Zero, p))
+    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X, p.Position.Y+50), Vector.Zero, p))
+    table.insert(flames, Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, Vector(p.Position.X, p.Position.Y-100), Vector.Zero, p))
     
     for i, flame in ipairs(flames) do
       
       if (i == 1) then
-        flame:SetColor(Color(1, 0, 0, 1, 300, 60, 60), 0, 0, false, false)
+        flame:SetColor(Color(1, 0, 0, 1, 1.17647, 0.23529, 0.23529), 0, 0, false, false)
       else
-        flame:SetColor(Color(1, 0, 0, 1, 300, 200, 200), 0, 0, false, false)
+        flame:SetColor(Color(1, 0, 0, 1, 1.17647, 0.78431, 0.78431), 0, 0, false, false)
       end
       
       flame.CollisionDamage = p.Damage
@@ -347,7 +347,7 @@ trinkets.T_UCsStem = {
             col = IOTR.Enums.Rainbow[4]
           end
       
-          local tear = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.CUPID_BLUE, 0, p.Position-vec*i*30, Vector(0, 0), p):ToTear()
+          local tear = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.CUPID_BLUE, 0, p.Position-vec*i*30, Vector.Zero, p):ToTear()
           tear:SetColor(col, 0, 0, false, false)
           tear.CollisionDamage = 1.5
           tear.TearFlags = IOTR._.setbit(tear.TearFlags, TearFlags.TEAR_WAIT)
@@ -407,7 +407,7 @@ trinkets.T_BrokenD4R4Console = {
     local p = Isaac.GetPlayer(0)
     
     for i = 1, math.random(3) do
-      Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 500, p.Position, Vector(0,0), p)
+      Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 500, p.Position, Vector.Zero, p)
       p:UseActiveItem(CollectibleType.COLLECTIBLE_DATAMINER, false, true, false, false)
     end
   end,

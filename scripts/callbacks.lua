@@ -69,7 +69,7 @@ function callbacks:postUpdate ()
     and level:GetStartingRoomIndex() == level:GetCurrentRoomIndex()
   then
     local button = room:GetGridEntityFromPos(Vector(510, 370))
-    local textPos = Isaac.WorldToRenderPosition(button.Position, true) + Vector(0, 0)
+    local textPos = Isaac.WorldToRenderPosition(button.Position, true) + Vector.Zero
     IOTR.Text.add("openSiteButton", "Open site", textPos, {r=.549,g=.27,b=.968,a=1}, nil, true)
     
     if (button.State == 3) then
@@ -309,7 +309,7 @@ function callbacks:postGameStarted (fromSave)
         
         local colorObj = IOTR.Enums.ChatColors[subscriber.color]
         
-        subscriber.entity = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, IOTR.Mechanics.Subscribers.subscriber, 0, player.Position, Vector(0,0), player):ToFamiliar()
+        subscriber.entity = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, IOTR.Mechanics.Subscribers.subscriber, 0, player.Position, Vector.Zero, player):ToFamiliar()
         subscriber.entity:GetSprite():ReplaceSpritesheet(0, "gfx/Familiar/subs/familiar_shooters_twitch_subscriber_"..subscriber.texture..".png")
         subscriber.entity:GetSprite():LoadGraphics()
         subscriber.entity:SetColor(colorObj, 0, 0, false, false)
