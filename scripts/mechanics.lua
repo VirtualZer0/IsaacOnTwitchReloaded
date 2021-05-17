@@ -544,7 +544,7 @@ mechanics.TwitchRoom = {
     -- Check posibility to spawn room
     if
       room:GetType() ~= RoomType.ROOM_DEFAULT
-      and room:GetRoomShape() ~= RoomShape.ROOMSHAPE_1x1
+      or room:GetRoomShape() ~= RoomShape.ROOMSHAPE_1x1
     then
       IOTR.Storage.Special.twitchRoomId = nil
       IOTR.Cmd.send("Twitch room canceled - room have incorrect type or size")
@@ -626,21 +626,6 @@ mechanics.TwitchRoom = {
     for _, entity in ipairs(Isaac.GetRoomEntities()) do
       if ((
           entity.Type > 8
-          or entity.Type == EntityType.ENTITY_PICKUP
-          or entity.Type == EntityType.ENTITY_SLOT
-          or entity.Type == EntityType.ENTITY_BOMBDROP
-        ) and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
-        entity:Remove()
-      end
-    end
-    
-    -- Second check for rewards removing
-    for _, entity in ipairs(Isaac.GetRoomEntities()) do
-      if ((
-          entity.Type > 8
-          or entity.Type == EntityType.ENTITY_PICKUP
-          or entity.Type == EntityType.ENTITY_SLOT
-          or entity.Type == EntityType.ENTITY_BOMBDROP
         ) and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
         entity:Remove()
       end
@@ -678,6 +663,18 @@ mechanics.TwitchRoom = {
     
     if (not firstVisit) then return end
     
+    for _, entity in ipairs(Isaac.GetRoomEntities()) do
+      if ((
+          (entity.Type > 8
+          or entity.Type == EntityType.ENTITY_PICKUP
+          or entity.Type == EntityType.ENTITY_SLOT
+          or entity.Type == EntityType.ENTITY_BOMBDROP)
+          and (entity.Type ~= EntityType.ENTITY_EFFECT and entity.Variant ~= EffectVariant.BLUE_FLAME)
+        ) and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
+        entity:Remove()
+      end
+    end
+    
     IOTR.Sounds.play(IOTR.Sounds.list.twitchRoomAppear)
     g:SpawnParticles(room:GetGridPosition(67), EffectVariant.FIREWORKS, 1, 0, Color(1, 1, 1, 1, 0, 0, 0), 0)
       
@@ -686,8 +683,7 @@ mechanics.TwitchRoom = {
     end
     
     local itemnum = math.random(#IOTR.Mechanics.TwitchRoom.twitchRoomPool.items)
-    local item = IOTR.Mechanics.TwitchRoom.twitchRoomPool.items[itemnum]
-    IOTR.Mechanics.TwitchRoom.twitchRoomPool.items[itemnum] = nil
+    local item = table.remove(IOTR.Mechanics.TwitchRoom.twitchRoomPool.items, itemnum)
     
     Isaac.Spawn(5, 100, item, room:GetGridPosition(67), Vector.Zero, nil, 0)
     

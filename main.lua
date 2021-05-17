@@ -190,7 +190,7 @@ IOTR.Text = {
   -- Clear text
   clear = function ()
     IOTR.Text.Storage = {}
-    IOTR.Text.FollowStorage = {}
+    --IOTR.Text.FollowStorage = {}
   end,
   
   -- Contain text

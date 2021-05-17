@@ -401,31 +401,15 @@ trinkets.T_BrokenD4R4Console = {
   
   hold = false,
   
-  onDamage = function ()
-    if math.random(5) ~= 5 then return end
+  onDamage = function (entity, damageAmnt, damageFlag, damageSource, damageCountdown)
+    if (entity.Type ~= EntityType.ENTITY_PLAYER) and math.random(5) ~= 5 then return end
     
     local p = Isaac.GetPlayer(0)
+    p:UseActiveItem(CollectibleType.COLLECTIBLE_DATAMINER, false, true, false, false)
     
-    for i = 1, math.random(3) do
-      Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 500, p.Position, Vector.Zero, p)
-      p:UseActiveItem(CollectibleType.COLLECTIBLE_DATAMINER, false, true, false, false)
-    end
-  end,
-  
-  onUpdate = function ()
-    
-    for _, bug in pairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 500, false, false)) do
-      
-      if bug.FrameCount > 15*30 then bug:Die() end
-      
-    end
-    
-  end,
-  
-  onRemove = function ()
-    for _, bug in Isaac.FindByType(EntityType.ENTITY_FAMILIAR, FamiliarVariant.GB_BUG, 500, false, false) do
-      bug:Die()
-    end
+    local glitch = Isaac.Spawn(EntityType.ENTITY_DOGMA, 10, 0, p.Position, Vector.Zero, p)
+    glitch:AddCharmed(EntityRef(p), -1)
+    glitch:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
   end
   
 }

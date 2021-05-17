@@ -811,7 +811,7 @@ events.EV_Strabismus = {
 events.EV_Inverse = {
   
   name = "Inverse",
-  weights = {1,1,1},
+  weights = {.5,.7,1},
   good = false,
   duration = 45*30,
   
@@ -1143,7 +1143,7 @@ events.EV_Tenet = {
       Game().TimeCounter = Game().TimeCounter - 2
       
       -- Read position and prevent random room changes
-      p.Position = Game():GetRoom():GetClampedPosition(table.remove(IOTR.Events.EV_Tenet.storagePos, #IOTR.Events.EV_Tenet.storagePos), 2)
+      p.Position = Game():GetRoom():GetClampedPosition(table.remove(IOTR.Events.EV_Tenet.storagePos, #IOTR.Events.EV_Tenet.storagePos), 10)
       
       local roomId = table.remove(IOTR.Events.EV_Tenet.rooms, #IOTR.Events.EV_Tenet.rooms)
       if (roomId ~= Game():GetLevel():GetCurrentRoomIndex()) then
