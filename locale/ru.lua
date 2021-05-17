@@ -196,8 +196,8 @@ local ru = {
   evWeHateYouName = "Ненавижу тебя!",
   evWeHateYouDesc = "Буквально все пытается тебя убить",
   
-  evCallToDarkName = "Зов пустоты",
-  evCallToDarkDesc = "Древнее зло на вашей стороне",
+  evCallToTheVoidName = "Зов пустоты",
+  evCallToTheVoidDesc = "Древнее зло на вашей стороне",
   
   evFiveSpacesName = "Пять пробелов",
   evFiveSpacesDesc = "Акция! Пять случайных использований бесплатно",

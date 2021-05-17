@@ -196,8 +196,8 @@ local en = {
   evWeHateYouName = "We hate you",
   evWeHateYouDesc = "Literally everything is trying to kill you",
   
-  evCallToDarkName = "Call to Dark",
-  evCallToDarkDesc = "An ancient evil on your side",
+  evCallToTheVoidName = "Call to The Void",
+  evCallToTheVoidDesc = "An ancient evil on your side",
   
   evFiveSpacesName = "Five spaces",
   evFiveSpacesDesc = "Stock! Five random uses for free",

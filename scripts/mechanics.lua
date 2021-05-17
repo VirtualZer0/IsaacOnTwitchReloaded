@@ -452,27 +452,25 @@ mechanics.TwitchHearts = {
   _launchTwitchHeartBreak = function ()
     local p = Isaac.GetPlayer(0)
     
-    for i=0,4 do
-      local spider = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0,  0, p.Position, Vector.Zero, p)
-      spider.CollisionDamage = p.Damage * 3
-      spider:AddEntityFlags(EntityFlag.FLAG_CHARM)
-      spider:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
-      spider:SetColor(Color(0.392, 0.255, 0.643, 1, 39, 25, 64), 0, 0, false, false)
+    for i=0, math.random(2) do
+      local wisp = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, FamiliarVariant.WISP, 45, p.Position, Vector.Zero, p)
+      wisp:SetColor(Color(0.202, 0.255, 0.643, 1, 0, 0, .37686), 0, 0, false, false)
       
       local ball = Isaac.Spawn(EntityType.ENTITY_LITTLE_HORN, 1,  0, p.Position, Vector.Zero, p)
       ball:ToNPC().Scale = .8
       ball.MaxHitPoints = ball.MaxHitPoints * 3
       ball.HitPoints = ball.HitPoints * 3
       ball.CollisionDamage = p.Damage * 3
+      ball:AddCharmed(EntityRef(p), -1)
       ball:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
-      ball:AddEntityFlags(EntityFlag.FLAG_CHARM)
-      ball:SetColor(Color(0.392, 0.255, 0.643, 1, 39, 25, 64), 0, 0, false, false)
+      --ball:GetSprite():ReplaceSpritesheet(0, "Effects/effect_twitch_purple_ball.png")
+      --ball:GetSprite():LoadGraphics()
     end
     
-    Game():SpawnParticles(p.Position, EffectVariant.PLAYER_CREEP_HOLYWATER, 1, 0, IOTR.Enums.TintedRainbow[7], 0)
+    Game():SpawnParticles(p.Position, EffectVariant.PLAYER_CREEP_HOLYWATER, 1, 0, IOTR.Enums.Rainbow[7], 0)
     
     for i = 0, 15 do
-      Game():SpawnParticles(p.Position, EffectVariant.WISP, 1, 0, Color(0.392, 0.255, 0.643, 1, 1, 1, 1), 0)
+      Game():SpawnParticles(p.Position, EffectVariant.WISP, 1, 0, Color(0.392, 0.255, 0.643, 1, 0, 0, 0), 0)
     end
   end,
 }
@@ -495,6 +493,15 @@ mechanics.TwitchRoom = {
   onStageChange = function ()
     
     if not IOTR.GameState.postStartRaised then return end
+    
+    if
+      Game():GetLevel():GetAbsoluteStage() == 9
+      or Game():GetLevel():GetAbsoluteStage() == 13
+    then
+      IOTR.Cmd.send("Twitch room gen skipped - unsuitable level")
+      return
+    end
+    
     IOTR.Mechanics.TwitchRoom._genTwitchRoom()
     
   end,
@@ -534,20 +541,107 @@ mechanics.TwitchRoom = {
     
     local room = Game():GetRoom()
     
-    if room:GetType() ~= RoomType.ROOM_DEFAULT then
-      IOTR.Cmd.send("Twitch room gen skipped")
+    -- Check posibility to spawn room
+    if
+      room:GetType() ~= RoomType.ROOM_DEFAULT
+      and room:GetRoomShape() ~= RoomShape.ROOMSHAPE_1x1
+    then
+      IOTR.Storage.Special.twitchRoomId = nil
+      IOTR.Cmd.send("Twitch room canceled - room have incorrect type or size")
       return
+    end
+    
+    for i = 0, room:GetGridSize() do
+      
+      local gridEntity = room:GetGridEntity(i)
+      
+      if
+        gridEntity ~= nil
+        and gridEntity.Type == GridEntityType.GRID_PRESSURE_PLATE
+        and gridEntity.Variant == 3
+      then
+        IOTR.Storage.Special.twitchRoomId = nil
+        IOTR.Cmd.send("Twitch room canceled - room contains yellow button")
+        return
+      end
+      
+      if
+        gridEntity ~= nil
+        and gridEntity.Type == GridEntityType.GRID_ROCK_ALT2
+      then
+        IOTR.Storage.Special.twitchRoomId = nil
+        IOTR.Cmd.send("Twitch room canceled - room contains skull with cross")
+        return
+      end
+      
+      if
+        gridEntity ~= nil
+        and gridEntity.Type == GridEntityType.GRID_DOOR
+        and (gridEntity.Variant == 1 or gridEntity.Variant == 0)
+      then
+        IOTR.Storage.Special.twitchRoomId = nil
+        IOTR.Cmd.send("Twitch room canceled - room contains mirror")
+        return
+      end
+      
+      if
+        gridEntity ~= nil
+        and (gridEntity.Type == GridEntityType.GRID_TRAPDOOR or gridEntity.Type == GridEntityType.GRID_STAIRS)
+      then
+        IOTR.Storage.Special.twitchRoomId = nil
+        IOTR.Cmd.send("Twitch room canceled - room contains trapdoor or stairs")
+        return
+      end
+      
     end
     
     for _, entity in ipairs(Isaac.GetRoomEntities()) do
       
-      -- Disable if this is boss room
-      if (entity.Type == EntityType.ENTITY_MOM or entity.Type == EntityType.ENTITY_MOMS_HEART) then
+      if (entity.Type == EntityType.ENTITY_EFFECT and entity.Variant == EffectVariant.WOMB_TELEPORT) then
+        IOTR.Storage.Special.twitchRoomId = nil
+        IOTR.Cmd.send("Twitch room canceled - room contains womb teleport")
+        return
+      end
+      
+      if (entity.Type == EntityType.ENTITY_EFFECT and entity.Variant == EffectVariant.PORTAL_TELEPORT) then
+        IOTR.Storage.Special.twitchRoomId = nil
+        IOTR.Cmd.send("Twitch room canceled - room contains portal teleport")
+        return
+      end
+      
+      if (entity.Type == EntityType.ENTITY_EFFECT and entity.Variant == EffectVariant.HEAVEN_LIGHT_DOOR) then
+        IOTR.Storage.Special.twitchRoomId = nil
+        IOTR.Cmd.send("Twitch room canceled - room contains heaven door")
+        return
+      end
+      
+      if (entity:IsBoss()) then
+        IOTR.Cmd.send("Twitch room canceled - room contains boss")
         IOTR.Storage.Special.twitchRoomId = nil
         return
       end
       
-      if ((entity.Type > 8 or entity.Type == 2) and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
+    end
+    
+    for _, entity in ipairs(Isaac.GetRoomEntities()) do
+      if ((
+          entity.Type > 8
+          or entity.Type == EntityType.ENTITY_PICKUP
+          or entity.Type == EntityType.ENTITY_SLOT
+          or entity.Type == EntityType.ENTITY_BOMBDROP
+        ) and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
+        entity:Remove()
+      end
+    end
+    
+    -- Second check for rewards removing
+    for _, entity in ipairs(Isaac.GetRoomEntities()) do
+      if ((
+          entity.Type > 8
+          or entity.Type == EntityType.ENTITY_PICKUP
+          or entity.Type == EntityType.ENTITY_SLOT
+          or entity.Type == EntityType.ENTITY_BOMBDROP
+        ) and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)) then
         entity:Remove()
       end
     end
@@ -597,10 +691,10 @@ mechanics.TwitchRoom = {
     
     Isaac.Spawn(5, 100, item, room:GetGridPosition(67), Vector.Zero, nil, 0)
     
-    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(32), Vector.Zero, nil, 0, 0)
-    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(42), Vector.Zero, nil, 0, 0)
-    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(92), Vector.Zero, nil, 0, 0)
-    g:Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], room:GetGridPosition(102), Vector.Zero, nil, 0, 0)
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], 0, room:GetGridPosition(32), Vector.Zero, nil)
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], 0, room:GetGridPosition(42), Vector.Zero, nil)
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], 0, room:GetGridPosition(92), Vector.Zero, nil)
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, IOTR.Enums.TwitchRoomPickups[math.random(#IOTR.Enums.TwitchRoomPickups)], 0, room:GetGridPosition(102), Vector.Zero, nil)
   end
 }
 

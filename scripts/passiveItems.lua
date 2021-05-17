@@ -97,8 +97,7 @@ passiveItems.PI_KappaPride = {
   
   count = 0,
   
-  onTearUpdate = function (e)
-    
+  onEntityUpdate = function (e)
     local p = Isaac.GetPlayer(0)
     
     if
@@ -107,45 +106,62 @@ passiveItems.PI_KappaPride = {
         or math.random(math.ceil(p.Luck*3),80) == 80
       )
       and e.SpawnerType == EntityType.ENTITY_PLAYER
+      and (e.Type == EntityType.ENTITY_LASER or e.Type == EntityType.ENTITY_KNIFE or e.Type == EntityType.ENTITY_TEAR)
       and Isaac.GetFrameCount() % 3 == 0
-      then
+    then
       
-      local rotate = math.random(0,360)
-      local t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(0 + rotate) * .4, e)
-      t:SetColor(IOTR.Enums.TintedRainbow[1], 0, 0, false, false)
-      t:ToTear().TearFlags = TearFlags.TEAR_STICKY + TearFlags.TEAR_SPECTRAL
-      t:ToTear().Scale = 0.6
-      t.CollisionDamage = p.Damage / 6
+      local pos
+      local repeats = 1
       
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(60 + rotate) * .4, e)
-      t:SetColor(IOTR.Enums.TintedRainbow[2], 0, 0, false, false)
-      t:ToTear().TearFlags = TearFlags.TEAR_BURN + TearFlags.TEAR_SPECTRAL
-      t:ToTear().Scale = 0.6
-      t.CollisionDamage = p.Damage / 6
+      if (e.Type == EntityType.ENTITY_LASER) then
+        repeats = 10
+      end
       
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(120 + rotate) * .4, e)
-      t:SetColor(IOTR.Enums.TintedRainbow[3], 0, 0, false, false)
-      t:ToTear().TearFlags = TearFlags.TEAR_GREED_COIN + TearFlags.TEAR_SPECTRAL
-      t:ToTear().Scale = 0.6
-      t.CollisionDamage = p.Damage / 6
-      
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(180 + rotate) * .4, e)
-      t:SetColor(IOTR.Enums.TintedRainbow[4], 0, 0, false, false)
-      t:ToTear().TearFlags = TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP + TearFlags.TEAR_SPECTRAL
-      t:ToTear().Scale = 0.6
-      t.CollisionDamage = p.Damage / 6
-      
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(240 + rotate) * .4, e)
-      t:SetColor(IOTR.Enums.TintedRainbow[6], 0, 0, false, false)
-      t:ToTear().TearFlags = TearFlags.TEAR_FREEZE + TearFlags.TEAR_SPECTRAL
-      t:ToTear().Scale = 0.6
-      t.CollisionDamage = p.Damage / 6
-      
-      t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, e.Position, e.Velocity:Rotated(300 + rotate) * .4, e)
-      t:SetColor(IOTR.Enums.TintedRainbow[7], 0, 0, false, false)
-      t:ToTear().TearFlags = TearFlags.TEAR_FEAR + TearFlags.TEAR_SPECTRAL
-      t:ToTear().Scale = 0.6
-      t.CollisionDamage = p.Damage / 6
+      for i = 1, repeats do
+        local pos = e.Position
+        
+        if (e.Type == EntityType.ENTITY_LASER) then
+          repeats = 10
+          pos = e.Position * (1 - i/10) + e:ToLaser():GetEndPoint() * (i/10)
+        end
+        
+        local rotate = math.random(0,360)
+        local t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, pos, Vector.One:Rotated(0 + rotate) * 5, e)
+        t:SetColor(IOTR.Enums.TintedRainbow[1], 0, 0, false, false)
+        t:ToTear().TearFlags = TearFlags.TEAR_STICKY | TearFlags.TEAR_SPECTRAL
+        t:ToTear().Scale = 0.6
+        t.CollisionDamage = p.Damage / 6
+        
+        t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, pos, Vector.One:Rotated(60 + rotate) * 5, e)
+        t:SetColor(IOTR.Enums.TintedRainbow[2], 0, 0, false, false)
+        t:ToTear().TearFlags = TearFlags.TEAR_BURN | TearFlags.TEAR_SPECTRAL
+        t:ToTear().Scale = 0.6
+        t.CollisionDamage = p.Damage / 6
+        
+        t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, pos, Vector.One:Rotated(120 + rotate) * 5, e)
+        t:SetColor(IOTR.Enums.TintedRainbow[3], 0, 0, false, false)
+        t:ToTear().TearFlags = TearFlags.TEAR_GREED_COIN | TearFlags.TEAR_SPECTRAL
+        t:ToTear().Scale = 0.6
+        t.CollisionDamage = p.Damage / 6
+        
+        t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, pos, Vector.One:Rotated(180 + rotate) * 5, e)
+        t:SetColor(IOTR.Enums.TintedRainbow[4], 0, 0, false, false)
+        t:ToTear().TearFlags = TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP | TearFlags.TEAR_SPECTRAL
+        t:ToTear().Scale = 0.6
+        t.CollisionDamage = p.Damage / 6
+        
+        t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, pos, Vector.One:Rotated(240 + rotate) * 5, e)
+        t:SetColor(IOTR.Enums.TintedRainbow[6], 0, 0, false, false)
+        t:ToTear().TearFlags = TearFlags.TEAR_FREEZE | TearFlags.TEAR_SPECTRAL
+        t:ToTear().Scale = 0.6
+        t.CollisionDamage = p.Damage / 6
+        
+        t = Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.MYSTERIOUS, 0, pos, Vector.One:Rotated(300 + rotate) * 5, e)
+        t:SetColor(IOTR.Enums.TintedRainbow[7], 0, 0, false, false)
+        t:ToTear().TearFlags = TearFlags.TEAR_FEAR | TearFlags.TEAR_SPECTRAL
+        t:ToTear().Scale = 0.6
+        t.CollisionDamage = p.Damage / 6
+      end
     end
   end
 }
@@ -192,9 +208,9 @@ passiveItems.PI_CurseLit = {
     local p = Isaac.GetPlayer(0)
     
     if Game():GetLevel():GetCurses() ~= LevelCurse.CURSE_NONE then
-      local rnd = math.random(0,5)
-      if (rnd == 0) then IOTR.Storage.Stats.damage = IOTR.Storage.Stats.damage + 0.5 * IOTR.Items.Passive.PI_CurseLit.count
-      elseif (rnd == 1 and p.FireDelay > p.MaxFireDelay) then IOTR.Storage.Stats.tears = IOTR.Storage.Stats.tears - 1 * IOTR.Items.Passive.PI_CurseLit.count
+      local rnd = math.random(0,4)
+      if (rnd == 0) then IOTR.Storage.Stats.damage = IOTR.Storage.Stats.damage + 1 * IOTR.Items.Passive.PI_CurseLit.count
+      elseif (rnd == 1 and p.MaxFireDelay > 2) then IOTR.Storage.Stats.tears = IOTR.Storage.Stats.tears - 1 * IOTR.Items.Passive.PI_CurseLit.count
       elseif (rnd == 2) then IOTR.Storage.Stats.tearspeed = IOTR.Storage.Stats.tearspeed + 0.2 * IOTR.Items.Passive.PI_CurseLit.count
       elseif (rnd == 3 and p.MoveSpeed < 2) then IOTR.Storage.Stats.speed = IOTR.Storage.Stats.speed + 0.2 * IOTR.Items.Passive.PI_CurseLit.count
       else p.Luck = p.Luck + 1; IOTR.Storage.Stats.luck = IOTR.Storage.Stats.luck + 1  * IOTR.Items.Passive.PI_CurseLit.count end
@@ -262,7 +278,7 @@ passiveItems.PI_Kreygasm = {
         if (rnd == 0) then entities[i]:AddPoison(ref, math.random(30,300), math.random())
         elseif (rnd == 1) then entities[i]:AddFreeze(ref, math.random(30,300))
         elseif (rnd == 2) then entities[i]:AddSlowing(ref, math.random(30,300), math.random(), Color(1,1,1,1,0,0,0))
-        elseif (rnd == 3) then entities[i]:AddCharmed(math.random(30,300))
+        elseif (rnd == 3) then entities[i]:AddCharmed(ref, math.random(30,300))
         elseif (rnd == 4) then entities[i]:AddConfusion(ref, math.random(30,300), false)
         elseif (rnd == 5) then entities[i]:AddMidasFreeze(ref, math.random(30,300))
         elseif (rnd == 6) then entities[i]:AddFear(ref, math.random(30,300))
@@ -465,7 +481,7 @@ passiveItems.PI_GlitchLit = {
   
   description = {
     en = "Being near a fireplace will increase your stats#You don't take damage from fireplaces",
-    ru = "Нахождение рядом с кострами увеличт ваши статы#Вы не получаете урон от костров"
+    ru = "Нахождение рядом с кострами увеличит ваши статы#Вы не получаете урон от костров"
   },
   
   count = 0,

@@ -630,13 +630,13 @@ IOTR.Server:setHandler("movePlayer", function (req)
   IOTR.Cmd.send(req)
     
   if req == "l" then
-    if math.abs(p.Velocity.X) < 10 then p:AddVelocity(Vector(-2,0)) end
+    if math.abs(p.Velocity.X) < 10 then p:AddVelocity(Vector(-4,0)) end
   elseif req == "r" then
-    if math.abs(p.Velocity.X) < 10 then p:AddVelocity(Vector(2,0)) end
+    if math.abs(p.Velocity.X) < 10 then p:AddVelocity(Vector(4,0)) end
   elseif req == "u" then
-    if math.abs(p.Velocity.Y) < 10 then p:AddVelocity(Vector(0,-2)) end
+    if math.abs(p.Velocity.Y) < 10 then p:AddVelocity(Vector(0,-4)) end
   elseif req == "d" then
-    if math.abs(p.Velocity.Y) < 10 then p:AddVelocity(Vector(0,2)) end
+    if math.abs(p.Velocity.Y) < 10 then p:AddVelocity(Vector(0,4)) end
   end
 end)
 
@@ -862,6 +862,19 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE,
   end
 )
 
+-- onProjectileInit Callback
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_PROJECTILE_INIT, 
+  function (obj, e)
+    for key,value in pairs(IOTR.DynamicCallbacks.onProjectileInit) do
+      value(e)
+    end
+    
+    for key,value in pairs(IOTR.Mechanics) do
+      if value.onProjectileUpdate ~= nil then value.onProjectileInit(e) end
+    end
+  end
+)
+
 -- onProjectileUpdate Callback
 IOTR.Mod:AddCallback(ModCallbacks.MC_POST_PROJECTILE_UPDATE, 
   function (obj, e)
@@ -1006,6 +1019,10 @@ IOTR.Mod:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE,
     end
   end
 )
+
+-- Special checks for Dogma and Beast death
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, IOTR._.killAllEnemiesAndStopEvents, EntityType.ENTITY_DOGMA)
+IOTR.Mod:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, IOTR._.killAllEnemiesAndStopEvents, EntityType.ENTITY_BEAST)
 
 -- Initialize game launch
 IOTR._.checkRussianFont()

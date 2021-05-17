@@ -104,7 +104,7 @@ events.EV_Hell = {
       local posv = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
       pos = room:FindFreeTilePosition(posv, 0.5)
       if (player.Position:Distance(posv) >= 100) then
-        Isaac.GridSpawn(GridEntityType.GRID_FIREPLACE , math.random(2), pos, false)
+        Isaac.Spawn(EntityType.ENTITY_FIREPLACE, math.random(0,1), 0, pos, Vector.Zero, nil)
       end
     end
     
@@ -132,8 +132,8 @@ events.EV_Spiky = {
     for i = 0, room:GetGridSize()/7 do
       local max = room:GetBottomRightPos()
       local posv = Vector(math.random(math.floor(max.X-10)), math.random(math.floor(max.Y-10)))
-      pos = room:FindFreeTilePosition(posv, 0.5)
-      if (player.Position:Distance(posv) >= 100) then
+      pos = room:GetRandomPosition(41)
+      if (player.Position:Distance(pos) >= 100) then
         Isaac.GridSpawn(GridEntityType.GRID_SPIKES_ONOFF, math.random(2), pos, false)
       end
     end
@@ -227,7 +227,7 @@ events.EV_AngelRage = {
       local enemyType = IOTR.Enums.AngelRage[math.random(#IOTR.Enums.AngelRage)]
       IOTR.Cmd.send(enemyType)
       local enemy = Isaac.Spawn(enemyType, 0,  0, room:FindFreeTilePosition(pos, 0.5), Vector(math.random(-20, 20), math.random(-20, 20)), p)
-      enemy:AddCharmed(-1)
+      enemy:AddCharmed(EntityRef(p), -1)
       enemy:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
     end
   end,
@@ -365,7 +365,7 @@ events.EV_FlashJump = {
   
   onRoomChange = function ()
   
-    Game():MoveToRandomRoom(false, math.random(0, 99999))
+    Game():MoveToRandomRoom(false, math.random(0, 99999), Isaac.GetPlayer())
     
   end
   
@@ -385,7 +385,7 @@ events.EV_EnemyRegen = {
     if (Game():GetFrameCount() % 3 == 0) then
       if (entity:IsActiveEnemy() and entity.HitPoints < entity.MaxHitPoints) then
         entity:AddHealth(0.5)
-        Game():SpawnParticles(Vector(entity.Position.X + math.random()*20, entity.Position.Y + math.random()*20), EffectVariant.ULTRA_GREED_BLING, 1, 0, Color(0.5,1,0,1,0,0,0), 0)
+        Game():SpawnParticles(Vector(entity.Position.X + math.random(-20, 20), entity.Position.Y + math.random(-20, 20)), EffectVariant.ULTRA_GREED_BLING, 1, 0, Color(0.5,1,0,1,0,0,0), 0)
       end
     end
     
@@ -563,7 +563,12 @@ events.EV_StanleyParable = {
       local max = room:GetBottomRightPos()
       local pos = Vector(math.random(math.floor(max.X)), math.random(math.floor(max.Y)))
       pos = room:FindFreeTilePosition(pos, 0.5)
-      Isaac.GridSpawn(GridEntityType.GRID_PRESSURE_PLATE, 1, pos, false)
+      local button = Isaac.GridSpawn(GridEntityType.GRID_PRESSURE_PLATE, 1, pos, false)
+      
+      if (button) then
+        --button:GetSprite():ReplaceSpritesheet(0, "Grid/b.png")
+        --button:GetSprite():LoadGraphics()
+      end
     end
     
     SFXManager():Play(SoundEffect.SOUND_1UP, 1, 0, false, 1)
@@ -793,10 +798,10 @@ events.EV_Strabismus = {
       entity:AddVelocity(Vector(math.random(-10,10), math.random(-10,10)))
     elseif (entity.Type == EntityType.ENTITY_KNIFE) then
       local knife = entity:ToKnife()
-      knife.Rotation = knife.Rotation + math.random(-15,15)
-    elseif (entity.Type == EntityType.ENTITY_LASER and entity.Parent.Type == EntityType.ENTITY_PLAYER) then
+      knife.Rotation = knife.Rotation + math.random(-100,100)
+    elseif (entity.Type == EntityType.ENTITY_LASER and entity.SpawnerType <= 8) then
       local laser = entity:ToLaser()
-      laser.Angle = laser.Angle + math.random(-20,20)
+      laser.Angle = laser.Angle + math.random(-100,100)
     end
   end
   
@@ -949,15 +954,12 @@ events.EV_Toxic = {
   duration = 4,
   
   onRoomChange = function ()
+    local p = Isaac.GetPlayer(0)
     local room = Game():GetRoom()
+    
     room:SetWallColor(Color(0.5,1,0,1,.196078,.39215,-.07843))
     room:SetFloorColor(Color(0.5,1,0,1,.196078,.39215,-.07843))
     Isaac.GetPlayer(0):SetColor(IOTR.Enums.Rainbow[4], 0, 0, false, false)
-  end,
-  
-  onRoomChange = function ()
-    local p = Isaac.GetPlayer(0)
-    local room = Game():GetRoom()
     
     local entities = Isaac.GetRoomEntities()
     for i = 1, #entities do
@@ -972,9 +974,14 @@ events.EV_Toxic = {
       if (p.Position:Distance(pos) >= 100) then
         Game():SpawnParticles(pos, EffectVariant.DARK_BALL_SMOKE_PARTICLE, 10, 0, IOTR.Enums.Rainbow[4], 0)
         Game():SpawnParticles(pos, EffectVariant.FART, 1, 0, IOTR.Enums.Rainbow[4], 0)
-        local enemy = Game():Spawn(IOTR.Enums.Buddies[4], 0, pos, Vector.Zero, p, 0, 0):ToNPC()
-        if not enemy.Pathfinder:HasPathToPos(p.Position, false) then
-          enemy:Die()
+        
+        if (room:GetGridEntityFromPos(pos) == nil) then
+        
+          local enemy = Game():Spawn(IOTR.Enums.Buddies[4], 0, pos, Vector.Zero, nil, 1, math.random(99999)):ToNPC()
+          if not enemy.Pathfinder:HasPathToPos(p.Position, false) then
+            enemy:Remove()
+          end
+          
         end
       end
     end
@@ -989,7 +996,6 @@ events.EV_Toxic = {
   end,
   
   onStart = function ()
-    
     IOTR.Shaders.IOTR_ColorSides.enabled = true
     IOTR.Shaders.IOTR_ColorSides.params = {
       Intensity = .6,
@@ -1096,7 +1102,7 @@ events.EV_Tenet = {
       table.insert(IOTR.Events.EV_Tenet.storagePos, p.Position)
       
       -- Write current room
-      --table.insert(IOTR.Events.EV_Tenet.rooms, Game():GetLevel():GetCurrentRoomIndex())
+      table.insert(IOTR.Events.EV_Tenet.rooms, Game():GetLevel():GetCurrentRoomIndex())
       
       -- Write all new tears
       for i = 1, #entities do
@@ -1105,6 +1111,8 @@ events.EV_Tenet = {
             table.insert(IOTR.Events.EV_Tenet.storageTears, {
               origin = entities[i],
               tearFrom = nil,
+              tearSize = entities[i].Size,
+              tearFlags = entities[i]:ToTear().TearFlags,
               tearVelocity = entities[i].Velocity* -1,
               tearTime = #IOTR.Events.EV_Tenet.storagePos
             })
@@ -1134,12 +1142,13 @@ events.EV_Tenet = {
     if (#IOTR.Events.EV_Tenet.storagePos ~= 0 and IOTR.Events.EV_Tenet.isBack) then
       Game().TimeCounter = Game().TimeCounter - 2
       
-      --local roomId = table.remove(IOTR.Events.EV_Tenet.rooms, #IOTR.Events.EV_Tenet.rooms)
-      --if (roomId ~= Game():GetLevel():GetCurrentRoomIndex()) then
-      --  Game():ChangeRoom(roomId)
-      --end
+      -- Read position and prevent random room changes
+      p.Position = Game():GetRoom():GetClampedPosition(table.remove(IOTR.Events.EV_Tenet.storagePos, #IOTR.Events.EV_Tenet.storagePos), 2)
       
-      p.Position = table.remove(IOTR.Events.EV_Tenet.storagePos, #IOTR.Events.EV_Tenet.storagePos)
+      local roomId = table.remove(IOTR.Events.EV_Tenet.rooms, #IOTR.Events.EV_Tenet.rooms)
+      if (roomId ~= Game():GetLevel():GetCurrentRoomIndex()) then
+        Game():ChangeRoom(roomId)
+      end
       
       IOTR.Shaders.IOTR_VHS.params.Time = (Isaac.GetFrameCount()%150)/150
       
@@ -1150,6 +1159,8 @@ events.EV_Tenet = {
         if (tear.tearTime == #IOTR.Events.EV_Tenet.storagePos) then
           if (tear.tearFrom ~= nil) then
             local newTear = p:FireTear(tear.tearFrom, tear.tearVelocity, false, false, false)
+            newTear.TearFlags = tear.tearFlags
+            newTear.Size = tear.tearSize
           end
         end
         
@@ -1203,7 +1214,7 @@ events.EV_Superhot = {
   
   onEntityUpdate = function (entity)
     local p = Isaac.GetPlayer(0)
-    if (entity:IsActiveEnemy(false) and entity:IsVulnerableEnemy()) then
+    if (entity:IsActiveEnemy(true) and entity:IsVulnerableEnemy()) then
       if (math.abs(p.Velocity.X) < 0.2 and math.abs(p.Velocity.Y) < 0.2 and p:GetFireDirection() == Direction.NO_DIRECTION) then
         entity:AddFreeze(EntityRef(p), 1)
         entity.Velocity = Vector.Zero
@@ -1352,6 +1363,8 @@ events.EV_Radioactive = {
     local p = Isaac.GetPlayer(0)
     
     if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy()) then
+      Game():SpawnParticles(Vector(entity.Position.X + math.random(-20, 20), entity.Position.Y + math.random(-20, 20)), EffectVariant.ULTRA_GREED_BLING, 1, 0, Color(1,1,0,1,0,0,0), 0)
+      
       for n = 1, 2 do
         local angle = math.random(0,360);
         local x = entity.Position.X + 5 * math.cos(-angle*3.14/180) * 14;
@@ -1563,8 +1576,8 @@ events.EV_Pyrosis = {
   
   onEntityUpdate = function (entity)
     
-    if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy() and not entity:IsBoss()) then
-      Isaac.GridSpawn(GridEntityType.GRID_POOP, 1, entity.Position, true)
+    if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy() and entity.FrameCount == 1) then
+      Isaac.GetPlayer():AddFriendlyDip(1, entity.Position + RandomVector():Normalized() * 30 + RandomVector() * 20)
       Game():SpawnParticles(entity.Position, EffectVariant.PLAYER_CREEP_RED, 1, 0, IOTR.Enums.Rainbow[1], 0)
     end
     
@@ -1589,14 +1602,32 @@ events.EV_TearsEqualsSpiders = {
       local spider
       
       if (math.random(5) == 1) then
-        spider = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0, 0, entity.Position + entity.Velocity * 4, Vector.Zero, p)
-        spider.HitPoints = entity:ToTear().BaseDamage*2
+        spider = EntityNPC.ThrowSpider(entity.Position, nil, entity.Position + entity.Velocity * 20, nil, 1)
       else
         spider = p:AddBlueSpider (entity.Position)
         spider.HitPoints = entity:ToTear().BaseDamage
       end
       
       spider:AddVelocity(entity.Velocity)
+      entity:Remove()
+      
+    elseif (entity.Type == EntityType.ENTITY_LASER and entity.SpawnerType < 9) then
+        
+      local vec = entity:ToLaser():GetEndPoint()
+      for i = 1, 15 do
+        
+        local spider
+      
+        if (math.random(5) == 1 and i > 10) then
+          spider = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0, 0, entity.Position * (1 - i/15) + vec * (i/15), Vector.Zero, nil)
+        else
+          spider = p:AddBlueSpider(entity.Position * (1 - i/15) + vec * (i/15))
+        end
+        
+        spider.HitPoints = 1
+        
+      end
+      
       entity:Remove()
       
     end
@@ -1613,14 +1644,8 @@ events.EV_IpecacForAll = {
   good = false,
   duration = 50*30,
   
-  onEntityUpdate = function (entity)
-    
-    if (entity.Type == EntityType.ENTITY_PROJECTILE and entity:IsDead ()) then
-        
-      Isaac.Explode(entity.Position, entity, 30.0)
-      
-    end
-    
+  onProjectileInit = function (entity)
+    entity:ToProjectile():AddProjectileFlags(2)
   end
   
 }
@@ -1633,23 +1658,32 @@ events.EV_Ghostbusters = {
   good = false,
   duration = 50*30,
   
-  onEntityUpdate = function (entity)
-    
-    local bossDelay = 0
-    if entity:IsBoss() then bossDelay = 7 end
+  onNPCDeath = function (entity)
     
     if (
       entity.Type ~= EntityType.ENTITY_THE_HAUNT
       and entity.Type ~= EntityType.ENTITY_WIZOOB
-      and entity.Type > EntityType.ENTITY_PROJECTILE
-      and entity.Type < EntityType.ENTITY_EFFECT
-      and entity:IsDead() and math.random(1,1+bossDelay)
+      and entity.Type ~= EntityType.ENTITY_DOGMA
+      and entity.Type ~= EntityType.ENTITY_BEAST
     ) then 
-      if math.random(1,3) <= 2 then
-        Game():Spawn(EntityType.ENTITY_THE_HAUNT, 10, entity.Position, Vector.Zero, entity, 0, 0)
+    
+      if (entity:IsBoss()) then
+        for i = 1, 6 do
+          if math.random(2) == 2 then
+            Isaac.Spawn(EntityType.ENTITY_DUST, 0, 0, entity.Position, Vector.Zero, nil)
+          else
+            Isaac.Spawn(EntityType.ENTITY_WIZOOB, 0, 0, entity.Position, Vector.Zero, nil)
+          end
+        end
       else
-        Game():Spawn(EntityType.ENTITY_WIZOOB, 0, entity.Position, Vector.Zero, entity, 0, 0)
+        if math.random(2) == 2 then
+          Isaac.Spawn(EntityType.ENTITY_DUST, 0, 0, entity.Position, Vector.Zero, nil)
+        else
+          Isaac.Spawn(EntityType.ENTITY_WIZOOB, 0, 0, entity.Position, Vector.Zero, nil)
+        end
       end
+    
+      
     end
     
   end,
@@ -1760,10 +1794,10 @@ events.EV_Flash = {
   duration = 50*30,
   
   onStart = function ()
-    --[[local p = Isaac.GetPlayer(0)
+    local p = Isaac.GetPlayer(0)
     IOTR.Storage.Stats.speed = IOTR.Storage.Stats.speed + 10
     p:AddCacheFlags(CacheFlag.CACHE_SPEED)
-    p:EvaluateItems()--]]
+    p:EvaluateItems()
   end,
   
   onUpdate = function (entity)
@@ -1792,7 +1826,7 @@ events.EV_Flash = {
         true
       )
       
-      bolt:SetColor(Color(1,1,0,1,255,255,0), -1, 10, false, true)
+      bolt:SetColor(Color(1,1,0,1,255,255,0), -1, 1, false, true)
       bolt:SetMaxDistance(math.random(1,45))
     end
     
@@ -1828,7 +1862,7 @@ events.EV_ShadowClones = {
       IOTR.Sounds.play(IOTR.Sounds.list.shadowClones)
       for i = 0, math.random(1,3) do
         local clone = Isaac.Spawn(entity.Type, entity.Variant, entity.SubType, entity.Position + Vector(math.random(-30,30),math.random(-30,30)), Vector.Zero, entity)
-        clone:SetColor(Color(0, 0, 0, 1, 0, 0, 0), 0, 0, false, false)
+        clone:SetColor(Color(0, 0, 0, 1, 0, 0, 0), 0, 1, false, false)
         clone.HitPoints = 0.1
       end
     end
@@ -1854,26 +1888,22 @@ events.EV_IsaacOfIsaac = {
     end
   end,
   
-  onRoomChange = function ()
-    local entities = Isaac.GetRoomEntities()
-    
-    
-    for i = 1, #entities do
-      if (
-          entities[i].Type > 8
-          and not entities[i]:IsBoss()
-          and entities[i].Type < 1000
-          and entities[i].FrameCount < 2
-          and entities[i].Type ~= EntityType.ULCER
-          and entities[i].Type ~= EntityType.ENTITY_MOBILE_HOST
-          and entities[i].Type ~= EntityType.ENTITY_MOMS_HAND
-          and entities[i].Type ~= EntityType.ENTITY_ROUND_WORM
-          and entities[i].Type ~= EntityType.ENTITY_NIGHT_CRAWLER
-        ) then
-        local sprite = entities[i]:GetSprite()
-        sprite:Load("gfx/mod.twitch_isaac.anm2", true)
-        sprite:Play("Appear", true)
-      end
+  onEntityUpdate = function (entity)
+    if (
+        (entity.Type > 8 or entity.Type == EntityType.ENTITY_TEAR)
+        and entity.FrameCount == 2
+        and not entity:IsBoss()
+        and entity.EntityCollisionClass ~= 0                    -- Prevent to apply new sprite on hiding enemies
+        and entity.Type < 1000
+        and entity.Type ~= EntityType.ULCER
+        and entity.Type ~= EntityType.ENTITY_MOBILE_HOST
+        and entity.Type ~= EntityType.ENTITY_MOMS_HAND
+        and entity.Type ~= EntityType.ENTITY_ROUND_WORM
+        and entity.Type ~= EntityType.ENTITY_NIGHT_CRAWLER
+      ) then
+      local sprite = entity:GetSprite()
+      sprite:Load("gfx/mod.twitch_isaac.anm2", true)
+      sprite:Play("Appear", true)
     end
   end
   
@@ -1903,11 +1933,11 @@ events.EV_StaticElectricity = {
     entity1 = table.remove(entities, math.random(#entities))    
     entity2 = entities[math.random(#entities)]
     
-    if (not (entity1:IsVulnerableEnemy() and entity1:IsActiveEnemy(false)) or not (entity1:IsVulnerableEnemy() and entity1:IsActiveEnemy(false))) then return end
+    if (not (entity1:IsVulnerableEnemy() and entity1:IsActiveEnemy(true)) or not (entity1:IsVulnerableEnemy() and entity1:IsActiveEnemy(true))) then return end
     
     local laser = EntityLaser.ShootAngle(2, entity1.Position, (entity2.Position - entity1.Position):GetAngleDegrees(), 5, Vector.Zero, nil)
     laser.MaxDistance = entity2.Position:Distance(entity1.Position)
-    laser:SetColor(Color(0.4,0.4,1,1,.11764,.11764,.78431), 0, 0, false, false)
+    laser:SetColor(Color(0.4,0.4,1,1,.11764,.11764,.78431), 0, 1, false, false)
     laser.CollisionDamage = .1
   end
   
@@ -1925,7 +1955,7 @@ events.EV_Bleeding = {
   duration = 4,
   
   onEntityUpdate = function (entity)
-    if (Isaac.GetFrameCount() % 30 ~= 0) then return end
+    if (Isaac.GetFrameCount() % 45 ~= 0) then return end
     
     if (entity:IsActiveEnemy() and entity:IsVulnerableEnemy()) then
       
@@ -1956,7 +1986,6 @@ events.EV_ParasiticInfection = {
       and entity.Type > EntityType.ENTITY_PROJECTILE
       and entity.Type < EntityType.ENTITY_EFFECT
     then
-      IOTR.Cmd.send("HIT")
       if entity:IsBoss() then
         if (math.random(0,7) ~= 1) then return end
       end
@@ -1972,15 +2001,15 @@ events.EV_ParasiticInfection = {
     
     if entity.Type == EntityType.ENTITY_PLAYER then
       local fly = Isaac.Spawn(EntityType.ENTITY_ATTACKFLY, 0,  0, entity.Position, Vector.Zero, entity)
-      fly:AddCharmed(-1)
+      fly:AddCharmed(EntityRef(Isaac.GetPlayer()), -1)
       fly:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
       
       fly = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0,  0, entity.Position, Vector.Zero, entity)
-      fly:AddCharmed(-1)
+      fly:AddCharmed(EntityRef(Isaac.GetPlayer()), -1)
       fly:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
       
       fly = Isaac.Spawn(EntityType.ENTITY_MAGGOT, 0,  0, entity.Position, Vector.Zero, entity)
-      fly:AddCharmed(-1)
+      fly:AddCharmed(EntityRef(Isaac.GetPlayer()), -1)
       fly:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
     end
     
@@ -1997,8 +2026,12 @@ events.EV_IAmLost = {
   
   duration = 30*30,
   
+  onStart = function ()
+    Isaac.GetPlayer():SetColor(Color(1,1,1, .4, 1, 1, 1), 30*30, 1, false, true)
+  end,
+  
   onUpdate = function ()
-    Game():SpawnParticles(Isaac.GetPlayer(0).Position + Vector(0, -25), EffectVariant.TEAR_POOF_SMALL, 1, 0, Color(1,1,1,1,255,255,255), 0)
+    Game():SpawnParticles(Isaac.GetPlayer(0).Position + Vector(0, -50), EffectVariant.TEAR_POOF_SMALL, 1, 0, Color(1,1,1,1,255,255,255), 0)
   end,
   
   onDamage = function (entity, damageAmnt, damageFlag, damageSource, damageCountdown)
@@ -2098,7 +2131,7 @@ events.EV_Reroll = {
   good = true,
   
   onStart = function ()
-    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_D4, true, true, true, false)
+    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_D4, false, true, true, false)
   end
   
 }
@@ -2157,7 +2190,7 @@ events.EV_Danger = {
   
   name = "Danger",
   weights = {.8,1,1},
-  good = true,
+  good = false,
 
   byTime = false,
   onlyNewRoom = true,
@@ -2439,7 +2472,7 @@ events.EV_MarbleBalls = {
     
     for i = 1, math.random(30, 70) do
       local b = Isaac.Spawn(5, math.random(5750, 5753), 0, r:FindFreePickupSpawnPosition(Vector(math.random(min, max), math.random(r:GetTopLeftPos().Y, r:GetBottomRightPos().Y)), 2, true), Vector(math.random(-10,10), math.random(-10,10)), p)
-      b:SetColor(colors[math.random(1,3)], 0, 0, false, false)
+      b:SetColor(colors[math.random(1,3)], 0, 1, false, false)
     end
     
   end,
@@ -2494,10 +2527,10 @@ events.EV_WeHateYou = {
   
 }
 
--- Call to the dark
-events.EV_CallToDark = {
+-- Call to the void
+events.EV_CallToTheVoid = {
   
-  name = "CallToDark",
+  name = "CallToTheVoid",
   weights = {1,1,1},
   good = true,
   
@@ -2505,15 +2538,25 @@ events.EV_CallToDark = {
   onlyNewRoom = true,
   duration = 5,
   
+  onStart = function ()
+    local player = Isaac.GetPlayer(0)
+    local room = Game():GetRoom()
+    local pos = room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true)
+    local portal = Isaac.Spawn(EntityType.ENTITY_PORTAL, 1,  0, pos, Vector.Zero, player)
+    portal:AddCharmed(EntityRef(player), -1)
+    portal:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+    
+    Isaac.GetPlayer():UseCard(Card.RUNE_BLACK)
+  end,
+  
   onNewRoom = function ()
     local player = Isaac.GetPlayer(0)
     local room = Game():GetRoom()
     
     for i = 0, math.random(1,3) do
-      local pos = room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true)
       local unit = Isaac.Spawn(EntityType.ENTITY_IMP, 0,  0, pos, Vector.Zero, player)
-      unit:AddCharmed(-1)
-      unit:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+      unit:AddCharmed(EntityRef(player), -1)
+      unit:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)      
       Game():SpawnParticles(pos, EffectVariant.LARGE_BLOOD_EXPLOSION, 1, 0, Color(1,1,1,1,0,0,0), 0)
       Game():Darken(1, 90);
       IOTR.Sounds.play(SoundEffect.SOUND_SUMMONSOUND)
@@ -2621,10 +2664,12 @@ events.EV_GiveMeYourMoney = {
     local haveSlot = Isaac.FindByType(EntityType.ENTITY_SPIDER, 0, 500, false, false)
     
     if #haveSlot == 0 then
-      local slot = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0,  500, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true), Vector.Zero, p)
-      slot:GetSprite():Load("gfx/006.001_Slot Machine.anm2", true)
-      slot:GetSprite():Play("Idle", true)
-      slot:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+      for i = 1, 3 do
+        local slot = Isaac.Spawn(EntityType.ENTITY_SPIDER, 0,  500, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true), Vector.Zero, p)
+        slot:GetSprite():Load("gfx/006.001_Slot Machine.anm2", true)
+        slot:GetSprite():Play("Idle", true)
+        slot:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+      end
     end
     
   end,
@@ -2676,7 +2721,7 @@ events.EV_FliesAndFlies = {
     
     if (entity.FrameCount > 15 and Isaac.CountEntities(entity, EntityType.ENTITY_ATTACKFLY, 0, 0) < 35) then
       local fly = Isaac.Spawn(EntityType.ENTITY_ATTACKFLY, 0, 0, entity.Position, entity.Velocity, entity):ToNPC()
-      fly:SetColor(entity:GetColor(), 0, 0, false, false)
+      fly:SetColor(entity:GetColor(), 0, 1, false, false)
       fly.HitPoints = .2
       entity:Remove()
     end
@@ -2765,6 +2810,26 @@ events.EV_AutoAim = {
       
     end
     
+    if entity.Type == EntityType.ENTITY_LASER
+      and entity.SpawnerType < 9
+      and entity.FrameCount == 1
+      and IOTR.Events.EV_AutoAim.selectedEnemy ~= nil
+      and IOTR.Events.EV_AutoAim.selectedEnemy:Exists()
+    then
+      
+      entity:ToLaser():SetHomingType(2)
+      
+    end
+    
+    if entity.Type == EntityType.ENTITY_KNIFE
+      and IOTR.Events.EV_AutoAim.selectedEnemy ~= nil
+      and IOTR.Events.EV_AutoAim.selectedEnemy:Exists()
+    then
+      
+      entity:ToKnife().Rotation = (IOTR.Events.EV_AutoAim.selectedEnemy.Position - Isaac.GetPlayer().Position):GetAngleDegrees()
+      
+    end
+    
   end,
   
   onUpdate = function ()
@@ -2780,7 +2845,7 @@ events.EV_AutoAim = {
         IOTR.Events.EV_AutoAim.selectedEnemy
       )
       
-      IOTR.Events.EV_AutoAim.targetEffect:SetColor(IOTR.Enums.TintedRainbow[7], 0, 0, false, false)
+      IOTR.Events.EV_AutoAim.targetEffect:SetColor(IOTR.Enums.TintedRainbow[7], 0, 1, false, false)
       
     elseif IOTR.Events.EV_AutoAim.selectedEnemy ~= nil and IOTR.Events.EV_AutoAim.selectedEnemy:Exists() then
       IOTR.Events.EV_AutoAim.targetEffect.Position = IOTR.Events.EV_AutoAim.selectedEnemy.Position

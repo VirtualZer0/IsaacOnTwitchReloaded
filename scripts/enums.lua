@@ -129,7 +129,13 @@ enums.Bosses = {
   EntityType.ENTITY_ADVERSARY,
   EntityType.ENTITY_STAIN,
   EntityType.ENTITY_BROWNIE,
-  EntityType.ENTITY_FORSAKEN
+  EntityType.ENTITY_FORSAKEN,
+  EntityType.ENTITY_LIL_BLUB,
+  EntityType.ENTITY_RAINMAKER,
+  EntityType.ENTITY_VISAGE,
+  EntityType.ENTITY_SIREN,
+  EntityType.ENTITY_BUMBINO,
+  EntityType.ENTITY_BABY_PLUM
 }
 
 enums.TwitchRoomPickups = {

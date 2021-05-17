@@ -58,7 +58,7 @@ trinkets.T_HairClap = {
     local room = Game():GetRoom()
     for i = 1, math.random(1,3) do
       local enemy = Isaac.Spawn(EntityType.ENTITY_CORN_MINE, 0,  0, room:GetRandomPosition(1), Vector.Zero, Isaac.GetPlayer(0))
-      enemy:AddCharmed(-1)
+      enemy:AddCharmed(EntityRef(Isaac.GetPlayer()), -1)
       enemy:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
     end
   end
@@ -123,7 +123,7 @@ trinkets.T_GribulyasPiece = {
     if (math.random(1,5) == 1) then
       for i = 1, math.random(1,3) do
         local unit = Isaac.Spawn(EntityType.ENTITY_MUSHROOM, 0,  500, room:GetRandomPosition(4), Vector.Zero, player)
-        unit:AddCharmed(-1)
+        unit:AddCharmed(EntityRef(player), -1)
         unit:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
         unit:SetColor(IOTR.Enums.Rainbow[math.random(#IOTR.Enums.Rainbow)], 0, 0, false, false)
       end
@@ -155,7 +155,7 @@ trinkets.T_SpacesuitChargeIndicator = {
     unit:ToNPC().MaxHitPoints = player.Damage * 5
     unit:ToNPC().HitPoints = player.Damage * 5
     unit:SetColor(Color(0,0,0,0.4,1,1,1), 0, 0, false, false)
-    unit:AddCharmed(-1)
+    unit:AddCharmed(EntityRef(player), -1)
     unit:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
   end,
   

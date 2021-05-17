@@ -301,6 +301,19 @@ helper.openDoors = function ()
   end
 end
 
+-- Stop all events and kill all enemies
+  helper.killAllEnemiesAndStopEvents = function ()
+    for k, v in pairs(IOTR.Storage.ActiveEvents) do
+      v.currentTime = 0
+    end
+    
+    for k, v in pairs(Isaac.GetRoomEntities()) do
+      if (v:Exists() and v:IsActiveEnemy(false) and v.Type ~= EntityType.ENTITY_BEAST and v.Type ~= EntityType.ENTITY_DOGMA) then
+        v:Die()
+      end
+    end
+  end
+
 -- Reset mod state
 helper.resetState = function ()
   
