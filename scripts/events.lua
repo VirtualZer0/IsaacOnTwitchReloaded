@@ -34,8 +34,9 @@ events.EV_Richy = {
     
    for i = 0, math.random(10, 25) do
       Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN,  CoinSubType.COIN_PENNY, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 20, true), Vector.Zero, player)
-      player:DonateLuck(1)
     end
+    
+    player:DonateLuck(1)
     
   end
   
@@ -1611,7 +1612,7 @@ events.EV_TearsEqualsSpiders = {
       spider:AddVelocity(entity.Velocity)
       entity:Remove()
       
-    elseif (entity.Type == EntityType.ENTITY_LASER and entity.SpawnerType < 9) then
+    elseif ((entity.Type == EntityType.ENTITY_LASER and entity.Variant ~= 7 and entity.Visible) and entity.SpawnerType < 9) then
         
       local vec = entity:ToLaser():GetEndPoint()
       for i = 1, 15 do
@@ -1661,7 +1662,7 @@ events.EV_Ghostbusters = {
   onNPCDeath = function (entity)
     
     if (
-      entity.Type ~= EntityType.ENTITY_THE_HAUNT
+      entity.Type ~= EntityType.ENTITY_THE_DUST
       and entity.Type ~= EntityType.ENTITY_WIZOOB
       and entity.Type ~= EntityType.ENTITY_DOGMA
       and entity.Type ~= EntityType.ENTITY_BEAST

@@ -478,7 +478,7 @@ mechanics.TwitchHearts = {
 -- Twitch room generation
 mechanics.TwitchRoom = {
   twitchRoomPool = nil,
-  twitchRoomChance = 25,
+  twitchRoomChance = 20,
   
   onRoomChange = function ()
     local level = Game():GetLevel()

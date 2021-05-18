@@ -197,7 +197,7 @@ trinkets.T_GreedCoinEye = {
   hold = false,
   
   onTearUpdate = function (tear)
-    if (tear.FrameCount == 1 and math.random(1,11) == 1) then
+    if (tear.FrameCount == 1 and math.random(1,13) == 1) then
       tear:ChangeVariant(TearVariant.COIN)
       tear.TearFlags = IOTR._.setbit(tear.TearFlags, TearFlags.TEAR_COIN_DROP)
       tear.TearFlags = IOTR._.setbit(tear.TearFlags, TearFlags.TEAR_MIDAS)
@@ -395,8 +395,8 @@ trinkets.T_BrokenD4R4Console = {
   name = "Broken D4-R4 console",
   
   description = {
-    en = "\1 Can spawn 1-3 GB Bugs on 15 seconds and use Dataminer on damage",
-    ru = "\1 Может заспавнить 1-3 GB Bug'a на 15 секунд и активировать Датамайнер при получении урона"
+    en = "\1 Can spawn Static Glitch and use Dataminer on damage",
+    ru = "\1 Может заспавнить статический глитч и активировать Датамайнер при получении урона"
   },
   
   hold = false,

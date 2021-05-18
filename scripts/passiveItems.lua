@@ -103,10 +103,10 @@ passiveItems.PI_KappaPride = {
     if
       (
         p.Luck >= 15
-        or math.random(math.ceil(p.Luck*3),80) == 80
+        or math.random(math.ceil(p.Luck*5),80) == 80
       )
       and e.SpawnerType == EntityType.ENTITY_PLAYER
-      and (e.Type == EntityType.ENTITY_LASER or e.Type == EntityType.ENTITY_KNIFE or e.Type == EntityType.ENTITY_TEAR)
+      and ((e.Type == EntityType.ENTITY_LASER and e.Variant ~= 7 and e.Visible) or e.Type == EntityType.ENTITY_KNIFE or e.Type == EntityType.ENTITY_TEAR)
       and Isaac.GetFrameCount() % 3 == 0
     then
       
@@ -121,7 +121,6 @@ passiveItems.PI_KappaPride = {
         local pos = e.Position
         
         if (e.Type == EntityType.ENTITY_LASER) then
-          repeats = 10
           pos = e.Position * (1 - i/10) + e:ToLaser():GetEndPoint() * (i/10)
         end
         
