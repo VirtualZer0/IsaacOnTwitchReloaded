@@ -206,7 +206,7 @@ local ru = {
   evBossfightDesc = "Да, прямо сейчас",
   
   evGiveMeYourMoneyName = "Гони деньги!",
-  evGiveMeYourMoneyDesc = "Вас преследует странный игровой автомат",
+  evGiveMeYourMoneyDesc = "Вас преследует странные игровые автоматы",
   
   evWallOfTearsName = "Стена из слез",
   evWallOfTearsDesc = "Смотри, мам, я как Хаш!",
@@ -231,6 +231,9 @@ local ru = {
   
   evBlueScreenName = "Синий экран",
   evBlueScreenDesc = "Компания Micronicalis заботится о качестве своего продукта",
+  
+  evThrowItAwayName = "Выброси это!",
+  evThrowItAwayDesc = "Зачем ты вообще их поднимаешь?",
 }
 
 return ru

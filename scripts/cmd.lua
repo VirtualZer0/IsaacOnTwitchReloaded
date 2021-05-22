@@ -22,8 +22,8 @@ function cmd.main (obj, mcmd, params)
 end
 
 function cmd.send(text)
-  Isaac.DebugString("IOTR: " ..text.. "\n")
-  Isaac.ConsoleOutput("IOTR: " ..text.. "\n")
+  Isaac.DebugString("IOTR: " ..tostring(text).. "\n")
+  Isaac.ConsoleOutput("IOTR: " ..tostring(text).. "\n")
 end
   
 

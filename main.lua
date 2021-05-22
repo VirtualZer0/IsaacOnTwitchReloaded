@@ -333,6 +333,9 @@ IOTR.ProgressBar = {
     IOTR.ProgressBar.Storage.updated = true
     
     local currentSector = math.ceil(IOTR.ProgressBar.Storage.value/IOTR.ProgressBar.Storage.max*IOTR.ProgressBar.Storage.sectors) - 1
+    if (IOTR.ProgressBar.Storage.value == IOTR.ProgressBar.Storage.min) then
+      currentSector = 0
+    end
     IOTR.Sprites.UI["ProgressBar"..IOTR.ProgressBar.Storage.barType]:PlayOverlay("Anim"..currentSector, true)
     
   end,
@@ -481,6 +484,7 @@ end)
 IOTR.Server:setHandler("settings", function (req) 
   
   IOTR.Settings = req;
+  IOTR.Text.remove("siteMessage");
   
 end)
 
@@ -722,7 +726,7 @@ for key,value in pairs(IOTR.Items.Passive) do
   -- Add External Item Description support
   if EID then
     EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["ru"] .. "#\3 Предмет из Твич-мода", "ru")
-    EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["en"] .. "#\3 From Twitch Mod")
+    EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["en"] .. "#\3 From Isaac On Twitch")
   end
   
   __eidRusItemDescriptions[IOTR.Items.Passive[key].id] = IOTR._.fixrus(IOTR.Items.Passive[key].description["ru"] .. 
@@ -734,7 +738,7 @@ for key,value in pairs(IOTR.Items.Trinkets) do
   
   if EID then
     EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["ru"] .. "#\3 Тринкет из Твич-мода", "ru")
-    EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["en"] .. "#\3 From Twitch Mod")
+    EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["en"] .. "#\3 From Isaac On Twitch")
   end
   
   __eidRusTrinketDescriptions[IOTR.Items.Trinkets[key].id] = {IOTR.Items.Trinkets[key].name, IOTR._.fixrus(IOTR.Items.Trinkets[key].description["ru"] .. 

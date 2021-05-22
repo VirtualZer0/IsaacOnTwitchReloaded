@@ -220,7 +220,7 @@ trinkets.T_CrystalShard = {
   hold = false,
   
   onDamage = function (entity, damageAmnt, damageFlag, damageSource, damageCountdown)
-    if (entity.Type ~= EntityType.ENTITY_PLAYER) and math.random(5) ~= 5 then return end
+    if (entity.Type ~= EntityType.ENTITY_PLAYER) or math.random(5) ~= 5 then return end
       
     local p = entity:ToPlayer()
     local tears = {}
@@ -259,7 +259,7 @@ trinkets.T_GrizzlyClaw = {
   hold = false,
   
   onDamage = function (entity, damageAmnt, damageFlag, damageSource, damageCountdown)
-    if (entity.Type ~= EntityType.ENTITY_PLAYER) and math.random(5) ~= 5 then return end
+    if (entity.Type ~= EntityType.ENTITY_PLAYER) or math.random(5) ~= 5 then return end
       
     local p = entity:ToPlayer()
     Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.SHOCKWAVE, 0, p.Position, Vector.Zero, p)
@@ -402,7 +402,7 @@ trinkets.T_BrokenD4R4Console = {
   hold = false,
   
   onDamage = function (entity, damageAmnt, damageFlag, damageSource, damageCountdown)
-    if (entity.Type ~= EntityType.ENTITY_PLAYER) and math.random(5) ~= 5 then return end
+    if (entity.Type ~= EntityType.ENTITY_PLAYER) or math.random(5) ~= 5 then return end
     
     local p = Isaac.GetPlayer(0)
     p:UseActiveItem(CollectibleType.COLLECTIBLE_DATAMINER, false, true, false, false)
@@ -410,6 +410,29 @@ trinkets.T_BrokenD4R4Console = {
     local glitch = Isaac.Spawn(EntityType.ENTITY_DOGMA, 10, 0, p.Position, Vector.Zero, p)
     glitch:AddCharmed(EntityRef(p), -1)
     glitch:AddEntityFlags(EntityFlag.FLAG_FRIENDLY)
+  end
+  
+}
+
+-- Pug tail for 
+trinkets.T_PugTail = {
+  id = Isaac.GetTrinketIdByName("Pug tail"),
+  name = "Pug tail",
+  
+  description = {
+    en = "\1 Has a 33% chance to spawn an explosive barrel in a room with enemies",
+    ru = "\1 С шансом 33% может заспавнить взрывную бочку в комнате с врагами"
+  },
+  
+  hold = false,
+  
+  onNewRoom = function ()
+    if math.random(3) ~= 1 then return end
+    local room = Game():GetRoom()
+    local tile = room:FindFreeTilePosition(room:GetRandomPosition(0), 0)
+    
+    local barrel = Isaac.Spawn(EntityType.ENTITY_MOVABLE_TNT, 0, 0, tile, Vector.Zero, nil)
+    barrel:SetColor(IOTR.Enums.Rainbow[1], 0, 0, false, false)
   end
   
 }

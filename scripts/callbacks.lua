@@ -262,6 +262,11 @@ end
 -- Start Game callback
 function callbacks:postGameStarted (fromSave)
   
+  IOTR.Server.addOutput({
+    c = "changeGameState",
+    d = { paused = Game():IsPaused() }
+  })
+  
   IOTR.GameState.postStartRaised = true
   
   -- Reset previous game state

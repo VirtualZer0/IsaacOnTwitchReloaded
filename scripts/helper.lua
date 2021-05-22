@@ -260,9 +260,6 @@ helper.launchEvent = function (eventName)
   if ev.event.onRoomChange ~= nil then ev.event.onRoomChange() end
   if ev.event.onNewRoom ~= nil then ev.event.onNewRoom() end
   
-  -- Bind dynamic callbacks
-  IOTR.DynamicCallbacks.bind(IOTR.Events, eventName)
-  
   -- Add ActiveEvent to current events storage
   table.insert(IOTR.Storage.ActiveEvents, ev)
   
@@ -272,6 +269,9 @@ helper.launchEvent = function (eventName)
   else
     IOTR.Sounds.play(SoundEffect.SOUND_THUMBS_DOWN)
   end
+  
+  -- Bind dynamic callbacks
+  IOTR.DynamicCallbacks.bind(IOTR.Events, eventName)
   
 end
 

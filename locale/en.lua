@@ -206,7 +206,7 @@ local en = {
   evBossfightDesc = "Yes, right now",
   
   evGiveMeYourMoneyName = "Give me your money",
-  evGiveMeYourMoneyDesc = "You are being chased by a strange slot machine",
+  evGiveMeYourMoneyDesc = "You are being chased by a strange slot machines",
   
   evWallOfTearsName = "Wall of Tears",
   evWallOfTearsDesc = "Look mom! Like Hush!",
@@ -231,6 +231,9 @@ local en = {
   
   evBlueScreenName = "BSOD",
   evBlueScreenDesc = "Micronicalis cares about the quality of its product",
+  
+  evThrowItAwayName = "Throw it away",
+  evThrowItAwayDesc = "Why are you picking them up at all?",
 }
 
 return en

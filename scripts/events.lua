@@ -590,33 +590,39 @@ events.EV_Supernova  = {
   byTime = false,
   
   onStart = function ()
-    SFXManager():Play(SoundEffect.SOUND_SUPERHOLY, 1, 0, false, 1)
-    Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_MAMA_MEGA, false, true, true, false)
+    IOTR.Timers.addTimeout(function ()
+      SFXManager():Play(SoundEffect.SOUND_SUPERHOLY, 1, 0, false, 1)
+      Isaac.GetPlayer(0):UseActiveItem(CollectibleType.COLLECTIBLE_MAMA_MEGA, false, true, true, false)
+    end, 25)
+    
   end,
   
   onRoomChange = function ()
     
-    local player = Isaac.GetPlayer(0)
-    local room = Game():GetRoom()
-    local ppos = player.Position
-    
-    
-    for i = 0, 3 do
-      local mlaser = EntityLaser.ShootAngle(6, ppos, 90*i, 0, Vector.Zero, player)
-      mlaser:SetActiveRotation(1, 999360, 2, true)
-      mlaser.CollisionDamage = player.Damage*100;
+    IOTR.Timers.addTimeout(function ()
+      local player = Isaac.GetPlayer()
+      local room = Game():GetRoom()
+      local ppos = player.Position
       
-      local laser = EntityLaser.ShootAngle(5, ppos, 90*i, 0, Vector.Zero, player)
-      laser:SetActiveRotation(1, -999360, 10, true)
-      laser.CollisionDamage = player.Damage*25;
-    end
+      
+      for i = 0, 3 do
+        local mlaser = EntityLaser.ShootAngle(6, ppos, 90*i, 0, Vector.Zero, player)
+        mlaser:SetActiveRotation(1, 999360, 2, true)
+        mlaser.CollisionDamage = player.Damage*100;
+        
+        local laser = EntityLaser.ShootAngle(5, ppos, 90*i, 0, Vector.Zero, player)
+        laser:SetActiveRotation(1, -999360, 10, true)
+        laser.CollisionDamage = player.Damage*25;
+      end
+      
+      if (player:GetHearts() >= 1) then
+        player:AddHearts((-player:GetHearts())+3)
+        player:AddSoulHearts(-player:GetSoulHearts())
+      else
+        player:AddSoulHearts(-player:GetSoulHearts() + 3)
+      end
+    end, 25)
     
-    if (player:GetHearts() >= 1) then
-      player:AddHearts((-player:GetHearts())+3)
-      player:AddSoulHearts(-player:GetSoulHearts())
-    else
-      player:AddSoulHearts(-player:GetSoulHearts() + 3)
-    end
     
   end
   
@@ -1395,7 +1401,7 @@ events.EV_Radioactive = {
 events.EV_Rerun = {
   
   name = "Rerun",
-  weights = {0,.2,1},
+  weights = {0,.15,1},
   good = true,
   duration = 10*30,
   
@@ -1441,7 +1447,7 @@ events.EV_Rerun = {
 events.EV_SwitchTheChannel = {
   
   name = "SwitchTheChannel",
-  weights = {0,.2,1},
+  weights = {0,.1,1},
   good = false,
   duration = 10*30,
   
@@ -2209,7 +2215,12 @@ events.EV_Danger = {
     
     local entities = Isaac.GetRoomEntities()
     for i = 1, #entities do
-      if (entities[i]:IsActiveEnemy() and entities[i]:IsVulnerableEnemy() and not entities[i]:IsBoss()) then
+      if (
+        entities[i]:IsActiveEnemy()
+        and entities[i]:IsVulnerableEnemy()
+        and not entities[i]:IsBoss()
+        and not entities[i]:HasEntityFlags(EntityFlag.FLAG_FRIENDLY)
+      ) then
         local clone = Isaac.Spawn(entities[i].Type, entities[i].Variant, entities[i].SubType, entities[i].Position + Vector(20,0), Vector.Zero, entities[i])
         clone:ToNPC():MakeChampion(Game():GetSeeds():GetNextSeed())
         clone:ToNPC().MaxHitPoints = clone:ToNPC().MaxHitPoints * 2
@@ -3046,6 +3057,35 @@ events.EV_BlueScreen = {
     IOTR.Text.remove("blueScreen")
   end
   
+  
+}
+
+
+-- Throw it away
+events.EV_ThrowItAway = {
+  
+  name = "ThrowItAway",
+  weights = {.8,.9,1},
+  good = false,
+
+  duration = 40*30,
+  
+  onUpdate = function ()
+    
+    local room = Game():GetRoom()
+    local count = Isaac.CountEntities(nil, EntityType.ENTITY_PICKUP, 41, 0)
+    
+    IOTR.Cmd.send(count)
+    
+    if (Isaac.GetFrameCount() % 10 == 0 and (count == nil or count < 50)) then
+      Isaac.Spawn(
+        EntityType.ENTITY_PICKUP, 41, 0,
+        room:FindFreePickupSpawnPosition(room:GetRandomPosition (0), 0, false),
+        Vector.Zero, nil
+      )
+    end
+    
+  end
   
 }
 

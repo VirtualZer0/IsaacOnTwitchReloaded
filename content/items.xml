@@ -51,6 +51,7 @@
   <trinket description="His eyes are filled with madness" gfx="Trinket_twitch_Vitecp.png" name="UC's stem" /> <!-- VitecP -->
   <trinket description="Did you press Enter or Esc?" gfx="Trinket_twitch_Melharucos.png" name="Spider eye" /> <!-- Melharucos -->
   <trinket description="I repeat, D4, not 9" gfx="Trinket_twitch_D4N9.png" name="Broken D4-R4 console" /> <!-- D4N9 -->
+  <trinket description="Barrels and explosions" gfx="Trinket_twitch_BMVanquisher.png" name="Pug tail" /> <!-- BMVanquisher -->
   
   <!--<active maxcharges="0" description="EEEEEEDMUUUUND!!!" gfx="Collectibles_Debug.png" special="true" name="DEBUG ITEM"/>-->
 </items>
