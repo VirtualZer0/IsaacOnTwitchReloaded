@@ -1,5 +1,18 @@
 # Isaac On Twitch Reloaded
 
+<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2433361645">
+  <img src="https://img.shields.io/steam/subscriptions/2433361645?label=steam%20subscriptions"/>
+</a>
+<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2433361645">
+  <img src="https://img.shields.io/steam/views/2433361645?label=steam%20views"/>
+</a>
+<a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2433361645">
+  <img src="https://img.shields.io/steam/update-date/2433361645?label=steam%20last%20update"/>
+</a>
+<a href="https://discord.gg/3SzzUHWT27">
+  <img src="https://img.shields.io/discord/738348582557581376?label=discord"/>
+</a>
+
 Rewrited and improved version of old TBoI mod, [Isaac On Twitch](https://github.com/VFStudio/IsaacOnTwitch/). There are new features in this mod:
 
 - Internal web server instead file input/output system for external data exchange
