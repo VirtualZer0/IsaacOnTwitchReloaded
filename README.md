@@ -1,17 +1,13 @@
 # Isaac On Twitch Reloaded
 
 <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2433361645">
-  <img src="https://img.shields.io/steam/subscriptions/2433361645?label=steam%20subscriptions"/>
-</a>
+  <img src="https://img.shields.io/steam/subscriptions/2433361645?label=subscriptions&logo=steam"/></a>
 <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2433361645">
-  <img src="https://img.shields.io/steam/views/2433361645?label=steam%20views"/>
-</a>
+  <img src="https://img.shields.io/steam/views/2433361645?label=views&logo=steam"/></a>
 <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2433361645">
-  <img src="https://img.shields.io/steam/update-date/2433361645?label=steam%20last%20update"/>
-</a>
+  <img src="https://img.shields.io/steam/update-date/2433361645?label=last%20update&logo=steam"/></a>
 <a href="https://discord.gg/3SzzUHWT27">
-  <img src="https://img.shields.io/discord/738348582557581376?label=discord"/>
-</a>
+  <img src="https://img.shields.io/discord/738348582557581376?label=chat&logo=discord"/></a>
 
 Rewrited and improved version of old TBoI mod, [Isaac On Twitch](https://github.com/VFStudio/IsaacOnTwitch/). There are new features in this mod:
 
