@@ -1,7 +1,7 @@
 ---
 name: Feature | Функционал
 about: I have ideas for a mod | У меня есть идеи для мода
-title: "[FEATURE] Краткое описание предложения | Short future description"
+title: "[FEATURE] Краткое описание предложения | Short feature description"
 labels: enhancement
 assignees: ''
 
