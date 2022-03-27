@@ -423,6 +423,7 @@ IOTR.Server:setHandler("removeText", function (req)
   for key, value in ipairs(req) do
     if (not IOTR.Text.contains(value)) then
       IOTR.Cmd.send("Text not found: " .. value)
+      return
     end
     IOTR.Text.remove(value);
   end
@@ -666,7 +667,7 @@ for key,value in pairs(IOTR.Items.Active) do
   IOTR.Mod:AddCallback(ModCallbacks.MC_USE_ITEM, IOTR.Items.Active[key].onActivate, IOTR.Items.Active[key].id);
   
   if EID then
-    EID:addCollectible(IOTR.Items.Active[key].id, IOTR.Items.Active[key].description["ru"] .. "#\3 Предмет из Твич-мода", "ru")
+    EID:addCollectible(IOTR.Items.Active[key].id, IOTR.Items.Active[key].description["ru"] .. "#\3 Предмет из Твич-мода", nil, "ru")
     EID:addCollectible(IOTR.Items.Active[key].id, IOTR.Items.Active[key].description["en"] .. "#\3 From Twitch Mod")
   end
   
@@ -725,7 +726,7 @@ for key,value in pairs(IOTR.Items.Passive) do
   
   -- Add External Item Description support
   if EID then
-    EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["ru"] .. "#\3 Предмет из Твич-мода", "ru")
+    EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["ru"] .. "#\3 Предмет из Твич-мода", nil, "ru")
     EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["en"] .. "#\3 From Isaac On Twitch")
   end
   
@@ -737,7 +738,7 @@ end
 for key,value in pairs(IOTR.Items.Trinkets) do
   
   if EID then
-    EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["ru"] .. "#\3 Тринкет из Твич-мода", "ru")
+    EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["ru"] .. "#\3 Тринкет из Твич-мода", nil, "ru")
     EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["en"] .. "#\3 From Isaac On Twitch")
   end
   

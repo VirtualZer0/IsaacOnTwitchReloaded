@@ -46,7 +46,7 @@ function Server:run()
   self._server:setoption("keepalive", true)
   self._server:setoption("reuseaddr", true)
   self._server:setoption("tcp-nodelay", true)
-  self._server:listen(100)
+  self._server:listen(20)
   self._server:settimeout(0)
   self._running = true
   Isaac.ConsoleOutput("\nIOTR Server: Running on 127.0.0.1:"..self._port.."\n")
@@ -56,7 +56,7 @@ end
 function Server:getRequest()
   local client = self._server:accept()
   if client then
-    client:settimeout(0)
+    client:settimeout(0.01)
     local stop = false
     local rec = ""
     

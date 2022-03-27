@@ -3009,10 +3009,10 @@ events.EV_BlueScreen = {
       table.insert(IOTR.Events.EV_BlueScreen.currentText, "The problem seems to be caused by the following file: Isaac.exe")
       table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
     elseif (#IOTR.Events.EV_BlueScreen.currentText == 4) then
-      table.insert(IOTR.Events.EV_BlueScreen.currentText, "ISAAC_MOD_API_IS_A_BIG_SHIT")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "ISAAC_MOD_API_IS_NOT_VERY_GOOD")
       table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
     elseif (#IOTR.Events.EV_BlueScreen.currentText == 6) then
-      table.insert(IOTR.Events.EV_BlueScreen.currentText, "If this is the first time you've seen this stop error screen, kill yourself")
+      table.insert(IOTR.Events.EV_BlueScreen.currentText, "If this is the first time you've seen this stop error screen, blame Nicalis")
       table.insert(IOTR.Events.EV_BlueScreen.currentText, "If this screen appears again, follow these steps:")
       table.insert(IOTR.Events.EV_BlueScreen.currentText, "")
     elseif (#IOTR.Events.EV_BlueScreen.currentText == 9) then

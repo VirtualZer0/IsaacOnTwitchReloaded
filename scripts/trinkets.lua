@@ -33,7 +33,7 @@ trinkets.T_NeoGlasses = {
   hold = false,
   
   onEntityUpdate = function (entity)
-    if (entity.Type == EntityType.ENTITY_PROJECTILE and entity.FrameCount > 10 and math.random(1,10) == 10) then
+    if (entity.Type == EntityType.ENTITY_PROJECTILE and entity.FrameCount > 10 and math.random(1,100) <= 2) then
       Isaac.Spawn(EntityType.ENTITY_TEAR, TearVariant.BLUE, 0, entity.Position, entity.Velocity*-1, Isaac.GetPlayer(0))
       entity:Die()
     end
@@ -82,7 +82,7 @@ trinkets.T_TornFoxEar = {
     
     if (math.random(1, 1000) > 996) and (p:GetFireDirection() ~= Direction.NO_DIRECTION) then
       local t = Isaac.Spawn(EntityType.ENTITY_TEAR, 0, 0, p.Position, Vector(p:GetShootingInput().X*15, p:GetShootingInput().Y*15), p):ToTear()
-      t.CollisionDamage = p.Damage * 30
+      t.CollisionDamage = p.Damage * 5
       t:ChangeVariant(TearVariant.MULTIDIMENSIONAL)
       t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_SPECTRAL)
       t.TearFlags = IOTR._.setbit(t.TearFlags, TearFlags.TEAR_PIERCING)
