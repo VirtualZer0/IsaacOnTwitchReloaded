@@ -27,7 +27,8 @@ trinkets.T_NeoGlasses = {
   
   description = {
     en = "\1 Enemy projectiles can turn around",
-    ru = "\1 Вражеские выстрелы могут развернуться"
+    ru = "\1 Вражеские выстрелы могут развернуться",
+    es = "\1 Los proyectiles enemigos pueden girar"
   },
   
   hold = false,
@@ -48,7 +49,8 @@ trinkets.T_HairClap = {
   
   description = {
     en = "\1 Can spawn 1-3 friendly corn mine in new rooms",
-    ru = "\1 Может призвать 1-3 дружеских мин в новых комнатах"
+    ru = "\1 Может призвать 1-3 дружеских мин в новых комнатах",
+    es = "\1 Puede crear 1-3 minas de maíz amigables en nuevas habitaciones"
   },
   
   hold = false,
@@ -72,7 +74,9 @@ trinkets.T_TornFoxEar = {
   
   description = {
     en = "\1 You can fire tear with x30 damage#After firing, you can get damage with 30% chance",
-    ru = "\1 Вы можете выстрелить слезой с х30 уроном#После выстрела, вы можете получить урон с шансом 30%"
+    ru = "\1 Вы можете выстрелить слезой с х30 уроном#После выстрела, вы можете получить урон с шансом 30%",
+    es = "\1 Puede disparar una lágrima de daño x30#Después de disparar, puedes recibir daño con un 30% de probabilidad"
+
   },
   
   hold = false,
@@ -106,7 +110,8 @@ trinkets.T_GribulyasPiece = {
   
   description = {
     en = "\1 Can spawn 1-3 friendly mushrooms",
-    ru = "\1 может призвать 1-3 дружелюбных гриба"
+    ru = "\1 может призвать 1-3 дружелюбных гриба",
+    es = "\1 Puede crear 1-3 hongos amigables"
   },
   
   hold = false,
@@ -140,7 +145,8 @@ trinkets.T_SpacesuitChargeIndicator = {
   
   description = {
     en = "\1 Can spawn friendly dark shadow#Give speed boost with curse of dark",
-    ru = "\1 Спавнит дружелюбную черную тень#Увеличивает скорость при проклятии темноты"
+    ru = "\1 Спавнит дружелюбную черную тень#Увеличивает скорость при проклятии темноты",
+    es = "\1 Puede crear una sombra amigable#Aumenta la velocidad con la maldición de la oscuridad"
   },
   
   hold = false,
@@ -191,7 +197,8 @@ trinkets.T_GreedCoinEye = {
   
   description = {
     en = "\1 Can fire coin tear with Midas effect",
-    ru = "\1 Возможен выстрел слезой-монетой с эффектом Мидаса"
+    ru = "\1 Возможен выстрел слезой-монетой с эффектом Мидаса",
+    es = "\1 Puedes disparar una lágrima de moneda con el efecto de Midas"
   },
   
   hold = false,
@@ -214,7 +221,8 @@ trinkets.T_CrystalShard = {
   
   description = {
     en = "\1 Can spawn tears in circle shape around player on damage",
-    ru = "\1 Может создать круг из слез вокруг игрока при получении урона"
+    ru = "\1 Может создать круг из слез вокруг игрока при получении урона",
+    es = "\1 Puede crear lágrimas en forma de círculo alrededor al recibir daño"
   },
   
   hold = false,
@@ -253,7 +261,8 @@ trinkets.T_GrizzlyClaw = {
   
   description = {
     en = "\1 Can spawn shockwave and fear enemies around player on damage",
-    ru = "\1 Может создать каменную волну и напугать врагов вокруг при получении урона"
+    ru = "\1 Может создать каменную волну и напугать врагов вокруг при получении урона",
+    es = "\1 Puede crear una onda de choque y atemorizar a los enemigos alrededor del jugador al recibir daño"
   },
   
   hold = false,
@@ -282,7 +291,8 @@ trinkets.T_InvertedCross = {
   
   description = {
     en = "\1 Can spawn inverted cross made from fire on damage",
-    ru = "\1 Может создать перевернутый крест из огня при получении урона"
+    ru = "\1 Может создать перевернутый крест из огня при получении урона",
+    es = "\1 Puede crear una cruz invertida hecha de fuego al recibir daño"
   },
   
   hold = false,
@@ -326,7 +336,8 @@ trinkets.T_UCsStem = {
   
   description = {
     en = "\1 Can spawn path from tears for all enemies in room",
-    ru = "\1 Может создать путь из слез до каждого врага в комнате"
+    ru = "\1 Может создать путь из слез до каждого врага в комнате",
+    es = "\1 Puede crear un camino de lágrimas hasta cada enemigo en la habitación"
   },
   
   hold = false,
@@ -367,7 +378,8 @@ trinkets.T_SpiderEye = {
   
   description = {
     en = "\1 Can poison enemies in new room and spawn blue spider",
-    ru = "\1 Может отравить врагов в комнате и создать синего паука"
+    ru = "\1 Может отравить врагов в комнате и создать синего паука",
+    es = "\1 Puede envenenar enemigos en la habitación y crear una araña azul"
   },
   
   hold = false,
@@ -396,7 +408,8 @@ trinkets.T_BrokenD4R4Console = {
   
   description = {
     en = "\1 Can spawn Static Glitch and use Dataminer on damage",
-    ru = "\1 Может заспавнить статический глитч и активировать Датамайнер при получении урона"
+    ru = "\1 Может заспавнить статический глитч и активировать Датамайнер при получении урона",
+    es = "\1 Puede crear Static Glitch y activar Dataminer al recibir daño"
   },
   
   hold = false,
@@ -421,7 +434,8 @@ trinkets.T_PugTail = {
   
   description = {
     en = "\1 Has a 33% chance to spawn an explosive barrel in a room with enemies",
-    ru = "\1 С шансом 33% может заспавнить взрывную бочку в комнате с врагами"
+    ru = "\1 С шансом 33% может заспавнить взрывную бочку в комнате с врагами",
+    es = "\1 Tiene un 33% de probabilidad de crear una bodega explosiva en una habitación con enemigos"
   },
   
   hold = false,

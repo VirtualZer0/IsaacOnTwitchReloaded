@@ -669,6 +669,7 @@ for key,value in pairs(IOTR.Items.Active) do
   if EID then
     EID:addCollectible(IOTR.Items.Active[key].id, IOTR.Items.Active[key].description["ru"] .. "#\3 Предмет из Твич-мода", nil, "ru")
     EID:addCollectible(IOTR.Items.Active[key].id, IOTR.Items.Active[key].description["en"] .. "#\3 From Twitch Mod")
+    EID:addCollectible(IOTR.Items.Active[key].id, IOTR.Items.Active[key].description["es"] .. "#\3 Del mod Twitch")
   end
   
   __eidRusItemDescriptions[IOTR.Items.Active[key].id] = IOTR._.fixrus(IOTR.Items.Active[key].description["ru"] .. 
@@ -728,6 +729,7 @@ for key,value in pairs(IOTR.Items.Passive) do
   if EID then
     EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["ru"] .. "#\3 Предмет из Твич-мода", nil, "ru")
     EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["en"] .. "#\3 From Isaac On Twitch")
+    EID:addCollectible(IOTR.Items.Passive[key].id, IOTR.Items.Passive[key].description["es"] .. "#\3 De Isaac en Twitch")
   end
   
   __eidRusItemDescriptions[IOTR.Items.Passive[key].id] = IOTR._.fixrus(IOTR.Items.Passive[key].description["ru"] .. 
@@ -740,6 +742,7 @@ for key,value in pairs(IOTR.Items.Trinkets) do
   if EID then
     EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["ru"] .. "#\3 Тринкет из Твич-мода", nil, "ru")
     EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["en"] .. "#\3 From Isaac On Twitch")
+    EID:addTrinket(IOTR.Items.Trinkets[key].id, IOTR.Items.Trinkets[key].description["es"] .. "#\3 De Isaac en Twitch")
   end
   
   __eidRusTrinketDescriptions[IOTR.Items.Trinkets[key].id] = {IOTR.Items.Trinkets[key].name, IOTR._.fixrus(IOTR.Items.Trinkets[key].description["ru"] .. 

@@ -22,7 +22,8 @@ activeItems.TwitchRaid = {
   
   description = {
     en = "Summon friendly buddies",
-    ru = "Спавнит дружелюбных мобов"
+    ru = "Спавнит дружелюбных мобов",
+    es = "Invoca a amigables amigos"
   },
   
   onActivate = function ()
@@ -60,7 +61,8 @@ activeItems.TTours = {
   
   description = {
     en = "Confuse all enemies in the room",
-    ru = "Запутывает врагов в комнате"
+    ru = "Запутывает врагов в комнате",
+    es = "Confunde a todos los enemigos en la habitación"
   },
   
   onActivate = function ()
@@ -92,7 +94,8 @@ activeItems.RipPepperonis = {
   
   description = {
     en = "Spawn multiple brimstone swirls",
-    ru = "Спавнит несколько бримстоун-воронок"
+    ru = "Спавнит несколько бримстоун-воронок",
+    es = "Despliega varios tornados de brimstone"
   },
   
   onActivate = function ()
@@ -121,7 +124,8 @@ activeItems.NomNom = {
   
   description = {
     en = "Give you half red and 1 soul heart#Disappears after 6 uses",
-    ru = "Дает половину красного и 1 синее сердца#Исчезает после 6 использований"
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 6 использований",
+    es = "Te da la mitad de un corazón rojo y 1 corazón de alma#Desaparece luego de 6 usos"
   },
   
   onActivate = function ()
@@ -152,7 +156,8 @@ activeItems.NomNomPart1 = {
   
   description = {
     en = "Give you half red and 1 soul heart#Disappears after 5 uses",
-    ru = "Дает половину красного и 1 синее сердца#Исчезает после 5 использований"
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 5 использований",
+    es = "Te da la mitad de un corazón rojo y 1 corazón de alma#Desaparece luego de 5 usos"
   },
   
   onActivate = function ()
@@ -182,7 +187,8 @@ activeItems.NomNomPart2 = {
   
   description = {
     en = "Give you half red and 1 soul heart#Disappears after 4 uses",
-    ru = "Дает половину красного и 1 синее сердца#Исчезает после 4 использований"
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 4 использований",
+    es = "Te da la mitad de un corazón rojo y 1 corazón de alma#Desaparece luego de 4 usos"
   },
   
   onActivate = function ()
@@ -212,7 +218,8 @@ activeItems.NomNomPart3 = {
   
   description = {
     en = "Give you half red and 1 soul heart#Disappears after 3 uses",
-    ru = "Дает половину красного и 1 синее сердца#Исчезает после 3 использований"
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 3 использований",
+    es = "Te da la mitad de un corazón rojo y 1 corazón de alma#Desaparece luego de 3 usos"
   },
   
   onActivate = function ()
@@ -242,7 +249,8 @@ activeItems.NomNomPart4 = {
   
   description = {
     en = "Give you half red and 1 soul heart#Disappears after 2 uses",
-    ru = "Дает половину красного и 1 синее сердца#Исчезает после 2 использований"
+    ru = "Дает половину красного и 1 синее сердца#Исчезает после 2 использований",
+    es = "Te da la mitad de un corazón rojo y 1 corazón de alma#Desaparece luego de 2 usos"
   },
   
   onActivate = function ()
@@ -273,6 +281,7 @@ activeItems.NomNomPart5 = {
   description = {
     en = "Give you half red and 1 soul heart#Disappears after 1 use",
     ru = "Дает половину красного и 1 синее сердца#Исчезает после 1 использования"
+    es = "Te da la mitad de un corazón rojo y 1 corazón de alma#Desaparece luego de 1 uso"
   },
   
   onActivate = function ()
@@ -300,7 +309,8 @@ activeItems.PanicBasket = {
   
   description = {
     en = "Throws fire",
-    ru = "Раскидывает огонь"
+    ru = "Раскидывает огонь",
+    es = "Lanza fuego"
   },
   
   onActivate = function ()
@@ -324,7 +334,8 @@ activeItems.VoteYea = {
   
   description = {
     en = "Immediately accepts current poll",
-    ru = "Немедленно принимает текущее голосование"
+    ru = "Немедленно принимает текущее голосование",
+    es = "Acepta inmediatamente la encuesta actual"
   },
   
   onActivate = function ()
@@ -343,7 +354,8 @@ activeItems.VoteNay = {
   
   description = {
     en = "Skips current poll#One-time use",
-    ru = "Пропускает текущее голосование#Исчезает после использования"
+    ru = "Пропускает текущее голосование#Исчезает после использования",
+    es = "Saltar la encuesta actual#Uso único"
   },
   
   onActivate = function ()

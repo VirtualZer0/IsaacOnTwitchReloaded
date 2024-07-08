@@ -27,7 +27,8 @@ passiveItems.PI_Kappa = {
   name = "Kappa",
   description = {
     en = "\1 +2.5 Damage Up",
-    ru = "\1 +2.5 к урону"
+    ru = "\1 +2.5 к урону",
+    es = "\1 +2.5 de daño"
   },
   count = 0,
   cacheFlag = CacheFlag.CACHE_DAMAGE,
@@ -47,7 +48,8 @@ passiveItems.PI_GoldenKappa = {
   
   description = {
     en = "\015 + 15 Coins#\189 + Golden bomb#\5 + Golden key#\6 + 2 Golden hearts",
-    ru = "\015 + 15 монет#\5 + Золотая бомба#\5 + Золотой ключ#\6 + 2 золотых сердца"
+    ru = "\015 + 15 монет#\5 + Золотая бомба#\5 + Золотой ключ#\6 + 2 золотых сердца",
+    es = "\015 + 15 monedas#\5 + Bomba de oro#\5 + Llave de oro#\6 + 2 corazones de oro"
   },
   
   count = 0,
@@ -69,7 +71,8 @@ passiveItems.PI_NotLikeThis = {
   
   description = {
     en = "Reroll enemies on every room",
-    ru = "Реролит врагов в каждой комнате при входе в нее"
+    ru = "Реролит врагов в каждой комнате при входе в нее",
+    es = "Cambia los enemigos de cada habitación"
   },
   
   count = 0,
@@ -92,7 +95,8 @@ passiveItems.PI_KappaPride = {
   
   description = {
     en = "Every tear have a chance to spawn 6 another tears with different effects#This tears deal 1/6 of your damage#100% chance on 15 luck",
-    ru = "Каждая слеза имеет шанс заспавнить 6 других слез с разными эффектами#Эти слезы наносят 1/6 от вашего урона#100% шанс с удачей 15"
+    ru = "Каждая слеза имеет шанс заспавнить 6 других слез с разными эффектами#Эти слезы наносят 1/6 от вашего урона#100% шанс с удачей 15",
+    es = "Cada lágrima tiene una oportunidad de crear 6 lágrimas con diferentes efectos#Estas lágrimas hacen 1/6 de tu daño#100% de chance con 15 de suerte"
   },
   
   count = 0,
@@ -173,7 +177,8 @@ passiveItems.PI_SSSsss = {
   
   description = {
     en = "Enemies exploding after death",
-    ru = "Враги взрываются при смерти"
+    ru = "Враги взрываются при смерти",
+    es = "Enemigos explotan después de la muerte"
   },
   
   count = 0,
@@ -197,7 +202,8 @@ passiveItems.PI_CurseLit = {
   
   description = {
     en = "Curses give permanent random stats up",
-    ru = "Проклятья навсегда увеличивают случайный стат"
+    ru = "Проклятья навсегда увеличивают случайный стат",
+    es = "Las maldiciones aumentan permanentemente un stat aleatorio"
   },
   
   count = 0,
@@ -231,7 +237,8 @@ passiveItems.PI_DrinkPurple = {
   
   description = {
     en = "\1 +0.35 Speed Up#Spawn 1-2 Twtich hearts on pickup",
-    ru = "\1 +0.35 к скорости#Спавнит 1-2 Твич-сердца при поднятии"
+    ru = "\1 +0.35 к скорости#Спавнит 1-2 Твич-сердца при поднятии",
+    es = "\1 +0.35 Velocidad#Aparecen 1-2 corazones de Twitch al recoger"
   },
   
   count = 0,
@@ -262,7 +269,8 @@ passiveItems.PI_Kreygasm = {
   
   description = {
     en = "Random effect for enemies in room",
-    ru = "Накладывает случайный эффект на часть врагов в комнате"
+    ru = "Накладывает случайный эффект на часть врагов в комнате",
+    es = "Efecto aleatorio para enemigos en la habitación"
   },
   
   count = 0,
@@ -296,7 +304,8 @@ passiveItems.PI_FutureMan = {
   
   description = {
     en = "Spawn rotating beam#Beam deals 5% of player damage",
-    ru = "Спавнит вращающийся луч#Луч наносит 5% от вашего урона"
+    ru = "Спавнит вращающийся луч#Луч наносит 5% от вашего урона",
+    es = "Genera un haz giratorio#Hace 5% del daño del jugador"
   },
   
   count = 0,
@@ -329,7 +338,8 @@ passiveItems.PI_BrainSlug = {
   
   description = {
     en = "Enemies move to player shot direction",
-    ru = "Враги смещаются в сторону вашего выстрела"
+    ru = "Враги смещаются в сторону вашего выстрела",
+    es = "Enemigos se mueven en la dirección del disparo del jugador"
   },
   
   count = 0,
@@ -352,8 +362,9 @@ passiveItems.PI_Nightbot = {
   name = "Nightbot",
   
   description = {
-    en = "If projectile hit Ngihtbot, all projectiles will be removed",
-    ru = "При попадании по нему вражеской слезы убирает все вражеские слезы в комнате"
+    en = "If projectile hit Nightbot, all projectiles will be removed",
+    ru = "При попадании по нему вражеской слезы убирает все вражеские слезы в комнате",
+    es = "Si un proyectil impacta a Nightbot, todos los proyectiles se eliminan"
   },
   
   count = 0,
@@ -389,7 +400,8 @@ passiveItems.PI_StinkyCheese = {
   
   description = {
     en = "Can poison enemy when touched",
-    ru = "Может отравить врага при прикосновении"
+    ru = "Может отравить врага при прикосновении",
+    es = "Puede envenenar al enemigo al tocarlo"
   },
   
   count = 0,
@@ -426,7 +438,8 @@ passiveItems.PI_BleedPurple = {
   
   description = {
     en = "If you have Twitch hearts, all your familiars will shoot#Give 1 Twitch heart",
-    ru = "Все ваши спутники будут стрелять, пока у вас есть Твич-сердца#Дает 1 Твич-сердце"
+    ru = "Все ваши спутники будут стрелять, пока у вас есть Твич-сердца#Дает 1 Твич-сердце",
+    es = "Si tienes corazones de Twitch, todos tus familiares dispararán#Da 1 corazón de Twitch"
   },
   
   count = 0,
@@ -451,7 +464,8 @@ passiveItems.PI_PogChamp = {
   
   description = {
     en = "Enemy can lose half of their HP with a 66% chance#Enemy can double their HP with a 33% chance",
-    ru = "Враг может потерять половину своего здоровья с шансом 66%#Враг может удвоить свое здоровье с шансом 33%"
+    ru = "Враг может потерять половину своего здоровья с шансом 66%#Враг может удвоить свое здоровье с шансом 33%",
+    es = "El enemigo puede perder la mitad de su vida con un 66% de probabilidad#El enemigo puede duplicar su vida con un 33% de probabilidad"
   },
   
   count = 0,
@@ -480,7 +494,8 @@ passiveItems.PI_GlitchLit = {
   
   description = {
     en = "Being near a fireplace will increase your stats#You don't take damage from fireplaces",
-    ru = "Нахождение рядом с кострами увеличит ваши статы#Вы не получаете урон от костров"
+    ru = "Нахождение рядом с кострами увеличит ваши статы#Вы не получаете урон от костров",
+    es = "Estar cerca de una fogata aumentará sus estadísticas#No recibes daño de las fogatas"
   },
   
   count = 0,
